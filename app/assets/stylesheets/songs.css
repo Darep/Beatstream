@@ -33,6 +33,10 @@ h1 {
 	font-size:30px;
 	text-shadow:0 2px 8px rgba(0,0,0, 0.6);
 }
+h2 {
+	font-size:24px;
+	margin:0 0 15px;
+}
 h5 {
 	font-weight:700;
 }
@@ -63,6 +67,7 @@ h5 {
 		}
 		#content {
 			float:left;
+			height:100%;
 			overflow: hidden;
 		}
 			#content-wrap {
@@ -84,8 +89,12 @@ header {
 
 /* 4.SONGLIST
 ----------------------------------------------------------------------------- */
+.container {
+	padding:20px;
+}
 ol#songlist {
 	margin-bottom:60px;
+	width:100%;
 }
 	#songlist .now-playing {
 		font-weight:700;
@@ -106,6 +115,7 @@ ol#songlist {
 	font-size:11px;
 	font-weight:700;
 	padding:0 0 15px;
+	position:relative;
 	z-index:1000;
 
 	box-shadow:0 -1px 0 #000;
@@ -181,17 +191,10 @@ ol#songlist {
 	border-right:1px solid #e5e5e5;
 	height:100%;
 }
+	#sidebar-wrap {
+		padding:10px;
+	}
 
 
 /* 99.MISC
 ----------------------------------------------------------------------------- */
-#content:after, #content:before {
-	display:table;
-	content:"";
-}
-#content:after {
-	clear:both;
-}
-#main {
-	zoom:1;
-}

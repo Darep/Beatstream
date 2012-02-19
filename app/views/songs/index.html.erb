@@ -1,8 +1,14 @@
+<div class="container">
+	<h2>All songs</h2>
 
-<ol id="songlist">
-	<% @songs.each do |song| %>
-	<li>
-		<%= link_to song, :action => "play", :file => song %>
-	</li>
-	<% end %>
-</ol>
+	<div id="slickgrid"></div>
+
+	<ol id="songlist">
+		<% @songs.each do |song| %>
+		<li>
+			<%= link_to song.to_s, :action => "play", :file => song.path %>
+		</li>
+		<% end %>
+	</ol>
+
+</div>
