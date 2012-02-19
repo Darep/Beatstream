@@ -1,0 +1,33 @@
+.ui-slider {
+	background:#000;
+	border:1px solid #555;
+	height:10px;
+	position:relative;
+	text-align:left;
+}
+	.ui-slider-range {
+		background:#f6a828;
+		display:block;
+		height:100%;
+		position: absolute;
+		z-index:1;
+	}
+.ui-slider-handle {
+	background:#f1f1f1;
+	display:block;
+	height:13px;
+	margin-left:-.5em;
+	position:absolute;
+	top:-1px;
+	width:14px;
+	z-index:2;
+}
+.ui-slider-handle:focus {
+	outline:0;
+}
+.ui-slider-handle.ui-state-hover {
+	background:#fff;
+}
+.ui-slider-handle.ui-state-active {
+	background:#ddd;
+}

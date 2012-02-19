@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BeatStream</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+  <link href="http://fonts.googleapis.com/css?family=Lobster&amp;subset=latin" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div id="wrap">
+	<header>
+		<h1>BeatStream</h1>
+	</header>
+
+	<div id="main">
+		<div id="sidebar">
+			TODO: sidebar
+		</div>
+		<div id="content">
+			<div id="content-wrap">
+				<%= yield %>
+			</div>
+		</div>
+	</div>
+
+	<div id="player">
+		<h5 id="player-song"><span class="label">Current song:</span> <span class="track">None</span></h5>
+		<div id="player-controls">
+			<div id="player-buttons">
+				<button id="prev" type="button" disabled="disabled">Prev</button>
+				<button id="play-pause" type="button" disabled="disabled">Play/pause</button>
+				<button id="next" type="button" disabled="disabled">Next</button>
+			</div>
+			<div id="player-volume">
+				<div id="player-volume-slider"></div>
+			</div>
+			<p id="player-time">
+				<span class="elapsed">00:00</span> / <span class="duration">00:00</span>
+			</p>
+			<div id="player-buttons-2">
+				<button id="shuffle" type="button">Shuffle <span class="status">Off</span></button>
+			</div>
+			<div id="seekbar">
+				<div id="seekbar-slider"></div>
+			</div>
+		</div>
+		<audio preload="preload" autoplay="autoplay" />
+	</div>
+</div>
+
+</body>
+</html>

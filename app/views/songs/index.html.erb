@@ -1,0 +1,8 @@
+
+<ol id="songlist">
+	<% @songs.each do |song| %>
+	<li>
+		<%= link_to song, :action => "play", :file => song %>
+	</li>
+	<% end %>
+</ol>
