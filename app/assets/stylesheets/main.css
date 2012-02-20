@@ -94,20 +94,22 @@ header {
 }
 
 .grid-container {
+    background:#f1f1f1;
     position:relative;
     width:100%;
 }
 
 /* slickgrid */
 #slickgrid {
+    background:#fff;
     color:#222;
     font-size:12px;
+    height:auto;
     position:absolute;
     left:0;
     right:0;
     top:0;
-    bottom:0;
-    height:auto;
+    bottom:2px;
     width:100%;
 }
     #slickgrid .slick-header-column {
