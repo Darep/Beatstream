@@ -88,6 +88,7 @@ class Mp3File
         @nice_title
     end
 
+    private
 
     # Iconv UTF-8 helper
     # Converts string into valid UTF-8
