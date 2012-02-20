@@ -193,6 +193,7 @@ ol#songlist {
 }
 	#sidebar-wrap {
 		padding:10px;
+		min-width:100px;
 	}
 
 

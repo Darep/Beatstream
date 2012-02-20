@@ -11,25 +11,8 @@ class SongsController < ApplicationController
   		end
 
   		respond_to do |format|
-  			format.html
   			format.json { render :json => @songs }
   		end
-  	end
-
-  	def refresh
-		@songs = []
-		Find.find(MUSIC_PATH) do |file|
- 			next if file !~ /.*\.mp3$/
-			begin
-	 			mp3 = Mp3File.new(file)
-	 			@songs.push(mp3)
-			rescue Mp3InfoError
-				# don't take broken mp3s
-				# TODO: collect the broken mp3s into a separate array
-				# TODO: tell the caller how many broken mp3s found
-			end
-		end
- 		Rails.cache.write('songs', @songs, :time_to_idle => 1.minute, :timeToLive => 1440.minutes)
   	end
 
   	def play
@@ -41,6 +24,19 @@ class SongsController < ApplicationController
   		render :text => File.open(filepath, 'rb') { |f| f.read }
 		#send_file filepath, :type => 'audio/mpeg'
   	end
+
+	private
+
+  	def refresh
+		@songs = []
+		Find.find(MUSIC_PATH) do |file|
+ 			next if file !~ /.*\.mp3$/
+ 			next if File.directory?(file)
+ 			mp3 = Mp3File.new(file)
+ 			@songs.push(mp3)
+		end
+ 		Rails.cache.write('songs', @songs, :time_to_idle => 1.minute, :timeToLive => 1440.minutes)
+  	end
 end
 
 class Mp3File
@@ -49,23 +45,37 @@ class Mp3File
 
     def initialize(path)
       	file = File.new(path)
-      	info = Mp3Info.open(path)
-      	tag = info.tag()
-      	
+
       	@file = path
       	@filename = File.basename(path)
-      	@artist = tag['artist']
-      	@title = tag['title']
-      	@album = tag['album']
-      	@tracknum = tag['tracknum']
-      	@length = info.length
-
-	    @path = file.path().gsub(MUSIC_PATH, '')
+	    @path = path.gsub(MUSIC_PATH, '')
       	@size = file.stat.size()
       	@type = 'audio/mpeg'
       	@mtime = file.stat.mtime()
 
-      	@nice_title = (@artist || @title ? @artist.to_s + " - " + @title.to_s : @filename)
+      	@title = @filename
+		@artist = ''
+		@album = ''
+		@tracknum = nil
+		@length = 0
+
+      	# ID3 tag info
+		begin
+      		info = Mp3Info.open(path)
+	      	tag = info.tag()
+	      	@title = tag['title'] if (!tag['title'].nil?)
+	      	@artist = tag['artist'] if (!tag['title'].nil?)
+	      	@album = tag['album']
+	      	@tracknum = tag['tracknum']
+	      	@length = info.length
+		rescue Mp3InfoError
+			# don't take broken mp3s
+			# TODO: collect the broken mp3s into a separate array
+			# TODO: tell the caller how many broken mp3s found
+		end
+      	
+      	@nice_title = @artist.to_s if (!@artist.nil?)
+      	@nice_title += " - " + @title.to_s
       	@nice_length = (Time.mktime(0)+@length).strftime("%M:%S")
     end
 

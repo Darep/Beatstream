@@ -2,7 +2,7 @@ BeatStream::Application.routes.draw do
   get 'songs/index'
   get 'songs/play'
 
-  root :to => 'songs#index'
+  root :to => 'main#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

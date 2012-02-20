@@ -2,7 +2,7 @@
 //= require slick.grid
 
 $(document).ready(function () {
-	var songs = $('#songlist li');
+	var songs = null;
 	var audio = $('#player audio');
 	audio.css('display', 'none');
 
@@ -166,11 +166,21 @@ $(document).ready(function () {
 		currentSong.addClass('now-playing');
 	}
 
-	// play songs when the name is clicked!
-	songs.click(function (e) {
-		e.preventDefault();
-		playSong($(this));
-	});
+  	$.getJSON('/songs/index\?refresh=yes', function(data) {
+
+  		var songlist = $('#songlist');
+  		$.each(data, function () {
+ 			songlist.append('<li><a href="/songs/play?file=' + this.path + '">' + this.nice_title + '</a></li>');
+  		});
+  		songs = songlist.find('li');
+
+		// play songs when the name is clicked!
+		songs.click(function (e) {
+			e.preventDefault();
+			playSong($(this));
+		});
+
+  	});
 
 	// resize the main-area to correct height
 	function resizeMain() {
@@ -206,8 +216,8 @@ $(document).ready(function () {
 
 	var grid = null;
 
+/*
   	$.getJSON('/songs/index', function(data) {
-  		return;
     	grid = new Slick.Grid("#slickgrid", data, columns, options);
 
     	// double-click => play song
@@ -220,6 +230,7 @@ $(document).ready(function () {
 
 		console.log(grid);
 	});
+*/
 
 });
 
