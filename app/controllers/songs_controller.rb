@@ -7,7 +7,7 @@ class SongsController < ApplicationController
 
     def index
         @songs = Rails.cache.fetch('songs')
-        if @songs.nil? || @songs.empty? || params['refresh'] || true
+        if @songs.nil? || @songs.empty? || params['refresh']
             refresh
         end
 
