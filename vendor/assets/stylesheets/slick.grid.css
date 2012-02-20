@@ -156,3 +156,8 @@ classes should alter those!
   position: absolute;
   border: 2px dashed black;
 }
+
+.slick-viewport {
+  display: block;
+  z-index: 1;
+}
