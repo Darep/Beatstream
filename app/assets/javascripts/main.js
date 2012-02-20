@@ -231,6 +231,8 @@ $(document).ready(function () {
 
             grid.currentSong = row;
             grid.setSelectedRows([row]);
+
+            grid.scrollRowIntoView(row);
         };
     });
 
