@@ -95,28 +95,41 @@ header {
 
 /* slickgrid */
 #slickgrid {
+	color:#222;
 	font-size:12px;
 }
+	#slickgrid .slick-header-column {
+		background:#f1f1f1;
+		border-bottom:1px solid #e5e5e5;
+		border-right-color:#fff;
+		font-weight:700;
+	}
 	#slickgrid .slick-row {
 		line-height:22px;
 	}
-	#slickgrid .slick-cell {
-		border:0;
-	}
-	#slickgrid .slick-cell.l0 {
-		padding-left:5px;
-	}
-	#slickgrid .odd {
+		#slickgrid .slick-cell {
+			border:0;
+		}
+		#slickgrid .slick-cell.l0 {
+			padding-left:5px;
+		}
+		#slickgrid .selected {
+			background:#e5e5e5;
+			background:#6092e5;
+			color:#fff;
+		}
+		#slickgrid .playing {
+			background:#000;
+		}
+		.slick-cell.tracknum {
+			text-align:right;
+			padding-right:10px;
+		}
+		.slick-cell.duration {
+		}
+	#slickgrid .even {
 		background:#fffaf0;
-	}
-	#slickgrid .selected {
-		background:#e5e5e5;
-	}
-	.slick-cell.tracknum {
-		text-align:right;
-		padding-right:10px;
-	}
-	.slick-cell.duration {
+		background:#f7f7f7;
 	}
 
 

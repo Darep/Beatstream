@@ -143,10 +143,10 @@ $(document).ready(function () {
 	// SlickGrid
 
 	var columns = [
-		{ id: 'artist', name: 'Artist', field: 'artist', sortable: true },
-		{ id: 'tracknum', name: '#', field: 'tracknum', sortable: true , cssClass: 'tracknum', width: 10 },
-		{ id: 'np', cssClass: 'now-playing', width: 5 },
+		{ id: 'np', resizable: false, width: 20 },
 		{ id: 'title', name: 'Title', field: 'title', sortable: true },
+		{ id: 'tracknum', name: '', field: 'tracknum', sortable: true, resizable: false, cssClass: 'tracknum', width: 30 },
+		{ id: 'artist', name: 'Artist', field: 'artist', sortable: true },
 		{ id: 'album', name: 'Album', field: 'album', sortable: true },
 		{ id: 'duration', name: 'Duration', field: 'nice_length', sortable: true, cssClass: 'duration', width: 30 },
 		{ id: 'path', name: '', field: 'path' }
@@ -189,11 +189,21 @@ $(document).ready(function () {
     		var row = grid.getSelectedRows()[0];
     	});
 
+    	grid.currentSong = null;
+
     	grid.startPlaying = function (row) {
     		var song = grid.getDataItem(row);
     		
     		playSong(song.nice_title, song.path);
 
+    		// now playing icon
+    		var cells = {};
+    		cells[row] = { np: 'playing' };
+
+    		grid.removeCellCssStyles('currentSong_playing');
+    		grid.addCellCssStyles('currentSong_playing', cells);
+
+    		grid.currentSong = row;
     		grid.setSelectedRows([row]);
     	};
 	});
@@ -203,7 +213,7 @@ $(document).ready(function () {
 
 	function prevSong() {
 		var newRow = grid.getDataLength() - 1;
-		var currentRow = grid.getSelectedRows()[0];
+		var currentRow = grid.currentSong; //grid.getSelectedRows()[0];
 
 		if ((currentRow - 1) >= 0) {
 			newRow = currentRow - 1;
@@ -215,7 +225,7 @@ $(document).ready(function () {
 	function nextSong() {
 		var numberOfRows = grid.getDataLength();
 		var newRow = 0;
-		var currentRow = grid.getSelectedRows()[0];
+		var currentRow = grid.currentSong; //grid.getSelectedRows()[0];
 
 		if (shuffle) {
 			newRow = randomToN(numberOfRows);
