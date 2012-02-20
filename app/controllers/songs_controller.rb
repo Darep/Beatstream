@@ -1,7 +1,6 @@
 require 'find'
 
-MUSIC_PATH = '/Users/ajk/Music/'
-#MUSIC_PATH = '/Volumes/work/Musa/'
+MUSIC_PATH = Rails.application.config.MUSIC_PATH
 
 class SongsController < ApplicationController
 
@@ -20,9 +19,15 @@ class SongsController < ApplicationController
   	def refresh
 		@songs = []
 		Find.find(MUSIC_PATH) do |file|
- 			next if file !~ /.*mp3$/
- 			mp3 = Mp3File.new(file)
- 			@songs.push(mp3)
+ 			next if file !~ /.*\.mp3$/
+			begin
+	 			mp3 = Mp3File.new(file)
+	 			@songs.push(mp3)
+			rescue Mp3InfoError
+				# don't take broken mp3s
+				# TODO: collect the broken mp3s into a separate array
+				# TODO: tell the caller how many broken mp3s found
+			end
 		end
  		Rails.cache.write('songs', @songs, :time_to_idle => 1.minute, :timeToLive => 1440.minutes)
   	end

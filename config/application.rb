@@ -57,7 +57,5 @@ module BeatStream
     config.assets.version = '1.0'
 
     config.cache_store = :memory_store
-
-    MUSIC_PATH = '/Users/ajk/Music'
   end
 end

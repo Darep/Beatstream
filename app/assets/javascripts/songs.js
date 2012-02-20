@@ -1,3 +1,4 @@
+//= require store.min
 //= require slick.grid
 
 $(document).ready(function () {
