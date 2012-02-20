@@ -41,22 +41,19 @@ end
 
 class Mp3File
 
-    attr_reader :file, :filename, :path, :artist, :title, :album, :tracknum, :length, :type, :mtime
+    attr_reader :filename, :path, :artist, :title, :album, :tracknum, :length
 
     def initialize(path)
       	file = File.new(path)
 
-      	@file = path
       	@filename = File.basename(path)
 	    @path = path.gsub(MUSIC_PATH, '')
-      	@size = file.stat.size()
-      	@type = 'audio/mpeg'
-      	@mtime = file.stat.mtime()
+      	#@size = file.stat.size()
 
       	@title = @filename
 		@artist = ''
 		@album = ''
-		@tracknum = nil
+		@tracknum = ''
 		@length = 0
 
       	# ID3 tag info
@@ -74,9 +71,10 @@ class Mp3File
 			# TODO: tell the caller how many broken mp3s found
 		end
       	
-      	@nice_title = @artist.to_s if (!@artist.nil?)
-      	@nice_title += " - " + @title.to_s
-      	@nice_length = (Time.mktime(0)+@length).strftime("%M:%S")
+      	@nice_title = (@artist.to_s + ' - ') if (!@artist.nil?)
+      	@nice_title += @title.to_s
+
+      	@nice_length = (Time.mktime(0)+@length).strftime("%m:%S")
     end
 
     def to_s

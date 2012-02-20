@@ -3,6 +3,7 @@
 
 $(document).ready(function () {
 	var songs = null;
+	var grid = null;
 	var audio = $('#player audio');
 	audio.css('display', 'none');
 
@@ -12,14 +13,29 @@ $(document).ready(function () {
 	var nextButton = $('#next');
 	var elapsed = $('#player-time .elapsed');
 	var duration = $('#player-time .duration');
-	var shuffleButton = $('#shuffle');
 
 	var currentSong = null;
+
+	// shuffle
+	var shuffleButton = $('#shuffle');
 	var shuffle = false;
 
 	if (store.get('shuffle')) {
 		shuffle = store.get('shuffle');
 	}
+
+	if (shuffle) {
+		shuffleButton.addClass('enabled');
+	}
+
+	shuffleButton.click(function (e) {
+		e.preventDefault();
+
+		shuffle = !shuffle;
+		store.set('shuffle', shuffle);
+
+		$(this).toggleClass('enabled');
+	});
 
 	// volume slider
 	var volume = 0.6;
@@ -55,14 +71,12 @@ $(document).ready(function () {
 		min: 0,
 		range: 'min',
 		slide: function (event, ui) {
-			console.log(ui.value);
 		},
 		start: function(event, ui) {
 			user_is_seeking = true;
 		},
 		stop: function(event, ui) {
 			audio[0].currentTime = ui.value;
-			console.log(ui.value);
 			user_is_seeking = false;
 		}
 	});
@@ -76,18 +90,6 @@ $(document).ready(function () {
 			audio[0].pause();
 		}
 		e.preventDefault();
-	});
-
-	shuffleButton.click(function (e) {
-		e.preventDefault();
-		shuffle = !shuffle;
-		store.set('shuffle', shuffle);
-		if (shuffle) {
-			alert('shuffle is ENABLED!');
-		}
-		else {
-			alert('shuffle is DISABLED');
-		}
 	});
 
 	nextButton.click(function (e) {
@@ -137,50 +139,103 @@ $(document).ready(function () {
 		seekbar.slider('option', 'disabled', false);
 	});
 
+
+	// SlickGrid
+
+	var columns = [
+		{ id: 'artist', name: 'Artist', field: 'artist', sortable: true },
+		{ id: 'tracknum', name: '#', field: 'tracknum', sortable: true , cssClass: 'tracknum', width: 10 },
+		{ id: 'np', cssClass: 'now-playing', width: 5 },
+		{ id: 'title', name: 'Title', field: 'title', sortable: true },
+		{ id: 'album', name: 'Album', field: 'album', sortable: true },
+		{ id: 'duration', name: 'Duration', field: 'nice_length', sortable: true, cssClass: 'duration', width: 30 },
+		{ id: 'path', name: '', field: 'path' }
+	];
+
+	var options = {
+		autoHeight: true,
+		forceFitColumns: true,
+		enableCellNavigation: false,
+		enableColumnReorder: false,
+		multiSelect: false,
+		rowHeight: 22
+	};
+
+	$.getJSON('/songs/index', function(data) {
+		grid = new Slick.Grid("#slickgrid", data, columns, options);
+		grid.setSelectionModel(new Slick.RowSelectionModel());
+
+		// remove 'path' column
+		grid.setColumns(columns.slice(0, -1));
+
+		console.log(grid);
+
+    	// double-click => play song
+    	grid.onClick.subscribe(function (e) {
+    		var cell = grid.getCellFromEvent(e);
+
+    		grid.setSelectedRows([cell.row]);
+    	});
+
+    	grid.onDblClick.subscribe(function (e) {
+    		var cell = grid.getCellFromEvent(e);
+
+    		grid.startPlaying(cell.row);
+
+    		e.stopPropagation();
+    	});
+
+    	grid.onSelectedRowsChanged.subscribe(function (e) {
+    		var row = grid.getSelectedRows()[0];
+    	});
+
+    	grid.startPlaying = function (row) {
+    		var song = grid.getDataItem(row);
+    		
+    		playSong(song.nice_title, song.path);
+
+    		grid.setSelectedRows([row]);
+    	};
+	});
+
+
+	// song playback functions
+
 	function prevSong() {
-		playSong(currentSong.prev('li'));
+		var newRow = grid.getDataLength() - 1;
+		var currentRow = grid.getSelectedRows()[0];
+
+		if ((currentRow - 1) >= 0) {
+			newRow = currentRow - 1;
+		}
+
+		grid.startPlaying(newRow);
 	}
 
 	function nextSong() {
+		var numberOfRows = grid.getDataLength();
+		var newRow = 0;
+		var currentRow = grid.getSelectedRows()[0];
+
 		if (shuffle) {
-			var numbah = randomToN(songs.length);
-			playSong($(songs.get(numbah)));
+			newRow = randomToN(numberOfRows);
 		}
-		else {
-			playSong(currentSong.next('li'));
+		else if ((currentRow + 1) < numberOfRows) {
+			newRow = currentRow + 1;
 		}
+
+		grid.startPlaying(newRow);
 	}
 
-	function playSong(song) {
-		var $this = song,
-			filename = $.trim($this.text()),
-			uri = $this.find('a').attr('href');
-
-		playerTrack.text(filename);
+	function playSong(song, path) {
+		var uri = '/songs/play/?file=' + path;
 
 		audio.attr('src', uri);
 		audio[0].play();
 
-		if (currentSong) currentSong.removeClass('now-playing');
-		currentSong = $this;
-		currentSong.addClass('now-playing');
+		playerTrack.text(song);
 	}
 
-  	$.getJSON('/songs/index\?refresh=yes', function(data) {
-
-  		var songlist = $('#songlist');
-  		$.each(data, function () {
- 			songlist.append('<li><a href="/songs/play?file=' + this.path + '">' + this.nice_title + '</a></li>');
-  		});
-  		songs = songlist.find('li');
-
-		// play songs when the name is clicked!
-		songs.click(function (e) {
-			e.preventDefault();
-			playSong($(this));
-		});
-
-  	});
 
 	// resize the main-area to correct height
 	function resizeMain() {
@@ -188,49 +243,15 @@ $(document).ready(function () {
 		var w = $(window).width() - $('#sidebar').innerWidth();
 		$('#main').css('height', h);
 		$('#content-wrap').css('width', w);
+
+		if (grid)
+			grid.resizeCanvas();
 	}
 
 	$(window).resize(function () {
 		resizeMain();
 	});
 	$(window).resize();
-
-
-	// SlickGrid
-
-	var columns = [
-		{ id: 'artist', name: 'Artist', field: 'artist' },
-		{ id: 'tracknum', name: '#', field: 'tracknum', cssClass: 'tracknum', width: 20 },
-		{ id: 'title', name: 'Title', field: 'title' },
-		{ id: 'album', name: 'Album', field: 'album' },
-		{ id: 'duration', name: 'Duration', field: 'nice_length', cssClass: 'duration', width: 30 },
-		{ id: 'path', name: '', field: 'path' }
-	];
-
-	var options = {
-		autoHeight: true,
-		forceFitColumns: true,
-		enableCellNavigation: true,
-		enableColumnReorder: false
-	};
-
-	var grid = null;
-
-/*
-  	$.getJSON('/songs/index', function(data) {
-    	grid = new Slick.Grid("#slickgrid", data, columns, options);
-
-    	// double-click => play song
-    	grid.onDblClick.subscribe(function (e) {
-    		var cell = grid.getCellFromEvent(e);
-
-    		playSong(data[cell.row].path);
-    		e.stopPropagation();
-    	});
-
-		console.log(grid);
-	});
-*/
 
 });
 

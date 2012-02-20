@@ -89,15 +89,34 @@ header {
 
 /* 4.SONGLIST
 ----------------------------------------------------------------------------- */
-.container {
+.page {
 	padding:20px;
 }
-ol#songlist {
-	margin-bottom:60px;
-	width:100%;
+
+/* slickgrid */
+#slickgrid {
+	font-size:12px;
 }
-	#songlist .now-playing {
-		font-weight:700;
+	#slickgrid .slick-row {
+		line-height:22px;
+	}
+	#slickgrid .slick-cell {
+		border:0;
+	}
+	#slickgrid .slick-cell.l0 {
+		padding-left:5px;
+	}
+	#slickgrid .odd {
+		background:#fffaf0;
+	}
+	#slickgrid .selected {
+		background:#e5e5e5;
+	}
+	.slick-cell.tracknum {
+		text-align:right;
+		padding-right:10px;
+	}
+	.slick-cell.duration {
 	}
 
 
