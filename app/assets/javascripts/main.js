@@ -11,6 +11,9 @@ $(document).ready(function () {
         $('#main').css('height', h);
         $('#content-wrap').css('width', w);
 
+        var h2 = h - $('.page-header').innerHeight();
+        $('.grid-container').css('height', h2);
+
         if (grid)
             grid.resizeCanvas();
     }
@@ -174,7 +177,7 @@ $(document).ready(function () {
     ];
 
     var options = {
-        autoHeight: true,
+        /*autoHeight: true,*/
         editable: false,
         forceFitColumns: true,
         enableAutoTooltips: true,

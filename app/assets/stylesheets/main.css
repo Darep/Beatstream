@@ -35,7 +35,6 @@ h1 {
 }
 h2 {
     font-size:24px;
-    margin:0 0 15px;
 }
 h5 {
     font-weight:700;
@@ -72,7 +71,7 @@ h5 {
         }
             #content-wrap {
                 height:100%;
-                overflow-y:scroll;
+                overflow-y:hidden;
                 position: absolute;
                 top:0;
                 bottom:0;
@@ -89,14 +88,25 @@ header {
 
 /* 4.SONGLIST
 ----------------------------------------------------------------------------- */
-.page {
+.page-header {
+    border-bottom:1px solid #e5e5e5;
     padding:20px;
+}
+
+.grid-container {
+    position:relative;
+    width:100%;
 }
 
 /* slickgrid */
 #slickgrid {
     color:#222;
     font-size:12px;
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
     height:auto;
     width:100%;
 }
@@ -229,12 +239,16 @@ header {
 #sidebar {
     background:#f1f1f1;
     border-right:1px solid #e5e5e5;
+    font-size:12px;
     height:100%;
 }
     #sidebar-wrap {
         padding:10px;
         min-width:100px;
     }
+        #sidebar ul {
+            list-style:none;
+        }
 
 
 /* 99.MISC
