@@ -71,7 +71,8 @@ class Mp3File
 			# TODO: tell the caller how many broken mp3s found
 		end
       	
-      	@nice_title = (@artist.to_s + ' - ') if (!@artist.nil?)
+        @nice_title = ''
+      	@nice_title += (@artist.to_s + ' - ') if (!@artist.nil?)
       	@nice_title += @title.to_s
 
       	@nice_length = (Time.mktime(0)+@length).strftime("%m:%S")
