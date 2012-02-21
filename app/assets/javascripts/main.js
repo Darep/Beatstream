@@ -4,6 +4,12 @@
 
 $(document).ready(function () {
 
+    resizeMain();
+
+    $(window).resize(function () {
+        resizeMain();
+    });
+
     // resize the main-area to correct height
     function resizeMain() {
         var h = $(window).height() - $('#wrap > header').outerHeight() - $('#player').outerHeight();
@@ -18,11 +24,6 @@ $(document).ready(function () {
             grid.resizeCanvas();
         }
     }
-
-    $(window).resize(function () {
-        resizeMain();
-    });
-    $(window).resize();
 
     
     // init:
