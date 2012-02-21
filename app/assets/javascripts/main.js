@@ -6,8 +6,8 @@ $(document).ready(function () {
 
     // resize the main-area to correct height
     function resizeMain() {
-        var h = $(window).height() - $('#wrap > header').innerHeight() - $('#player').innerHeight();
-        var w = $(window).width() - $('#sidebar').innerWidth();
+        var h = $(window).height() - $('#wrap > header').outerHeight() - $('#player').outerHeight();
+        var w = $(window).width() - $('#sidebar').outerWidth();
         $('#main').css('height', h);
         $('#content-wrap').css('width', w);
 
@@ -107,13 +107,19 @@ $(document).ready(function () {
 
     playPause.click(function (e) {
         e.preventDefault();
+
+        if (grid.currentSong == null) {
+            grid.currentSong = grid.getDataLength();
+            nextSong();
+            return;
+        }
+
         if (audio[0].paused) {
             audio[0].play();
         }
         else {
             audio[0].pause();
         }
-        e.preventDefault();
     });
 
     nextButton.click(function (e) {
@@ -128,7 +134,6 @@ $(document).ready(function () {
 
     audio.bind('play', function() {
         playPause.removeClass('paused');
-        $('#player-buttons button').removeAttr('disabled');
     });
 
     audio.bind('pause', function() {
@@ -136,7 +141,6 @@ $(document).ready(function () {
     });
 
     audio.bind('ended', function () {
-        //seekbar.slider('option', 'disabled', true);
         nextSong();
     });
 
@@ -167,7 +171,7 @@ $(document).ready(function () {
     // SlickGrid
 
     var columns = [
-        { id: 'np', resizable: false, width: 20 },
+        { id: 'np', resizable: false, width: 22 },
         { id: 'title', name: 'Title', field: 'title', sortable: true },
         { id: 'tracknum', name: '', field: 'tracknum', sortable: true, resizable: false, cssClass: 'tracknum', width: 30 },
         { id: 'artist', name: 'Artist', field: 'artist', sortable: true },
@@ -236,6 +240,8 @@ $(document).ready(function () {
         };
     });
 
+    // enable buttons
+    $('#player-buttons button').removeAttr('disabled');
 
     // song playback functions
 

@@ -1,7 +1,7 @@
 .ui-slider {
-	background:#000;
-	border:1px solid #333;
-	border-top-color:#222;
+	background:#0b0b0b;
+	border:1px solid #2a2a2a;
+	border-top-color:#000;
 	height:8px;
 	position:relative;
 	text-align:left;
@@ -9,8 +9,12 @@
 }
 	.ui-slider-range {
 		background:#f6a828;
+		background:-webkit-linear-gradient(top,         #f6a828,
+        #f6a828 30%,
+        #d06010 85%,
+        #aa3311);
 		display:block;
-		height:100%;
+		height:8px;
 		position: absolute;
 		z-index:1;
 		border-radius:10px;
@@ -19,11 +23,11 @@
 	background:#eee;
 	border:1px solid #ddd;
 	display:block;
-	height:10px;
+	height:8px;
 	margin-left:-5px;
 	position:absolute;
-	top:-2px;
-	width:10px;
+	top:-1px;
+	width:8px;
 	z-index:2;
 	border-radius:10px;
 }
