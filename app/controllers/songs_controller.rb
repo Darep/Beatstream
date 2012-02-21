@@ -75,7 +75,7 @@ class Mp3File
         @nice_title += (@artist.to_s + ' - ') if !@artist.nil?
         @nice_title += @title.to_s
 
-        @nice_length = (Time.mktime(0)+@length).strftime("%m:%S")
+        @nice_length = (Time.mktime(0)+@length).strftime("%M:%S")
 
         # convert outgoing strings into valid utf-8
         @title = to_utf8(@title)

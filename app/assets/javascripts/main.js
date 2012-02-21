@@ -14,8 +14,9 @@ $(document).ready(function () {
         var h2 = h - $('.page-header').innerHeight();
         $('.grid-container').css('height', h2);
 
-        if (grid)
+        if (grid) {
             grid.resizeCanvas();
+        }
     }
 
     $(window).resize(function () {
