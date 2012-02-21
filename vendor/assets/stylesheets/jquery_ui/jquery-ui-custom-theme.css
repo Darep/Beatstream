@@ -1,9 +1,11 @@
 .ui-slider {
 	background:#000;
-	border:1px solid #555;
-	height:10px;
+	border:1px solid #333;
+	border-top-color:#222;
+	height:8px;
 	position:relative;
 	text-align:left;
+	border-radius:8px;
 }
 	.ui-slider-range {
 		background:#f6a828;
@@ -11,23 +13,26 @@
 		height:100%;
 		position: absolute;
 		z-index:1;
+		border-radius:10px;
 	}
 .ui-slider-handle {
-	background:#f1f1f1;
+	background:#222;
+	border:1px solid #222;
 	display:block;
-	height:13px;
-	margin-left:-.5em;
+	height:10px;
+	margin-left:-5px;
 	position:absolute;
-	top:-1px;
-	width:14px;
+	top:-2px;
+	width:10px;
 	z-index:2;
+	border-radius:10px;
 }
 .ui-slider-handle:focus {
 	outline:0;
 }
 .ui-slider-handle.ui-state-hover {
-	background:#fff;
+	background:#666;
 }
 .ui-slider-handle.ui-state-active {
-	background:#ddd;
+	background:#aaa;
 }
