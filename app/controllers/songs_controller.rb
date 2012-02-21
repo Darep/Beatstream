@@ -7,7 +7,7 @@ class SongsController < ApplicationController
 
     def index
         @songs = Rails.cache.fetch('songs')
-        if @songs.nil? || @songs.empty? || params['refresh']
+        if @songs.nil? || @songs.empty? || params['refresh'] || true
             refresh
         end
 
@@ -33,7 +33,7 @@ class SongsController < ApplicationController
         Find.find(MUSIC_PATH) do |file|
             next if file !~ /.*\.mp3$/
             next if File.directory?(file)
-            mp3 = Mp3File.new(file)
+            mp3 = Mp3File.new(file, @songs.length)
             @songs.push(mp3)
         end
         Rails.cache.write('songs', @songs, :time_to_idle => 1.minute, :timeToLive => 1.day)
@@ -42,13 +42,14 @@ end
 
 class Mp3File
 
-    attr_reader :filename, :path, :artist, :title, :album, :tracknum, :length
+    attr_reader :id, :filename, :path, :artist, :title, :album, :tracknum, :length
 
-    def initialize(path)
+    def initialize(path, id)
         file = File.new(path)
 
         @filename = File.basename(path)
         @path = path.gsub(MUSIC_PATH, '')
+        @id = id
         #@size = file.stat.size()
 
         @title = @filename

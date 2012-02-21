@@ -1,6 +1,6 @@
+//= require helpers
 //= require store.min
 //= require slick.grid
-//= require helpers
 
 $(document).ready(function () {
 
@@ -27,7 +27,6 @@ $(document).ready(function () {
     
     // init:
 
-    var songs = null;
     var grid = null;
     var audio = $('#player audio');
     audio.css('display', 'none');
@@ -38,8 +37,6 @@ $(document).ready(function () {
     var nextButton = $('#next');
     var elapsed = $('#player-time .elapsed');
     var duration = $('#player-time .duration');
-
-    var currentSong = null;
 
     // shuffle
     var shuffleButton = $('#shuffle');
@@ -109,9 +106,8 @@ $(document).ready(function () {
     playPause.click(function (e) {
         e.preventDefault();
 
-        if (grid.currentSong == null) {
-            grid.currentSong = grid.getDataLength();
-            nextSong();
+        if (grid.currentSongId == null) {
+            grid.nextSong();
             return;
         }
 
@@ -125,13 +121,16 @@ $(document).ready(function () {
 
     nextButton.click(function (e) {
         e.preventDefault();
-        nextSong();
+        grid.nextSong();
     });
 
     prevButton.click(function (e) {
         e.preventDefault();
-        prevSong();
+        grid.prevSong();
     });
+
+
+    // audio player events
 
     audio.bind('play', function() {
         playPause.removeClass('paused');
@@ -142,15 +141,13 @@ $(document).ready(function () {
     });
 
     audio.bind('ended', function () {
-        nextSong();
+        grid.nextSong();
     });
 
     audio.bind('timeupdate', function () {
-        var elaps = parseInt(audio[0].currentTime),
-            mins = Math.floor(elaps/60, 10),
-            secs = elaps - mins*60;
+        var elaps = parseInt(audio[0].currentTime);
 
-        elapsed.text((mins > 9 ? mins : '0' + mins) + ':' + (secs > 9 ? secs : '0' + secs));
+        elapsedTimeChanged(elaps);
 
         if (!user_is_seeking) {
             seekbar.slider('option', 'value', elaps);
@@ -158,13 +155,8 @@ $(document).ready(function () {
     });
 
     audio.bind('durationchange', function () {
-        var dur = parseInt(audio[0].duration),
-            mins = Math.floor(dur/60, 10),
-            secs = dur - mins*60;
-
-        duration.text((mins > 9 ? mins : '0' + mins) + ':' + (secs > 9 ? secs : '0' + secs));
-
-        seekbar.slider('option', 'max', dur);
+        var dur = parseInt(audio[0].duration);
+        durationChanged(dur);
         seekbar.slider('option', 'disabled', false);
     });
 
@@ -192,14 +184,18 @@ $(document).ready(function () {
         rowHeight: 22
     };
 
+    var dataView = new Slick.Data.DataView({ inlineFilters: true });
+
     $.getJSON('/songs/index', function(data) {
-        grid = new Slick.Grid("#slickgrid", data, columns, options);
+        grid = new Slick.Grid("#slickgrid", dataView, columns, options);
         grid.setSelectionModel(new Slick.RowSelectionModel());
 
         // remove 'path' column
         grid.setColumns(columns.slice(0, -1));
 
         console.log(grid);
+
+        // events:
 
         // double-click => play song
         grid.onClick.subscribe(function (e) {
@@ -210,8 +206,9 @@ $(document).ready(function () {
 
         grid.onDblClick.subscribe(function (e) {
             var cell = grid.getCellFromEvent(e);
+            var dataItem = grid.getDataItem(cell.row);
 
-            grid.startPlaying(cell.row);
+            grid.playSong(dataItem.id);
 
             e.stopPropagation();
         });
@@ -220,57 +217,146 @@ $(document).ready(function () {
             var row = grid.getSelectedRows()[0];
         });
 
-        grid.currentSong = null;
+        grid.onSort.subscribe(function (e, args) {
+            dataView.sort(comparer, args.sortAsc);
+        });
 
-        grid.startPlaying = function (row) {
-            var song = grid.getDataItem(row);
-            
+        // own extensions:
+
+        grid.currentSongId = null;
+
+        grid.playSong = function (id) {
+            var row = dataView.getRowById(id);
+
+            if (row == undefined) {
+                return; // song is not on the current list
+            }
+
+            var song = dataView.getItemById(id);
+
             playSong(song.nice_title, song.path);
+            grid.currentSongId = song.id;
 
             // now playing icon
-            var cells = {};
-            cells[row] = { np: 'playing' };
-
             grid.removeCellCssStyles('currentSong_playing');
-            grid.addCellCssStyles('currentSong_playing', cells);
 
-            grid.currentSong = row;
+            var np_cells = {}; np_cells[row] = { np: 'playing' };
+            grid.addCellCssStyles('currentSong_playing', np_cells);
+
             grid.setSelectedRows([row]);
-
             grid.scrollRowIntoView(row);
         };
+
+        grid.playSongAtRow = function (row) {
+            var song = dataView.getItem(row); // getItem == getItemAtRow
+            grid.playSong(song.id);
+        };
+
+        grid.prevSong = function () {
+            var number_of_rows = grid.getDataLength();
+            var new_row = number_of_rows - 1;
+            var current_row = dataView.getRowById(grid.currentSongId);
+
+            if (current_row == undefined) {
+                // current song is not in the grid, stop playing
+                stop();
+                return;
+            }
+
+            if ((current_row - 1) >= 0) {
+                new_row = current_row - 1;
+            }
+
+            grid.playSongAtRow(new_row);
+        };
+
+        grid.nextSong = function () {
+            var number_of_rows = grid.getDataLength();
+            var new_row = 0;
+            var current_row = -1;
+
+            if (grid.currentSongId != null) {
+                current_row = dataView.getRowById(grid.currentSongId);
+
+                if (current_row == undefined) {
+                    // current song is not in the grid, stop playing
+                    stop();
+                    return;
+                }
+            }
+
+            if (shuffle) {
+                new_row = randomToN(number_of_rows);
+            }
+            else if ((current_row + 1) < number_of_rows) {
+                new_row = current_row + 1;
+            }
+
+            grid.playSongAtRow(new_row);
+        };
+
+        // wire up model events to drive the grid
+        dataView.onRowCountChanged.subscribe(function (e, args) {
+            grid.updateRowCount();
+            grid.render();
+        });
+
+        dataView.onRowsChanged.subscribe(function (e, args) {
+            grid.invalidateRows(args.rows);
+            grid.render();
+        });
+
+        var searchString = '';
+
+        function myFilter(item, args) {
+            if (args.searchString == "") {
+                return true;
+            }
+
+            var searchStr = args.searchString.toLowerCase();
+
+            if ((item["title"] && item["title"].toLowerCase().indexOf(searchStr) != -1)
+                || (item["artist"] && item["artist"].toLowerCase().indexOf(searchStr) != -1)
+                || (item["album"] && item["album"].toLowerCase().indexOf(searchStr) != -1)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        // wire up the search textbox to apply the filter to the model
+        $('#search').keyup(function (e) {
+            // clear on Esc
+            if (e.which == 27) {
+                this.value = "";
+            }
+
+            searchString = this.value;
+            updateFilter();
+        });
+
+        function updateFilter() {
+            dataView.setFilterArgs({
+                searchString: searchString
+            });
+            dataView.refresh();
+        }
+
+        // initialize data view model after events have been hooked up
+        dataView.beginUpdate();
+        dataView.setItems(data);
+        dataView.setFilterArgs({
+            searchString: searchString
+        });
+        dataView.setFilter(myFilter);
+        dataView.endUpdate();
+
+        dataView.syncGridSelection(grid, false);
+        dataView.syncGridCellCssStyles(grid, 'currentSong_playing');
     });
 
     // enable buttons
     $('#player-buttons button').removeAttr('disabled');
-
-    // song playback functions
-
-    function prevSong() {
-        var newRow = grid.getDataLength() - 1;
-        var currentRow = grid.currentSong; //grid.getSelectedRows()[0];
-
-        if ((currentRow - 1) >= 0) {
-            newRow = currentRow - 1;
-        }
-
-        grid.startPlaying(newRow);
-    }
-
-    function nextSong() {
-        var numberOfRows = grid.getDataLength();
-        var newRow = 0;
-        var currentRow = grid.currentSong; //grid.getSelectedRows()[0];
-
-        if (shuffle) {
-            newRow = randomToN(numberOfRows);
-        }
-        else if ((currentRow + 1) < numberOfRows) {
-            newRow = currentRow + 1;
-        }
-
-        grid.startPlaying(newRow);
-    }
 
     function playSong(song, path) {
         var uri = '/songs/play/?file=' + path;
@@ -281,4 +367,39 @@ $(document).ready(function () {
         playerTrack.text(song);
     }
 
+    function stop() {
+        if (!audio[0].paused) {
+            audio[0].pause();
+            audio[0].src = '';
+        }
+        grid.currentSongId = null;
+        
+        elapsedTimeChanged(0);
+        durationChanged(0);
+        seekbar.slider('value', 0);
+        seekbar.slider('option', 'disabled', true);
+        playerTrack.text('None');
+    }
+
+    function durationChanged(dur) {
+        var mins = Math.floor(dur/60, 10),
+            secs = dur - mins*60;
+
+        duration.text((mins > 9 ? mins : '0' + mins) + ':' + (secs > 9 ? secs : '0' + secs));
+
+        seekbar.slider('option', 'max', dur);
+    }
+
+    function elapsedTimeChanged(elaps) {
+        var mins = Math.floor(elaps/60, 10),
+            secs = elaps - mins*60;
+
+        elapsed.text((mins > 9 ? mins : '0' + mins) + ':' + (secs > 9 ? secs : '0' + secs));
+    }
+
 });
+
+function comparer(a, b) {
+  var x = a[sortcol], y = b[sortcol];
+  return (x == y ? 0 : (x > y ? 1 : -1));
+}
