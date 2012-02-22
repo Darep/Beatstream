@@ -1,16 +1,14 @@
 //= require helpers
 //= require store.min
 //= require slick.grid
+//= require jquery.event.drop-2.0.min
 
 $(document).ready(function () {
 
-    resizeMain();
-
-    $(window).resize(function () {
-        resizeMain();
-    });
-
     // resize the main-area to correct height
+    resizeMain();
+    $(window).resize(function () { resizeMain(); });
+
     function resizeMain() {
         var h = $(window).height() - $('#wrap > header').outerHeight() - $('#player').outerHeight();
         var w = $(window).width() - $('#sidebar').outerWidth();
@@ -162,6 +160,23 @@ $(document).ready(function () {
     });
 
 
+    // sidebar drag & drop
+    
+    jQuery.event.special.drag.defaults.distance = 7;
+
+    $('#sidebar .playlists li').bind('dropinit', function () {
+        console.log('dropinit');
+    });
+
+    $('#sidebar .playlists li').bind('dropstart', function () {
+        console.log('starttoooo');
+    });
+
+    $('#sidebar .playlists li').drop(function (ev, dd) {
+        console.log('yay!');
+    });
+
+
     // SlickGrid
 
     var columns = [
@@ -179,9 +194,9 @@ $(document).ready(function () {
         editable: false,
         forceFitColumns: true,
         enableAutoTooltips: true,
-        enableCellNavigation: false,
+        enableCellNavigation: true,
         enableColumnReorder: false,
-        multiSelect: false,
+        multiSelect: true,
         rowHeight: 22
     };
 
@@ -198,10 +213,8 @@ $(document).ready(function () {
 
         // events:
 
-        // double-click => play song
         grid.onClick.subscribe(function (e) {
             var cell = grid.getCellFromEvent(e);
-
             grid.setSelectedRows([cell.row]);
         });
 
@@ -221,6 +234,82 @@ $(document).ready(function () {
         grid.onSort.subscribe(function (e, args) {
             dataView.sort(comparer, args.sortAsc);
         });
+
+        // dragging
+        var draginfo_top_margin = -20;
+
+        grid.onDragInit.subscribe(function (e, dd) {
+            // we're handling drags
+            e.stopImmediatePropagation();
+        });
+
+        grid.onDragStart.subscribe(function (e, dd) {
+
+            var cell = grid.getCellFromEvent(e);
+            var data = {};
+            var song_count = 0;
+
+            // check if dragging selected rows
+            var rows = grid.getSelectedRows();
+            var draggingSelectedRows = false;
+
+            for (var i = 0; i < rows.length; i++) {
+                var dataItem = grid.getDataItem(rows[i]);
+                data[i] = dataItem;
+                if (rows[i] == cell.row) {
+                    draggingSelectedRows = true;
+                }
+                song_count++;
+            }
+
+            if (draggingSelectedRows == false) {
+                var dataItem = grid.getDataItem(cell.row);
+                data = {};
+                data[0] = dataItem;
+                song_count = 1;
+            }
+
+            dd.bestDataEver = data;
+
+            var draginfo = $('#draginfo');
+            if (!draginfo.length) {
+                draginfo = $('<div id="draginfo"></div>');
+                $('body').append(draginfo);
+            }
+
+            draginfo.text(song_count + ' song')
+                    .css({
+                        position: 'absolute',
+                        left: dd.startX,
+                        top: dd.startY + draginfo_top_margin,
+                        zIndex: 2000
+                    })
+                    .show();
+
+            if (song_count != 1) {
+                draginfo.append('s');
+            }
+
+            // we're handling drags!
+            e.stopImmediatePropagation();
+        });
+
+        grid.onDrag.subscribe(function (e, dd) {
+            var draginfo = $('#draginfo');
+            draginfo.css({
+                left: e.clientX,
+                top: e.clientY + draginfo_top_margin
+            });
+        });
+
+        grid.onDragEnd.subscribe(function (e, dd) {
+            console.log(dd);
+            console.log(dd.drop);
+            console.log(dd.available);
+
+            $('#draginfo').hide();
+        });
+
 
         // own extensions:
 
@@ -316,13 +405,23 @@ $(document).ready(function () {
 
             var searchStr = args.searchString.toLowerCase();
 
-            if ((item["title"] && item["title"].toLowerCase().indexOf(searchStr) != -1)
-                || (item["artist"] && item["artist"].toLowerCase().indexOf(searchStr) != -1)
-                || (item["album"] && item["album"].toLowerCase().indexOf(searchStr) != -1)) {
-                return true;
+            searchStr = searchStr.split(' ');
+
+            var match = true;
+
+            for (var i = 0; i < searchStr.length; i++) {
+                var str = searchStr[i];
+                if ((item["title"] && item["title"].toLowerCase().indexOf(str) != -1)
+                    || (item["artist"] && item["artist"].toLowerCase().indexOf(str) != -1)
+                    || (item["album"] && item["album"].toLowerCase().indexOf(str) != -1)) {
+                    match = true;
+                }
+                else {
+                    return false;
+                }
             }
 
-            return false;
+            return match;
         }
 
         // wire up the search textbox to apply the filter to the model

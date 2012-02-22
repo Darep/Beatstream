@@ -94,8 +94,36 @@ header {
 ----------------------------------------------------------------------------- */
 .page-header {
     border-bottom:1px solid #e5e5e5;
+    overflow: hidden;
     padding:20px;
+    position:relative;
 }
+    .page-header h2 {
+        float:left;
+    }
+    .search {
+        float:right;
+        margin-top:3px;
+    }
+        #search {
+            border:1px solid #999;
+            height:16px;
+            border-radius:12px;
+            outline:0;
+            padding:1px 10px 3px;
+
+            -webkit-transition: all 100ms ease-in;
+        }
+        #search:focus {
+            -webkit-box-shadow:0 0 5px #6092e5; /*rgba(0,0,0, 0.6);*/
+        }
+        .search .clear {
+            background:#ddd;
+            display:inline-block;
+            height:20px;
+            text-indent:-9999em;
+            width:20px;
+        }
 
 .grid-container {
     background:#f1f1f1;
@@ -294,6 +322,17 @@ header {
                 padding:3px 10px;
             }
 
+/* draginfo */
+#draginfo {
+    background:#fff;
+    background:rgba(255,255,255, 0.8);
+    border:1px solid #e5e5e5;
+    font-size:11px;
+    padding:.5em .8em;
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+}
 
 /* 99.MISC
 ----------------------------------------------------------------------------- */
