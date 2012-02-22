@@ -118,11 +118,16 @@ header {
             -webkit-box-shadow:0 0 5px #6092e5; /*rgba(0,0,0, 0.6);*/
         }
         .search .clear {
-            background:#ddd;
+            background:url('/assets/close.png') no-repeat 0 -14px;
             display:inline-block;
-            height:20px;
+            height:14px;
+            position:relative;
+            top:4px;
             text-indent:-9999em;
-            width:20px;
+            width:14px;
+        }
+        .search .clear:hover {
+            background-position:0 0;
         }
 
 .grid-container {
