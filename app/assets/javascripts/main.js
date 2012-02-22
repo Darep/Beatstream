@@ -133,11 +133,11 @@ $(document).ready(function () {
     // audio player events
 
     audio.bind('play', function() {
-        playPause.removeClass('paused');
+        playPause.addClass('playing');
     });
 
     audio.bind('pause', function() {
-        playPause.addClass('paused');
+        playPause.removeClass('playing');
     });
 
     audio.bind('ended', function () {

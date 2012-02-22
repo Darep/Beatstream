@@ -252,6 +252,12 @@ header {
         #player #play-pause:active {
             background-position:-72px -92px;
         }
+        #player #play-pause.playing {
+            background-position:-286px -5px;
+        }
+        #player #play-pause.playing:active {
+            background-position:-286px -92px;
+        }
         #player #prev {
             background-position:0 -5px;
         }
