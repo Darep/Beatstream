@@ -233,11 +233,25 @@ $(document).ready(function () {
         });
 
         grid.onSort.subscribe(function (e, args) {
+            var sortcol = args.sortCol.field;
+
+            function comparer(a, b) {
+                var x = a[sortcol], y = b[sortcol];
+
+                if (!x) { return -1; }
+                if (!y) { return 1; }
+
+                if (sortcol == 'tracknum') {
+                    return (x == y ? 0 : (x > y ? 1 : -1));
+                }
+
+                return naturalsort(x, y);
+            }
+
             dataView.sort(comparer, args.sortAsc);
         });
 
         // dragging
-        var draginfo_top_margin = -20;
 
         grid.onDragInit.subscribe(function (e, dd) {
             // we're handling drags
@@ -272,20 +286,7 @@ $(document).ready(function () {
 
             dd.bestDataEver = data;
 
-            var draginfo = $('#draginfo');
-            if (!draginfo.length) {
-                draginfo = $('<div id="draginfo"></div>');
-                $('body').append(draginfo);
-            }
-
-            draginfo.text(song_count + ' song')
-                    .css({
-                        position: 'absolute',
-                        left: dd.startX,
-                        top: dd.startY + draginfo_top_margin,
-                        zIndex: 2000
-                    })
-                    .show();
+            DragTooltip.show(dd.startX, dd.startY, song_count + ' song');
 
             if (song_count != 1) {
                 draginfo.append('s');
@@ -296,11 +297,7 @@ $(document).ready(function () {
         });
 
         grid.onDrag.subscribe(function (e, dd) {
-            var draginfo = $('#draginfo');
-            draginfo.css({
-                left: e.clientX,
-                top: e.clientY + draginfo_top_margin
-            });
+            DragTooltip.update(e.clientX, e.clientY);
         });
 
         grid.onDragEnd.subscribe(function (e, dd) {
@@ -308,7 +305,7 @@ $(document).ready(function () {
             console.log(dd.drop);
             console.log(dd.available);
 
-            $('#draginfo').hide();
+            DragTooltip.hide();
         });
 
 
@@ -500,7 +497,32 @@ $(document).ready(function () {
 
 });
 
-function comparer(a, b) {
-  var x = a[sortcol], y = b[sortcol];
-  return (x == y ? 0 : (x > y ? 1 : -1));
+
+function naturalsort(a, b) {
+  function chunkify(t) {
+    var tz = [], x = 0, y = -1, n = 0, i, j;
+
+    while (i = (j = t.charAt(x++)).charCodeAt(0)) {
+      var m = (i == 46 || (i >=48 && i <= 57));
+      if (m !== n) {
+        tz[++y] = "";
+        n = m;
+      }
+      tz[y] += j;
+    }
+    return tz;
+  }
+
+  var aa = chunkify(a.toLowerCase());
+  var bb = chunkify(b.toLowerCase());
+
+  for (x = 0; aa[x] && bb[x]; x++) {
+    if (aa[x] !== bb[x]) {
+      var c = Number(aa[x]), d = Number(bb[x]);
+      if (c == aa[x] && d == bb[x]) {
+        return c - d;
+      } else return (aa[x] > bb[x]) ? 1 : -1;
+    }
+  }
+  return aa.length - bb.length;
 }
