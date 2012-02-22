@@ -103,7 +103,7 @@ header {
     }
     .search {
         float:right;
-        margin-top:3px;
+        margin-top:4px;
     }
         #search {
             border:1px solid #999;
@@ -122,7 +122,7 @@ header {
             display:inline-block;
             height:14px;
             position:relative;
-            top:4px;
+            top:3px;
             text-indent:-9999em;
             width:14px;
         }

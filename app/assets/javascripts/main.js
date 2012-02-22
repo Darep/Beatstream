@@ -2,6 +2,7 @@
 //= require store.min
 //= require slick.grid
 //= require jquery.event.drop-2.0.min
+//= require jquery.ba-hashchange.min
 
 $(document).ready(function () {
 
@@ -161,7 +162,7 @@ $(document).ready(function () {
 
 
     // sidebar drag & drop
-    
+
     jQuery.event.special.drag.defaults.distance = 7;
 
     $('#sidebar .playlists li').bind('dropinit', function () {
