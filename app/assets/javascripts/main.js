@@ -1,7 +1,6 @@
 //= require helpers
 //= require store.min
 //= require slick.grid
-//= require jquery.event.drop-2.0.min
 //= require jquery.ba-hashchange.min
 
 $(document).ready(function () {
@@ -165,25 +164,13 @@ $(document).ready(function () {
 
     jQuery.event.special.drag.defaults.distance = 7;
 
-    $('#sidebar .playlists li').bind('dropinit', function () {
-        console.log('dropinit');
-    });
-
-    $('#sidebar .playlists li').bind('dropstart', function () {
-        console.log('starttoooo');
-    });
-
-    $('#sidebar .playlists li').drop(function (ev, dd) {
-        console.log('yay!');
-    });
-
 
     // SlickGrid
 
     var columns = [
         { id: 'np', resizable: false, width: 22 },
         { id: 'title', name: 'Title', field: 'title', sortable: true },
-        { id: 'tracknum', name: '', field: 'tracknum', sortable: true, resizable: false, cssClass: 'tracknum', width: 30 },
+        { id: 'tracknum', name: '', field: 'tracknum', sortable: false, resizable: false, cssClass: 'tracknum', width: 30 },
         { id: 'artist', name: 'Artist', field: 'artist', sortable: true },
         { id: 'album', name: 'Album', field: 'album', sortable: true },
         { id: 'duration', name: 'Duration', field: 'nice_length', sortable: true, cssClass: 'duration', width: 30 },
@@ -236,13 +223,19 @@ $(document).ready(function () {
             var sortcol = args.sortCol.field;
 
             function comparer(a, b) {
-                var x = a[sortcol], y = b[sortcol];
+                var x = a[sortcol],
+                    y = b[sortcol];
 
                 if (!x) { return -1; }
                 if (!y) { return 1; }
 
-                if (sortcol == 'tracknum') {
-                    return (x == y ? 0 : (x > y ? 1 : -1));
+                if (sortcol == 'album') {
+                    x = a['album'] + ' - ' + a['tracknum'];
+                    y = b['album'] + ' - ' + b['tracknum'];
+                }
+                else if (sortcol == 'artist') {
+                    x = a['artist'] + ' - ' + a['album'] + ' - ' + a['tracknum'];
+                    y = b['artist'] + ' - ' + b['album'] + ' - ' + b['tracknum'];
                 }
 
                 return naturalsort(x, y);
@@ -289,23 +282,44 @@ $(document).ready(function () {
             DragTooltip.show(dd.startX, dd.startY, song_count + ' song');
 
             if (song_count != 1) {
-                draginfo.append('s');
+                DragTooltip.append('s');
             }
 
-            // we're handling drags!
+            // make playlists hilight
+            $('#sidebar .playlists li').addClass('targeted');
+
+            // tell grid that we're handling drags!
             e.stopImmediatePropagation();
         });
 
         grid.onDrag.subscribe(function (e, dd) {
             DragTooltip.update(e.clientX, e.clientY);
+
+            var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
+
+            if (drop_target == undefined || drop_target.parent().parent().hasClass('playlists') == false) {
+                // these are not the drops you are looking for
+                $('#sidebar .playlists li').removeClass('hover');
+                return;
+            }
+
+            $('#sidebar .playlists li').removeClass('hover');
+            drop_target.parent().addClass('hover');
         });
 
         grid.onDragEnd.subscribe(function (e, dd) {
-            console.log(dd);
-            console.log(dd.drop);
-            console.log(dd.available);
-
             DragTooltip.hide();
+
+            $('#sidebar .playlists li').removeClass('targeted').removeClass('hover');
+
+            var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
+
+            if (drop_target == undefined || drop_target.parent().hasClass('.playlists') == false) {
+                // these are not the drops you are looking for
+                return;
+            }
+
+            // TODO: asdf
         });
 
 
@@ -431,6 +445,15 @@ $(document).ready(function () {
 
             searchString = this.value;
             updateFilter();
+        });
+
+        $('.search .clear').click(function (e) {
+            $('#search').val('');
+            searchString = '';
+            updateFilter();
+
+            e.preventDefault();
+            e.stopPropagation();
         });
 
         function updateFilter() {

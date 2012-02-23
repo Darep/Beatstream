@@ -1,66 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <title>BeatStream</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-  <link href="http://fonts.googleapis.com/css?family=Lobster&amp;subset=latin" rel="stylesheet" type="text/css">
+    <meta charset="UTF-8" />
+    <title>Beatstream</title>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+    <link href="http://fonts.googleapis.com/css?family=Lobster&amp;subset=latin" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
 <div id="wrap">
-	<header>
-		<h1>BeatStream</h1>
-	</header>
+    <header>
+        <h1>Beatstream</h1>
+    </header>
 
-	<div id="main">
-		<div id="sidebar">
-			<div id="sidebar-wrap">
-				
-				<h5>Music</h5>
-				<ul class="music">
-					<li class="act">All music</li>
-				</ul>
+    <div id="main">
+        <div id="sidebar">
+            <div id="sidebar-wrap">
+                
+                <h5>Music</h5>
+                <ul class="music">
+                    <li class="act"><a href="#">All music</a></li>
+                </ul>
 
-				<h5>Playlists</h5>
-				<ul class="playlists">
-					<li>TODO:</li>
-					<li>playlists</li>
-				</ul>
-			</div>
-		</div>
-		<div id="content">
-			<div id="content-wrap">
-				<%= yield %>
-			</div>
-		</div>
-	</div>
+                <h5>Playlists</h5>
+                <ul class="playlists">
+                    <li class="new-list">
+                        <a href="#" class="new-list">+ New Playlist</a>
+                    </li>
+                </ul>
 
-	<div id="player">
-		<h5 id="player-song"><span class="label">Current song:</span> <span class="track">None</span></h5>
-		<div id="player-controls">
-			<div id="player-buttons">
-				<button id="prev" type="button" disabled="disabled">Prev</button>
-				<button id="play-pause" type="button" disabled="disabled">Play/pause</button>
-				<button id="next" type="button" disabled="disabled">Next</button>
-			</div>
-			<div id="player-volume">
-				<div id="player-volume-slider"></div>
-			</div>
-			<p id="player-time">
-				<span class="elapsed">00:00</span> / <span class="duration">00:00</span>
-			</p>
-			<div id="player-buttons-2">
-				<button id="shuffle" type="button">Shuffle <span class="status">Off</span></button>
-			</div>
-			<div id="seekbar">
-				<div id="seekbar-slider"></div>
-			</div>
-		</div>
-		<audio preload="preload" autoplay="autoplay" />
-	</div>
+            </div>
+        </div>
+        <div id="content">
+            <div id="content-wrap">
+                <%= yield %>
+            </div>
+        </div>
+    </div>
+
+    <div id="player">
+        <h5 id="player-song"><span class="label">Current song:</span> <span class="track">None</span></h5>
+        <div id="player-controls">
+            <div id="player-buttons">
+                <button id="prev" type="button" disabled="disabled">Prev</button>
+                <button id="play-pause" type="button" disabled="disabled">Play/pause</button>
+                <button id="next" type="button" disabled="disabled">Next</button>
+            </div>
+            <div id="player-volume">
+                <div id="player-volume-slider"></div>
+            </div>
+            <p id="player-time">
+                <span class="elapsed">00:00</span> / <span class="duration">00:00</span>
+            </p>
+            <div id="player-buttons-2">
+                <button id="shuffle" type="button">Shuffle <span class="status">Off</span></button>
+            </div>
+            <div id="seekbar">
+                <div id="seekbar-slider"></div>
+            </div>
+        </div>
+        <audio preload="preload" autoplay="autoplay" />
+    </div>
 </div>
 
 </body>

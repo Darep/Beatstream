@@ -6,7 +6,8 @@
 var DragTooltip = {
 
     options: {
-        topMargin: -20
+        topMargin: -20,
+        leftMargin: 5
     },
 
 	draginfo: $('#draginfo'),
@@ -21,7 +22,7 @@ var DragTooltip = {
         this.draginfo.text(text)
                 .css({
                     position: 'absolute',
-                    left: x,
+                    left: x + this.options.leftMargin,
                     top: y + this.options.topMargin,
                     zIndex: 9001
                 })
@@ -30,12 +31,16 @@ var DragTooltip = {
 
     update: function (x, y) {
         this.draginfo.css({
-            left: x,
+            left: x + this.options.leftMargin,
             top: y + this.options.topMargin
         });
     },
 
     hide: function() {
         this.draginfo.hide();
+    },
+
+    append: function (text) {
+        this.draginfo.append(text);
     }
 };
