@@ -191,12 +191,15 @@ $(document).ready(function () {
     var dataView = new Slick.Data.DataView({ inlineFilters: true });
 
     $.getJSON('/songs/index', function(data) {
+        $('.grid-container .overlay').hide();
+
         grid = new Slick.Grid("#slickgrid", dataView, columns, options);
         grid.setSelectionModel(new Slick.RowSelectionModel());
 
         // remove 'path' column
         grid.setColumns(columns.slice(0, -1));
 
+        // DEBUG:
         console.log(grid);
 
         // events:
