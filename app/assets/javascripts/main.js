@@ -169,9 +169,9 @@ $(document).ready(function () {
 
     var columns = [
         { id: 'np', resizable: false, width: 22 },
-        { id: 'title', name: 'Title', field: 'title', sortable: true },
-        { id: 'tracknum', name: '', field: 'tracknum', sortable: false, resizable: false, cssClass: 'tracknum', width: 30 },
         { id: 'artist', name: 'Artist', field: 'artist', sortable: true },
+        { id: 'tracknum', name: '', field: 'tracknum', sortable: false, resizable: false, cssClass: 'tracknum', width: 30 },
+        { id: 'title', name: 'Title', field: 'title', sortable: true },
         { id: 'album', name: 'Album', field: 'album', sortable: true },
         { id: 'duration', name: 'Duration', field: 'nice_length', sortable: true, cssClass: 'duration', width: 30 },
         { id: 'path', name: '', field: 'path' }
