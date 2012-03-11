@@ -203,7 +203,11 @@ $(document).ready(function () {
 
     var dataView = new Slick.Data.DataView({ inlineFilters: true });
 
-    $.getJSON('/songs/index', function(data) {
+    $.ajax({
+        url: '/songs/index',
+        dataType: 'json',
+        success: function(data) {
+
         $('.grid-container .overlay').hide();
 
         grid = new Slick.Grid("#slickgrid", dataView, columns, options);
@@ -490,7 +494,7 @@ $(document).ready(function () {
 
         dataView.syncGridSelection(grid, false);
         dataView.syncGridCellCssStyles(grid, 'currentSong_playing');
-    });
+    }});
 
     // enable buttons
     $('#player-buttons button').removeAttr('disabled');
@@ -565,3 +569,4 @@ function naturalsort(a, b) {
   }
   return aa.length - bb.length;
 }
+
