@@ -159,6 +159,19 @@ $(document).ready(function () {
         seekbar.slider('option', 'disabled', false);
     });
 
+    var error_counter = 0;
+
+    audio.bind('error', function () {
+        if (error_counter > 2) {
+            audio[0].pause();
+            error_counter = 0;
+            return;
+        }
+
+        grid.nextSong();
+        error_counter = error_counter + 1;
+    });
+
 
     // sidebar drag & drop
 
@@ -483,7 +496,7 @@ $(document).ready(function () {
     $('#player-buttons button').removeAttr('disabled');
 
     function playSong(song, path) {
-        var uri = '/songs/play/?file=' + path;
+        var uri = '/songs/play/?file=' + encodeURIComponent(path);
 
         audio.attr('src', uri);
         audio[0].play();

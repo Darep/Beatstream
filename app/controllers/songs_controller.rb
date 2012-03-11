@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'find'
+require 'mp3info'
 
 MUSIC_PATH = Rails.application.config.MUSIC_PATH
 
@@ -17,8 +18,7 @@ class SongsController < ApplicationController
     end
 
     def play
-        filename = params[:file]
-        filepath = MUSIC_PATH + filename
+        filepath = MUSIC_PATH + params[:file]
 
         response.content_type = Mime::Type.lookup_by_extension("mp3")
 
@@ -59,7 +59,7 @@ class Mp3File
         @length = 0
 
         # ID3 tag info
-        begin
+        #begin
             info = Mp3Info.open(path)
             tag = info.tag()
             @title = tag['title'] if (!tag['title'].nil?)
@@ -67,10 +67,10 @@ class Mp3File
             @album = tag['album']
             @tracknum = tag['tracknum']
             @length = info.length
-        rescue Mp3InfoError
+        #rescue Mp3InfoError
             # TODO: collect the broken mp3s into a separate array
             # TODO: count the broken mp3s
-        end
+        #end
         
         @nice_title = ''
         @nice_title += (@artist.to_s + ' - ') if !@artist.nil?
@@ -79,10 +79,11 @@ class Mp3File
         @nice_length = (Time.mktime(0)+@length).strftime("%M:%S")
 
         # convert outgoing strings into valid utf-8
-        @title = to_utf8(@title)
-        @artist = to_utf8(@artist) if !@artist.nil?
-        @album = to_utf8(@album) if !@album.nil?
-        @nice_title = to_utf8(@nice_title)
+
+        #@title = to_utf8(@title)
+        #@artist = to_utf8(@artist) if !@artist.nil?
+        #@album = to_utf8(@album) if !@album.nil?
+        #@nice_title = to_utf8(@nice_title)
     end
 
     def to_s
@@ -97,7 +98,7 @@ class Mp3File
     # @param [String] untristed_string the string to convert to UTF-8
     # @return [String] passed string in UTF-8
     def to_utf8 untrusted_string=""
-        ic = Iconv.new('UTF-8//IGNORE', 'ISO-8859-15')
+        ic = Iconv.new('UTF-8//IGNORE', 'ISO-8859-1')
         ic.iconv(untrusted_string)
         #ic.iconv(untrusted_string + ' ')[0..-2]
     end
