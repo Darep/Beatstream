@@ -208,10 +208,8 @@ $(document).ready(function () {
         dataType: 'json',
         error: function (xhr, status, error) {
             console.log(xhr);
-            console.log(xhr.responseText);
             console.log(status);
             console.log(error);
-            JSON.parse(xhr.responseText);
         },
         success: function(data) {
 

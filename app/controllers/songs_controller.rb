@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'find'
-require 'mp3info'
+#require 'mp3info'
 require 'logger'
 
 MUSIC_PATH = Rails.application.config.MUSIC_PATH
@@ -42,7 +42,7 @@ class SongsController < ApplicationController
                 mp3 = Mp3File.new(file, @songs.length)
                 @songs.push(mp3)
             rescue Mp3InfoError
-                #Rails.logger.info 'Failed to load MP3: ' + path
+                Rails.logger.info 'Failed to load MP3: ' + file
                 # TODO: collect the broken mp3s into a separate array
                 # TODO: count the broken mp3s
             end
@@ -86,10 +86,10 @@ class Mp3File
 
         # convert outgoing strings into valid utf-8
 
-        #@title = to_utf8(@title)
-        #@artist = to_utf8(@artist) if !@artist.nil?
-        #@album = to_utf8(@album) if !@album.nil?
-        #@nice_title = to_utf8(@nice_title)
+        @title = to_utf8(@title)
+        @artist = to_utf8(@artist) if !@artist.nil?
+        @album = to_utf8(@album) if !@album.nil?
+        @nice_title = to_utf8(@nice_title)
     end
 
     def to_s
@@ -101,10 +101,10 @@ class Mp3File
     # Iconv UTF-8 helper
     # Converts string into valid UTF-8
     #
-    # @param [String] untristed_string the string to convert to UTF-8
+    # @param [String] untrusted_string the string to convert to UTF-8
     # @return [String] passed string in UTF-8
     def to_utf8 untrusted_string=""
-        ic = Iconv.new('UTF-8//IGNORE', 'ISO-8859-1')
+        ic = Iconv.new('UTF-8//IGNORE', 'ISO-8859-15')
         ic.iconv(untrusted_string)
         #ic.iconv(untrusted_string + ' ')[0..-2]
     end
