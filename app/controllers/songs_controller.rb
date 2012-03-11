@@ -56,12 +56,13 @@ class Mp3File
     attr_reader :id, :filename, :path, :artist, :title, :album, :tracknum, :length
 
     def initialize(path, id)
-        file = File.new(path)
+        #file = File.new(path)
+        #@size = file.stat.size()
 
         @filename = File.basename(path)
+        #@size = file.stat.size()
         @path = path.gsub(MUSIC_PATH, '')
         @id = id
-        #@size = file.stat.size()
 
         @title = @filename
         @artist = ''
