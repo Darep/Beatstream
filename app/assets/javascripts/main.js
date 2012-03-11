@@ -495,7 +495,8 @@ $(document).ready(function () {
             dataView.syncGridSelection(grid, false);
             dataView.syncGridCellCssStyles(grid, 'currentSong_playing');
         },
-        error: function (error) {
+        error: function (xhr, status, error) {
+            console.log(status);
             console.log(error);
         }
     }); /* end $.ajax */
