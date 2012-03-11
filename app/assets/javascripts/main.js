@@ -206,6 +206,13 @@ $(document).ready(function () {
     $.ajax({
         url: '/songs/index',
         dataType: 'json',
+        error: function (xhr, status, error) {
+            console.log(xhr);
+            console.log(xhr.responseText);
+            console.log(status);
+            console.log(error);
+            JSON.parse(xhr.responseText);
+        },
         success: function(data) {
 
             $('.grid-container .overlay').hide();
@@ -494,11 +501,6 @@ $(document).ready(function () {
 
             dataView.syncGridSelection(grid, false);
             dataView.syncGridCellCssStyles(grid, 'currentSong_playing');
-        },
-        error: function (xhr, status, error) {
-            console.log(xhr.responseText);
-            console.log(status);
-            console.log(error);
         }
     }); /* end $.ajax */
 
