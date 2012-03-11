@@ -496,6 +496,7 @@ $(document).ready(function () {
             dataView.syncGridCellCssStyles(grid, 'currentSong_playing');
         },
         error: function (xhr, status, error) {
+            console.log(xhr.responseText);
             console.log(status);
             console.log(error);
         }
