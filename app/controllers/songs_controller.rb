@@ -10,7 +10,7 @@ class SongsController < ApplicationController
     def index
         @songs = Rails.cache.fetch('songs')
         if @songs.nil? || @songs.empty? || params['refresh']
-            Rails.logger.info 'Cache not found, or forced-refresh --> refreshing songs list'
+            #Rails.logger.info 'Cache not found, or forced-refresh --> refreshing songs list'
             refresh
         end
 
@@ -34,7 +34,7 @@ class SongsController < ApplicationController
         @songs = []
         Find.find(MUSIC_PATH) do |file|
             if File.directory?(file) || file !~ /.*\.mp3$/ || file =~ /^\./
-                Rails.logger.info 'Skipping file: ' + file
+                #Rails.logger.info 'Skipping file: ' + file
                 next
             end
             mp3 = Mp3File.new(file, @songs.length)
@@ -72,7 +72,7 @@ class Mp3File
             @tracknum = tag['tracknum']
             @length = info.length
         rescue Mp3InfoError
-            Rails.logger.info 'Failed to load MP3: ' + path
+            #Rails.logger.info 'Failed to load MP3: ' + path
             # TODO: collect the broken mp3s into a separate array
             # TODO: count the broken mp3s
         end
