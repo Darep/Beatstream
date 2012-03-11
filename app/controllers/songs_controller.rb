@@ -33,7 +33,7 @@ class SongsController < ApplicationController
     def refresh
         @songs = []
         Find.find(MUSIC_PATH) do |file|
-            if File.directory?(file) || file !~ /.*\.mp3$/ || file !~ /^\._.*/
+            if File.directory?(file) || file !~ /.*\.mp3$/ || file =~ /^\./
                 Rails.logger.info 'Skipping file: ' + file
                 next
             end
