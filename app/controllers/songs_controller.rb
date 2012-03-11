@@ -59,7 +59,7 @@ class Mp3File
         @length = 0
 
         # ID3 tag info
-        #begin
+        begin
             info = Mp3Info.open(path)
             tag = info.tag()
             @title = tag['title'] if (!tag['title'].nil?)
@@ -67,10 +67,11 @@ class Mp3File
             @album = tag['album']
             @tracknum = tag['tracknum']
             @length = info.length
-        #rescue Mp3InfoError
+        rescue Mp3InfoError
+            puts path
             # TODO: collect the broken mp3s into a separate array
             # TODO: count the broken mp3s
-        #end
+        end
         
         @nice_title = ''
         @nice_title += (@artist.to_s + ' - ') if !@artist.nil?
