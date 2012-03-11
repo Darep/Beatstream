@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'find'
 require 'mp3info'
+require 'logger'
 
 MUSIC_PATH = Rails.application.config.MUSIC_PATH
 
@@ -68,7 +69,7 @@ class Mp3File
             @tracknum = tag['tracknum']
             @length = info.length
         rescue Mp3InfoError
-            logger.info 'Failed to load MP3: ' + path
+            Rails.logger.info 'Failed to load MP3: ' + path
             # TODO: collect the broken mp3s into a separate array
             # TODO: count the broken mp3s
         end
