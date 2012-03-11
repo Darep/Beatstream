@@ -60,7 +60,6 @@ class Mp3File
         #@size = file.stat.size()
 
         @filename = File.basename(path)
-        #@size = file.stat.size()
         @path = path.gsub(MUSIC_PATH, '')
         @id = id
 
