@@ -37,8 +37,15 @@ class SongsController < ApplicationController
                 #Rails.logger.info 'Skipping file: ' + file
                 next
             end
-            mp3 = Mp3File.new(file, @songs.length)
-            @songs.push(mp3)
+            
+            begin
+                mp3 = Mp3File.new(file, @songs.length)
+                @songs.push(mp3)
+            rescue Mp3InfoError
+                #Rails.logger.info 'Failed to load MP3: ' + path
+                # TODO: collect the broken mp3s into a separate array
+                # TODO: count the broken mp3s
+            end
         end
         Rails.cache.write('songs', @songs, :time_to_idle => 1.minute, :timeToLive => 1.day)
     end
@@ -63,19 +70,13 @@ class Mp3File
         @length = 0
 
         # ID3 tag info
-        begin
-            info = Mp3Info.open(path)
-            tag = info.tag()
-            @title = tag['title'] if (!tag['title'].nil?)
-            @artist = tag['artist'] if (!tag['title'].nil?)
-            @album = tag['album']
-            @tracknum = tag['tracknum']
-            @length = info.length
-        rescue Mp3InfoError
-            #Rails.logger.info 'Failed to load MP3: ' + path
-            # TODO: collect the broken mp3s into a separate array
-            # TODO: count the broken mp3s
-        end
+        info = Mp3Info.open(path)
+        tag = info.tag()
+        @title = tag['title'] if (!tag['title'].nil?)
+        @artist = tag['artist'] if (!tag['title'].nil?)
+        @album = tag['album']
+        @tracknum = tag['tracknum']
+        @length = info.length
         
         @nice_title = ''
         @nice_title += (@artist.to_s + ' - ') if !@artist.nil?
