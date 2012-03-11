@@ -68,7 +68,7 @@ class Mp3File
             @tracknum = tag['tracknum']
             @length = info.length
         rescue Mp3InfoError
-            puts path
+            logger.info 'Failed to load MP3: ' + path
             # TODO: collect the broken mp3s into a separate array
             # TODO: count the broken mp3s
         end
