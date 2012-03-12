@@ -26,6 +26,8 @@ gem 'jquery-rails'
 #gem 'ruby-mp3info'
 gem 'mp3info'
 
+gem 'rockstar'
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
