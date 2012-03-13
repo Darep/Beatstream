@@ -265,12 +265,12 @@ $(document).ready(function () {
                     if (!y) { return 1; }
 
                     if (sortcol == 'album') {
-                        x = a['album'] + ' - ' + a['tracknum'];
-                        y = b['album'] + ' - ' + b['tracknum'];
+                        x = a['album'] + ' ' + a['tracknum'];
+                        y = b['album'] + ' ' + b['tracknum'];
                     }
                     else if (sortcol == 'artist') {
-                        x = a['artist'] + ' - ' + a['album'] + ' - ' + a['tracknum'];
-                        y = b['artist'] + ' - ' + b['album'] + ' - ' + b['tracknum'];
+                        x = a['artist'] + ' ' + a['album'] + ' ' + a['tracknum'];
+                        y = b['artist'] + ' ' + b['album'] + ' ' + b['tracknum'];
                     }
 
                     return naturalsort(x, y);

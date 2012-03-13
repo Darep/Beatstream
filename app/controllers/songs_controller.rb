@@ -9,8 +9,11 @@ class SongsController < ApplicationController
 
     def index
         @songs = Rails.cache.fetch('songs')
-        if @songs.nil? || @songs.empty? || params['refresh']
-            Rails.logger.info 'Cache not found, or forced-refresh --> refreshing songs list'
+        if @songs.nil? || @songs.empty?
+            Rails.logger.info 'Cache not found --> refreshing songs list'
+            refresh
+        elsif params[:refresh]
+            Rails.logger.info 'Forced song list refresh'
             refresh
         end
 
