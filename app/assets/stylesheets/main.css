@@ -7,6 +7,12 @@
 1.BASE
 2.LAYOUT
 3.HEADER
+4.SONGLIST
+5.PLAYER
+6.SIDEBAR
+7.MODAL
+
+99.MISC
 
 */
 
@@ -108,7 +114,7 @@ header {
         font-weight:700;
     }
         #user-panel a {
-            color:#ddd;
+            color:#bbb;
             display:block;
         }
             #user-panel img {
@@ -121,6 +127,19 @@ header {
             }
             #user-panel .name {
                 line-height:50px;
+                margin-right:2px;
+            }
+            #user-panel .dropdown {
+                border-left:4px solid transparent;
+                border-right:4px solid transparent;
+                border-top:4px solid #bbb;
+                display:inline-block;
+                position:relative;
+                top:-1px;
+            }
+            #user-panel a:hover *, #user-panel a.act * {
+                color:#fff;
+                border-top-color:#fff;
             }
         #user-menu {
             background:#fff;
@@ -485,6 +504,59 @@ header {
     border-radius:4px;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
+}
+
+
+/* 7.MODAL
+----------------------------------------------------------------------------- */
+.modal {
+    font-size:13px;
+    padding:20px 30px;
+    width:340px;
+}
+    .modal h2 {
+        margin:0 0 2px;
+    }
+    .modal .subheader {
+        color:#888;
+        font-size:14px;
+        margin:0 0 15px;
+    }
+    .modal fieldset {
+        border-top:1px solid #ddd;
+        margin:0 -30px;
+        padding:15px 30px;
+    }
+        .modal label {
+            clear:both;
+            display:inline-block;
+            float:left;
+            font-size:14px;
+            font-weight:700;
+            line-height:34px;
+            width:100px;
+        }
+        .modal .field {
+            display:inline-block;
+            float:left;
+            margin:0 0 15px;
+        }
+        .modal input[type="text"] {
+            border:1px solid #ccc;
+            font-size:13px;
+            line-height:20px;
+            padding:4px;
+            border-radius:3px;
+        }
+        .modal .actions {
+            margin-left:100px;
+        }
+            .modal .actions a {
+                margin-left:15px;
+            }
+
+input[type="submit"] {
+    cursor:pointer;
 }
 
 /* 99.MISC

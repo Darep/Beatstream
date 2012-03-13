@@ -16,7 +16,8 @@
         <div id="user-panel">
             <a href="#">
                 <img src="" alt="" />
-                <span class="name">Username</span>
+                <span class="name"><%= session[:username] ? session[:username] : 'You' %></span>
+                <span class="dropdown"></span>
             </a>
             <ul id="user-menu">
                 <li class="head"><span></span></li>

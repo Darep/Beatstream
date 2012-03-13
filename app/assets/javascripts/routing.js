@@ -10,8 +10,36 @@ var Routing = {
 
         switch (route) {
             case 'settings':
-                $.fancybox({ href: '/settings' });
+                var href = window.location.href.replace('#!/', '');
+                
+                $.fancybox({
+                    type: 'ajax',
+                    href: href,
+                    
+                    modal: true,
+                    padding: 0,
+
+                    afterClose: function () {
+                        window.location.hash = '';
+                    },
+                    beforeShow: function () {
+                        var $this = $('.fancybox-inner');
+
+                        console.log($this);
+
+                        $this.find('.close').click(function () {
+                            console.log('yey');
+                            $.fancybox.close();
+
+                            return false;
+                        });
+                    }
+                });
                 break;
         }
     }
 };
+
+$(document).ready(function () {
+    window.location.hash = '';
+});

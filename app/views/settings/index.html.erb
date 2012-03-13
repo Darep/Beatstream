@@ -1,27 +1,36 @@
-<h2>Settings</h2>
-<p class="subheader">&ldquo;Fuck you too, buddy!&rdquo;</p>
+<div class="modal settings">
 
-<%= form_for @user, :url => { :action => 'save' }, :method => 'post' do |f| %>
-    <%= f.error_messages %>
-    <fieldset>
-        <%= f.label :username %>
-        <div class="field">
-            <%= f.text_field :username %>
-        </div>
+    <h2>Settings</h2>
+    <p class="subheader">&ldquo;Fuck you too, buddy!&rdquo;</p>
 
-        <%= f.label :email %>
-        <div class="field">
-            <%= f.text_field :email %>
-        </div>
-    </fieldset>
+    <%= form_for @user, :url => { :action => 'save' }, :method => 'post' do |f| %>
+        <%= f.error_messages %>
+        <fieldset>
+            <%= f.label :username %>
+            <div class="field">
+                <%= f.text_field :username %>
+            </div>
 
-    <fieldset>
-        <label>Last.fm</label>
-        <div class="field">
-            <a href="http://www.last.fm/api/auth/?api_key=<%= Rockstar.lastfm_api_key %>&amp;cb=<%= url_for :action => 'lastfm_callback', :only_path => false %>">Connect Last.fm</a>
+            <%= f.label :email %>
+            <div class="field">
+                <%= f.text_field :email %>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <label>Last.fm</label>
+            <div class="field">
+                <% if @user.lastfm_session_key == nil %>
+                <a href="http://www.last.fm/api/auth/?api_key=<%= Rockstar.lastfm_api_key %>&amp;cb=<%= url_for :action => 'lastfm_callback', :only_path => false %>" target="_blank" class="connect-lastfm">Connect Last.fm</a>
+                <% else %>
+                    <p>Logged in :) <a href="#">Remove</a></p>
+                <% end %>
+            </div>
+        </fieldset>
+        <div class="actions">
+            <%= submit_tag %>
+            <a href="/" class="close">Cancel</a>
         </div>
-    </fieldset>
-    <div class="actions">
-        <%= submit_tag %>
-    </div>
-<% end %>
+    <% end %>
+
+</div>
