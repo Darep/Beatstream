@@ -125,6 +125,7 @@ header {
         #user-menu {
             background:#fff;
             border:1px solid #ccc;
+            display:none;
             list-style:none;
             padding:.4em 0;
             position:absolute;
