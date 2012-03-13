@@ -12,7 +12,18 @@
 
 <div id="wrap">
     <header>
-        <h1>Beatstream</h1>
+        <p id="logo"><a href="#">Beatstream</a></p>
+        <div id="user-panel">
+            <a href="#">
+                <img src="" alt="" />
+                <span class="name">Username</span>
+            </a>
+            <ul id="user-menu">
+                <li class="head"><span></span></li>
+                <li><a href="#!/settings" class="settings">Settings</a></li>
+                <li><%= link_to 'Logout', logout_path, :method => :delete %>
+            </ul>
+        </div>
     </header>
 
     <div id="main">
@@ -63,6 +74,17 @@
         <audio />
     </div>
 </div>
+
+<script type="text/html" id="settings-template">
+    <h1>Settings</h1>
+
+    <div>
+        <label for=""></label>
+    </div>
+    <input type="text" name="" />
+
+
+</script>
 
 </body>
 </html>

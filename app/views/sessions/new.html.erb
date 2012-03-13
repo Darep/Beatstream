@@ -1,0 +1,21 @@
+<% if flash[:alert] %>
+    <div id="alert">
+        <p><%= flash[:alert] %></p>
+    </div>
+<% end %>
+
+<%= form_tag do %>
+    <div>
+        <label>Username</label>
+    </div>
+    <%= text_field_tag :username, params[:username] %>
+
+    <div>
+        <label>Password</label>
+    </div>
+    <%= password_field_tag :password, params[:password] %>
+
+    <div>
+        <%= submit_tag "Log in" %>
+    </div>
+<% end %>

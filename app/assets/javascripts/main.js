@@ -1,7 +1,8 @@
 //= require helpers
 //= require store.min
-//= require slick.grid
 //= require jquery.ba-hashchange.min
+//= require slick.grid
+//= require routing
 
 $(document).ready(function () {
 
@@ -23,10 +24,18 @@ $(document).ready(function () {
         }
     }
 
+
+    // ::: USER MENU :::
+
+    $(window).hashchange(function () {
+        Routing.ResolveCurrent();
+    });
     
-    // init:
+
+    // ::: INIT SONGLIST / GRID OMG SO BIG SECTION :::
 
     var grid = null;
+
     var audio = $('#player audio');
     audio.css('display', 'none');
 
@@ -36,6 +45,9 @@ $(document).ready(function () {
     var nextButton = $('#next');
     var elapsed = $('#player-time .elapsed');
     var duration = $('#player-time .duration');
+
+    var song_scrobbled = false;
+    var scrobble_time = 240;
 
     // shuffle
     var shuffleButton = $('#shuffle');
@@ -221,8 +233,6 @@ $(document).ready(function () {
             // remove 'path' column
             grid.setColumns(columns.slice(0, -1));
 
-            // DEBUG:
-            console.log(grid);
 
             // events:
 
@@ -352,6 +362,15 @@ $(document).ready(function () {
 
             grid.currentSongId = null;
 
+            grid.getCurrentSong = function () {
+                if (grid.currentSongId === null) {
+                    return null;
+                }
+                else {
+                    return dataView.getItemById(grid.currentSongId);
+                }
+            };
+
             grid.playSong = function (id) {
                 var row = dataView.getRowById(id);
 
@@ -361,7 +380,7 @@ $(document).ready(function () {
 
                 var song = dataView.getItemById(id);
 
-                playSong(song.nice_title, song.path);
+                playSong(song);
                 grid.currentSongId = song.id;
 
                 // now playing icon
@@ -505,13 +524,31 @@ $(document).ready(function () {
     // enable buttons
     $('#player-buttons button').removeAttr('disabled');
 
-    function playSong(song, path) {
-        var uri = '/songs/play/?file=' + encodeURIComponent(path);
+    function playSong(song) {
+        var uri = '/songs/play/?file=' + encodeURIComponent(song.path);
 
         audio.attr('src', uri);
         audio[0].play();
 
-        playerTrack.text(song);
+        playerTrack.text(song.nice_title);
+
+        // set now playing
+        updateNowPlaying(song);
+
+        // set scrobbling time
+        scrobble_time = Math.floor(song.length/2, 10);
+        
+        if (scrobble_time > 240) {
+            scrobble_time = 240;
+        }
+
+        // don't scrobble songs that are under 30 secs (last.fm rule)
+        if (scrobble_time <= 15) {
+            song_scrobbled = true;
+        }
+        else {
+            song_scrobbled = false;
+        }
     }
 
     function stop() {
@@ -542,37 +579,45 @@ $(document).ready(function () {
             secs = elaps - mins*60;
 
         elapsed.text((mins > 9 ? mins : '0' + mins) + ':' + (secs > 9 ? secs : '0' + secs));
+
+        if (song_scrobbled === false && scrobble_time < elaps) {
+            song_scrobbled = true;
+            scrobble();
+        }
     }
 
+    function scrobble() {
+        var song = grid.getCurrentSong();
+
+        var uri = '/songs/scrobble/?artist=' +
+            encodeURIComponent(song.artist) +
+            '&title=' + encodeURIComponent(song.title);
+
+        $.ajax({
+            url: uri,
+            success: function () {
+                console.log('Scrobbled song: ' + song.artist + ' - ' + song.title);
+            },
+            error: function () {
+                console.log('Scrobbling failed!');
+            }
+        });
+    }
+
+    function updateNowPlaying(song) {
+        var uri = '/songs/now_playing/?artist=' +
+            encodeURIComponent(song.artist) +
+            '&title=' + encodeURIComponent(song.title);
+
+        $.ajax({
+            url: uri,
+            success: function () {
+                console.log('Updated now playing to: ' + song.artist + ' - ' + song.title);
+            },
+            error: function () {
+                console.log('Now playing update failed!');
+            }
+        });
+    }
 });
-
-
-function naturalsort(a, b) {
-  function chunkify(t) {
-    var tz = [], x = 0, y = -1, n = 0, i, j;
-
-    while (i = (j = t.charAt(x++)).charCodeAt(0)) {
-      var m = (i == 46 || (i >=48 && i <= 57));
-      if (m !== n) {
-        tz[++y] = "";
-        n = m;
-      }
-      tz[y] += j;
-    }
-    return tz;
-  }
-
-  var aa = chunkify(a.toLowerCase());
-  var bb = chunkify(b.toLowerCase());
-
-  for (x = 0; aa[x] && bb[x]; x++) {
-    if (aa[x] !== bb[x]) {
-      var c = Number(aa[x]), d = Number(bb[x]);
-      if (c == aa[x] && d == bb[x]) {
-        return c - d;
-      } else return (aa[x] > bb[x]) ? 1 : -1;
-    }
-  }
-  return aa.length - bb.length;
-}
 

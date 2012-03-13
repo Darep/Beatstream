@@ -1,0 +1,27 @@
+<h2>Settings</h2>
+<p class="subheader">&ldquo;Fuck you too, buddy!&rdquo;</p>
+
+<%= form_for @user, :url => { :action => 'save' }, :method => 'post' do |f| %>
+    <%= f.error_messages %>
+    <fieldset>
+        <%= f.label :username %>
+        <div class="field">
+            <%= f.text_field :username %>
+        </div>
+
+        <%= f.label :email %>
+        <div class="field">
+            <%= f.text_field :email %>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <label>Last.fm</label>
+        <div class="field">
+            <a href="http://www.last.fm/api/auth/?api_key=<%= Rockstar.lastfm_api_key %>&amp;cb=<%= url_for :action => 'lastfm_callback', :only_path => false %>">Connect Last.fm</a>
+        </div>
+    </fieldset>
+    <div class="actions">
+        <%= submit_tag %>
+    </div>
+<% end %>

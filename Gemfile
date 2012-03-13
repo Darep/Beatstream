@@ -26,7 +26,9 @@ gem 'jquery-rails'
 #gem 'ruby-mp3info'
 gem 'mp3info'
 
-gem 'rockstar'
+gem 'rockstar', :git => 'git://github.com/gigbeat/rockstar.git'
+
+gem 'dynamic_form'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

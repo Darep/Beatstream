@@ -28,6 +28,40 @@ class SongsController < ApplicationController
         #send_file filepath, :type => 'audio/mpeg'
     end
 
+    def now_playing
+        artist = params[:artist]
+        title = params[:title]
+
+        @user = User.find(session[:user_id])
+
+        #if @user.lastfm_session_key == null
+        #end
+
+        Rails.logger.info 'Update Now Playing to "' + artist + ' - ' + title + '" for user ' + @user.username
+
+        track = Rockstar::Track.new(artist, title)
+        track.updateNowPlaying(Time.now, @user.lastfm_session_key)
+
+        render :text => ''
+    end
+
+    def scrobble
+        artist = params[:artist]
+        title = params[:title]
+
+        @user = User.find(session[:user_id])
+
+        #if @user.lastfm_session_key == null
+        #end
+
+        Rails.logger.info 'Scrobbling track "' + artist + ' - ' + title + '" for user ' + @user.username
+
+        track = Rockstar::Track.new(artist, title)
+        track.scrobble(Time.now, @user.lastfm_session_key)
+
+        render :text => ''
+    end
+
     private
 
     def refresh
@@ -49,6 +83,10 @@ class SongsController < ApplicationController
         end
         Rails.cache.write('songs', @songs, :time_to_idle => 1.minute, :timeToLive => 1.day)
     end
+
+    def scrobble_track(artist, title)
+    end
+
 end
 
 class Mp3File

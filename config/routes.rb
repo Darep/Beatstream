@@ -1,6 +1,19 @@
 BeatStream::Application.routes.draw do
+
+  match 'settings' => 'settings#index'
+  match 'settings/save' => 'settings#save'
+  match 'settings/lastfm_callback' => 'settings#lastfm_callback'
+
+  controller :sessions do
+    get 'login' => :new
+    post 'login' => :create
+    delete 'logout' => :destroy
+  end
+
   get 'songs/index'
   get 'songs/play'
+  get 'songs/scrobble'
+  get 'songs/now_playing'
 
   root :to => 'main#index'
 
