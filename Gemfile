@@ -30,6 +30,8 @@ gem 'rockstar', :git => 'git://github.com/gigbeat/rockstar.git'
 
 gem 'dynamic_form'
 
+#gem 'mongo_mapper'
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

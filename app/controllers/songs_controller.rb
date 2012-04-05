@@ -19,6 +19,7 @@ class SongsController < ApplicationController
 
         respond_to do |format|
             format.json { render :json => @songs }
+            format.html { render :text => @songs }
         end
     end
 
@@ -70,7 +71,7 @@ class SongsController < ApplicationController
     def refresh
         @songs = []
         Find.find(MUSIC_PATH) do |file|
-            if File.directory?(file) || file !~ /.*\.mp3$/ || file =~ /^\./
+            if File.directory?(file) || file !~ /.*\.mp3$/i || file =~ /^\./
                 #Rails.logger.info 'Skipping file: ' + file
                 next
             end
@@ -85,9 +86,6 @@ class SongsController < ApplicationController
             end
         end
         Rails.cache.write('songs', @songs, :time_to_idle => 1.minute, :timeToLive => 1.day)
-    end
-
-    def scrobble_track(artist, title)
     end
 
 end

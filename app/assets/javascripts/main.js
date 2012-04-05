@@ -4,6 +4,10 @@
 //= require slick.grid
 //= require routing
 
+var keyCode = {
+    ENTER: 13
+};
+
 $(document).ready(function () {
 
     // resize the main-area to correct height
@@ -86,7 +90,8 @@ $(document).ready(function () {
         min: 0,
         range: 'min',
         slide: function (event, ui) {
-            audio[0].volume = parseFloat(ui.value/100);
+            var vol = parseFloat(ui.value/100/2);
+            audio[0].volume = vol;
         },
         stop: function (event, ui) {
             store.set('volume', parseFloat(ui.value/100));
@@ -117,7 +122,7 @@ $(document).ready(function () {
     playPause.click(function (e) {
         e.preventDefault();
 
-        if (grid.currentSongId == null) {
+        if (grid.playingSongId == null) {
             grid.nextSong();
             return;
         }
@@ -138,6 +143,13 @@ $(document).ready(function () {
     prevButton.click(function (e) {
         e.preventDefault();
         grid.prevSong();
+    });
+
+    playerTrack.dblclick(function (e) {
+        e.preventDefault();
+        
+        var row = dataView.getRowById(grid.playingSongId);
+        grid.scrollRowIntoView(row);
     });
 
 
@@ -250,8 +262,24 @@ $(document).ready(function () {
                 e.stopPropagation();
             });
 
+            grid.onKeyDown.subscribe(function (e) {
+                if (e.keyCode == keyCode.ENTER) {
+                    
+                    var rows = grid.getSelectedRows();
+                    if (!rows || rows.length <= 0) {
+                        return;
+                    }
+
+                    var dataItem = grid.getDataItem(rows[0]);
+                    
+                    grid.playSong(dataItem.id);
+
+                    e.stopPropagation();
+                }
+            });
+
             grid.onSelectedRowsChanged.subscribe(function (e) {
-                var row = grid.getSelectedRows()[0];
+                //var row = grid.getSelectedRows()[0];
             });
 
             grid.onSort.subscribe(function (e, args) {
@@ -360,14 +388,14 @@ $(document).ready(function () {
 
             // own extensions:
 
-            grid.currentSongId = null;
+            grid.playingSongId = null;
 
-            grid.getCurrentSong = function () {
-                if (grid.currentSongId === null) {
+            grid.getPlayingSong = function () {
+                if (grid.playingSongId === null) {
                     return null;
                 }
                 else {
-                    return dataView.getItemById(grid.currentSongId);
+                    return dataView.getItemById(grid.playingSongId);
                 }
             };
 
@@ -381,7 +409,7 @@ $(document).ready(function () {
                 var song = dataView.getItemById(id);
 
                 playSong(song);
-                grid.currentSongId = song.id;
+                grid.playingSongId = song.id;
 
                 // now playing icon
                 grid.removeCellCssStyles('currentSong_playing');
@@ -401,7 +429,7 @@ $(document).ready(function () {
             grid.prevSong = function () {
                 var number_of_rows = grid.getDataLength();
                 var new_row = number_of_rows - 1;
-                var current_row = dataView.getRowById(grid.currentSongId);
+                var current_row = dataView.getRowById(grid.playingSongId);
 
                 if (current_row == undefined) {
                     // current song is not in the grid, stop playing
@@ -421,8 +449,8 @@ $(document).ready(function () {
                 var new_row = 0;
                 var current_row = -1;
 
-                if (grid.currentSongId != null) {
-                    current_row = dataView.getRowById(grid.currentSongId);
+                if (grid.playingSongId != null) {
+                    current_row = dataView.getRowById(grid.playingSongId);
 
                     if (current_row == undefined) {
                         // current song is not in the grid, stop playing
@@ -556,7 +584,7 @@ $(document).ready(function () {
             audio[0].pause();
             audio[0].src = '';
         }
-        grid.currentSongId = null;
+        grid.playingSongId = null;
         
         elapsedTimeChanged(0);
         durationChanged(0);
@@ -587,7 +615,7 @@ $(document).ready(function () {
     }
 
     function scrobble() {
-        var song = grid.getCurrentSong();
+        var song = grid.getPlayingSong();
 
         var uri = '/songs/scrobble/?artist=' +
             encodeURIComponent(song.artist) +
@@ -596,10 +624,10 @@ $(document).ready(function () {
         $.ajax({
             url: uri,
             success: function () {
-                console.log('Scrobbled song: ' + song.artist + ' - ' + song.title);
+                //console.log('Scrobbled song: ' + song.artist + ' - ' + song.title);
             },
             error: function () {
-                console.log('Scrobbling failed!');
+                //console.log('Scrobbling failed!');
             }
         });
     }
@@ -612,10 +640,10 @@ $(document).ready(function () {
         $.ajax({
             url: uri,
             success: function () {
-                console.log('Updated now playing to: ' + song.artist + ' - ' + song.title);
+                //console.log('Updated now playing to: ' + song.artist + ' - ' + song.title);
             },
             error: function () {
-                console.log('Now playing update failed!');
+                //console.log('Now playing update failed!');
             }
         });
     }
