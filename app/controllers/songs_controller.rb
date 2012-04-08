@@ -4,23 +4,28 @@ require 'find'
 require 'logger'
 
 MUSIC_PATH = Rails.application.config.MUSIC_PATH
+SONGS_JSON_FILE = Rails.root.join('public/songs.json')
 
 class SongsController < ApplicationController
 
     def index
-        @songs = Rails.cache.fetch('songs')
-        if @songs.nil? || @songs.empty?
-            Rails.logger.info 'Cache not found --> refreshing songs list'
-            refresh
-        elsif params[:refresh]
+        songs_json = '';
+
+        if params[:refresh]
             Rails.logger.info 'Forced song list refresh'
-            refresh
+            refresh(songs_json)
+        else
+            begin
+                f = File.open(SONGS_JSON_FILE, 'r')
+                Rails.logger.info 'Songs JSON modified: ' + f.mtime.to_s
+                songs_json = f.read
+            rescue Errno::ENOENT
+                Rails.logger.info 'Songs JSON file not found --> refreshing songs list'
+                refresh(songs_json)
+            end
         end
 
-        respond_to do |format|
-            format.json { render :json => @songs }
-            format.html { render :text => @songs }
-        end
+        render :text => songs_json
     end
 
     def play
@@ -46,6 +51,7 @@ class SongsController < ApplicationController
         track = Rockstar::Track.new(artist, title)
         track.updateNowPlaying(Time.now, @user.lastfm_session_key)
 
+        # TODO: say something?
         render :text => ''
     end
 
@@ -63,13 +69,15 @@ class SongsController < ApplicationController
         track = Rockstar::Track.new(artist, title)
         track.scrobble(Time.now, @user.lastfm_session_key)
 
+        # TODO: say something?
         render :text => ''
     end
 
     private
 
-    def refresh
-        @songs = []
+    def refresh(songs_as_json)
+        songs = []
+
         Find.find(MUSIC_PATH) do |file|
             if File.directory?(file) || file !~ /.*\.mp3$/i || file =~ /^\./
                 #Rails.logger.info 'Skipping file: ' + file
@@ -77,15 +85,17 @@ class SongsController < ApplicationController
             end
 
             begin
-                mp3 = Mp3File.new(file, @songs.length)
-                @songs.push(mp3)
+                mp3 = Mp3File.new(file, songs.length)
+                songs.push(mp3)
             rescue Mp3InfoError
                 Rails.logger.info 'Failed to load MP3: ' + file
                 # TODO: collect the broken mp3s into a separate array
                 # TODO: count the broken mp3s
             end
         end
-        Rails.cache.write('songs', @songs, :time_to_idle => 1.minute, :timeToLive => 1.day)
+
+        songs_as_json = songs.to_json
+        File.open(SONGS_JSON_FILE, 'w') { |f| f.write(songs_as_json) }
     end
 
 end

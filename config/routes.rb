@@ -11,9 +11,10 @@ BeatStream::Application.routes.draw do
   end
 
   get 'songs/index'
+  get 'songs/index2'
   get 'songs/play'
-  get 'songs/scrobble'
   get 'songs/now_playing'
+  get 'songs/scrobble'
 
   root :to => 'main#index'
 
