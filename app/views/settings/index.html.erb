@@ -1,10 +1,12 @@
 <div class="modal settings">
 
     <h2>Settings</h2>
-    <p class="subheader">&ldquo;Fuck you too, buddy!&rdquo;</p>
+    <p class="subheader">&ldquo;Set the settings&rdquo;</p>
 
     <%= form_for @user, :url => { :action => 'save' }, :method => 'post' do |f| %>
+
         <%= f.error_messages %>
+
         <fieldset>
             <%= f.label :username %>
             <div class="field">
@@ -21,12 +23,20 @@
             <label>Last.fm</label>
             <div class="field">
                 <% if @user.lastfm_session_key == nil %>
-                <a href="http://www.last.fm/api/auth/?api_key=<%= Rockstar.lastfm_api_key %>&amp;cb=<%= url_for :action => 'lastfm_callback', :only_path => false %>" target="_blank" class="connect-lastfm">Connect Last.fm</a>
+                    <a href="http://www.last.fm/api/auth/?api_key=<%= Rockstar.lastfm_api_key %>&amp;cb=<%= url_for :action => 'lastfm_callback', :only_path => false %>" target="_blank" class="button connect-lastfm">Connect Last.fm</a>
                 <% else %>
                     <p>Logged in :) <a href="#">Remove</a></p>
                 <% end %>
             </div>
         </fieldset>
+
+        <fieldset>
+            <label>MP3 Library</label>
+            <div class="field">
+                <a href="/songs/index/?refresh=true" class="button reindex-mp3s">Search for new mp3s</a>
+            </div>
+        </fieldset>
+
         <div class="actions">
             <%= submit_tag %>
             <a href="/" class="close">Cancel</a>

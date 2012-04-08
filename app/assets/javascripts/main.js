@@ -236,6 +236,7 @@ $(document).ready(function () {
             console.log(error);
         },
         success: function(data) {
+            console.log(data);
 
             $('.grid-container .overlay').hide();
 
@@ -546,6 +547,15 @@ $(document).ready(function () {
 
             dataView.syncGridSelection(grid, false);
             dataView.syncGridCellCssStyles(grid, 'currentSong_playing');
+
+            // update playlist meta
+            $('.page-header .count').html(data.length);
+            if (data.length == 1) {
+                $('.page-header .text').html('song');
+            }
+            else {
+                $('.page-header .text').html('songs');
+            }
         }
     }); /* end $.ajax */
 

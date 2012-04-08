@@ -193,9 +193,14 @@ header {
     padding:20px;
     position:relative;
 }
-    .page-header h2 {
-        float:left;
+    .page-header .info {
+        float:left;    
     }
+        .page-header h2 {
+        }
+        .page-header .count {
+            font-size:12px;
+        }
     .search {
         float:right;
         margin-top:4px;
@@ -558,6 +563,7 @@ header {
 input[type="submit"] {
     cursor:pointer;
 }
+
 
 /* 99.MISC
 ----------------------------------------------------------------------------- */
