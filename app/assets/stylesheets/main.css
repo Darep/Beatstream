@@ -546,18 +546,33 @@ header {
             float:left;
             margin:0 0 15px;
         }
-        .modal input[type="text"] {
-            border:1px solid #ccc;
-            font-size:13px;
-            line-height:20px;
-            padding:4px;
-            border-radius:3px;
-        }
-        .modal .actions {
-            margin-left:100px;
-        }
-            .modal .actions a {
-                margin-left:15px;
+            .modal input[type="text"] {
+                border:1px solid #ccc;
+                font-size:13px;
+                line-height:20px;
+                padding:4px;
+                border-radius:3px;
+            }
+            .modal .actions {
+                margin-left:100px;
+            }
+                .modal .actions a {
+                    margin-left:15px;
+                }
+            .modal .button {
+                background: #f5f5f5;
+                border: 1px solid #aaa;
+                color:#000;
+                font-size:11px;
+                padding:3px 6px 3px;
+
+                border-radius:4px;
+            }
+            .modal .button:hover {
+                background:#eee;
+            }
+            .modal .button:active {
+                background:#abe;
             }
 
 input[type="submit"] {

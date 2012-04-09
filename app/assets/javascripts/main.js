@@ -39,6 +39,7 @@ $(document).ready(function () {
     // ::: INIT SONGLIST / GRID OMG SO BIG SECTION :::
 
     var grid = null;
+    var dataView = new Slick.Data.DataView({ inlineFilters: true });
 
     var audio = $('#player audio');
     audio.css('display', 'none');
@@ -75,7 +76,7 @@ $(document).ready(function () {
     });
 
     // volume slider
-    var volume = 0.6;
+    var volume = 0.3;
     if (store.get('volume')) {
         volume = parseFloat(store.get('volume'));
         if (volume >= 0 && volume <= 1.0) {
@@ -215,7 +216,6 @@ $(document).ready(function () {
     ];
 
     var options = {
-        /*autoHeight: true,*/
         editable: false,
         forceFitColumns: true,
         enableAutoTooltips: true,
@@ -224,8 +224,6 @@ $(document).ready(function () {
         multiSelect: true,
         rowHeight: 22
     };
-
-    var dataView = new Slick.Data.DataView({ inlineFilters: true });
 
     $.ajax({
         url: '/songs/index',
@@ -236,9 +234,6 @@ $(document).ready(function () {
             console.log(error);
         },
         success: function(data) {
-            console.log(data);
-
-            $('.grid-container .overlay').hide();
 
             grid = new Slick.Grid("#slickgrid", dataView, columns, options);
             grid.setSelectionModel(new Slick.RowSelectionModel());
@@ -383,7 +378,7 @@ $(document).ready(function () {
                     return;
                 }
 
-                // TODO: asdf
+                // TODO: add dragged things into playlist (if things can be added)
             });
 
 
@@ -644,8 +639,8 @@ $(document).ready(function () {
 
     function updateNowPlaying(song) {
         var uri = '/songs/now_playing/?artist=' +
-            encodeURIComponent(song.artist) +
-            '&title=' + encodeURIComponent(song.title);
+                  encodeURIComponent(song.artist) +
+                  '&title=' + encodeURIComponent(song.title);
 
         $.ajax({
             url: uri,
@@ -658,4 +653,3 @@ $(document).ready(function () {
         });
     }
 });
-
