@@ -25,4 +25,8 @@ class SettingsController < ApplicationController
         redirect_to :action => 'index'
     end
 
+    def lastfm_disconnect
+        # TODO: remove last.fm session from db etc.
+        render :text => 'yay'
+    end
 end

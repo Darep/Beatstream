@@ -3,6 +3,7 @@ BeatStream::Application.routes.draw do
   match 'settings' => 'settings#index'
   match 'settings/save' => 'settings#save'
   match 'settings/lastfm_callback' => 'settings#lastfm_callback'
+  match 'settings/lastfm_disconnect' => 'settings#lastfm_disconnect'
 
   controller :sessions do
     get 'login' => :new

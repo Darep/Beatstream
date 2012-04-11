@@ -7,15 +7,12 @@
 <%= form_tag do %>
     <div>
         <label>Username</label>
+        <%= text_field_tag :username, params[:username] %>
     </div>
-    <%= text_field_tag :username, params[:username] %>
 
     <div>
         <label>Password</label>
-    </div>
-    <%= password_field_tag :password, params[:password] %>
-
-    <div>
-        <%= submit_tag "Log in" %>
+        <%= password_field_tag :password, params[:password] %>
+        <%= submit_tag "Log in", :class => "submit" %>
     </div>
 <% end %>

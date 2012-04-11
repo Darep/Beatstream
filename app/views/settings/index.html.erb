@@ -25,7 +25,8 @@
                 <% if @user.lastfm_session_key == nil %>
                     <a href="http://www.last.fm/api/auth/?api_key=<%= Rockstar.lastfm_api_key %>&amp;cb=<%= url_for :action => 'lastfm_callback', :only_path => false %>" target="_blank" class="button connect-lastfm">Connect Last.fm</a>
                 <% else %>
-                    <p>Logged in :) <a href="#">Remove</a></p>
+                    <p class="lastfm-logged-in">Logged in</p>
+                    <%= link_to "Remove", { :action => 'lastfm_disconnect' }, :class => 'button disconnect-lastfm' %>
                 <% end %>
             </div>
         </fieldset>
@@ -33,7 +34,7 @@
         <fieldset>
             <label>MP3 Library</label>
             <div class="field">
-                <a href="/songs/index/?refresh=true" class="button reindex-mp3s">Search for new mp3s</a>
+                <%= link_to "Search for new MP3s", songs_path(:refresh => 'true'), :class => 'button reindex-mp3s' %>
             </div>
         </fieldset>
 
