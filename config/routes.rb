@@ -21,6 +21,7 @@ BeatStream::Application.routes.draw do
   match 'playlists' => 'playlists#index'
   get 'playlists/new'
 
+  #match '/' => 'main#index'
   root :to => 'main#index'
 
 end
