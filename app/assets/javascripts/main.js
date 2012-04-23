@@ -54,26 +54,33 @@ $(document).ready(function () {
     var song_scrobbled = false;
     var scrobble_time = 240;
 
-    // shuffle
-    var shuffleButton = $('#shuffle');
-    var shuffle = false;
+    var repeatButton = $('#repeat'),
+        shuffleButton = $('#shuffle'),
+        shuffle = false,
+        repeat = false
 
-    if (store.get('shuffle')) {
-        shuffle = store.get('shuffle');
+    function newToggleButton(button, key, value) {
+        if (store.get(key)) {
+            value = store.get(key);
+            console.log(value);
+        }
+        
+        if (value) {
+            button.addClass('enabled');
+        }
+
+        button.click(function (e) {
+            e.preventDefault();
+
+            value = !value;
+            store.set(key, value);
+
+            $(this).toggleClass('enabled');
+        });
     }
 
-    if (shuffle) {
-        shuffleButton.addClass('enabled');
-    }
-
-    shuffleButton.click(function (e) {
-        e.preventDefault();
-
-        shuffle = !shuffle;
-        store.set('shuffle', shuffle);
-
-        $(this).toggleClass('enabled');
-    });
+    newToggleButton(repeatButton, 'repeat', repeat);
+    newToggleButton(shuffleButton, 'shuffle', shuffle);
 
     // volume slider
     var volume = 0.3;

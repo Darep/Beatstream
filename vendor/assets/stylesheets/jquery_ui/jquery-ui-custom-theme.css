@@ -1,6 +1,6 @@
 .ui-slider {
-	background:#0b0b0b;
-	border:1px solid #2a2a2a;
+	background:#131313;
+	border:1px solid #2e2e2e;
 	border-top-color:#000;
 	height:8px;
 	position:relative;
@@ -9,10 +9,7 @@
 }
 	.ui-slider-range {
 		background:#f6a828;
-		background:-webkit-linear-gradient(top,         #f6a828,
-        #f6a828 30%,
-        #d06010 85%,
-        #aa3311);
+		background:-webkit-linear-gradient(top, #f6a828, #f6a828 30%, #d06010 85%, #aa3311);
 		display:block;
 		height:8px;
 		position: absolute;
@@ -21,7 +18,9 @@
 	}
 .ui-slider-handle {
 	background:#eee;
-	border:1px solid #ddd;
+	background:-webkit-linear-gradient(top, #faf9f8, #c3c2c1);
+	border:1px solid #ccc;
+	border-top:1px solid #fafafa;
 	display:block;
 	height:8px;
 	margin-left:-5px;
@@ -30,6 +29,7 @@
 	width:8px;
 	z-index:2;
 	border-radius:10px;
+	box-shadow:0 0 1px rgba(0,0,0, 0.7);
 }
 .ui-slider-handle:focus {
 	outline:0;

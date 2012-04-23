@@ -15,7 +15,7 @@
 
 <div id="wrap">
     <header>
-        <p id="logo"><a href="#">Beatstream</a></p>
+        <h1 id="logo"><a href="/">Beatstream</a></h1>
         <div id="user-panel">
             <a href="#">
                 <!-- <img src="" alt="" /> -->
@@ -34,16 +34,33 @@
         <div id="sidebar">
             <div id="sidebar-wrap">
                 
-                <h5>Music</h5>
-                <ul class="music">
-                    <li class="act"><a href="#">All music</a></li>
+                <ul class="common">
+                    <li class="act">
+                        <a>All music <span class="count">4,096</span></a>
+                    </li>
                 </ul>
 
-                <h5>Playlists</h5>
-                <ul class="playlists">
-                </ul>
-                
-                <a href="#" class="new-list">+ New Playlist</a>
+                <% if false %>
+                    <ul class="playlists">
+                        <li>
+                            <a>AC/DC</a>
+                        </li>
+                        <li>
+                            <a>Accept</a>
+                        </li>
+                        <li>
+                            <a>cash</a>
+                        </li>
+                        <li>
+                            <a>New playlist</a>
+                        </li>
+                    </ul>
+                    <a class="btn" id="btn-new-list">+ New Playlist</a>
+                <% else %>
+                    <p class="none">
+                        Playlists haven't been implemented, yet! Stay tuned.
+                    </p>
+                <% end %>
 
             </div>
         </div>
@@ -62,6 +79,7 @@
                 <button id="play-pause" type="button" disabled="disabled">Play/pause</button>
                 <button id="next" type="button" disabled="disabled">Next</button>
             </div>
+            <label id="player-volume-label">Volume</label>
             <div id="player-volume">
                 <div id="player-volume-slider"></div>
             </div>
@@ -69,6 +87,7 @@
                 <span class="elapsed">00:00</span> / <span class="duration">00:00</span>
             </p>
             <div id="player-buttons-2">
+                <button id="repeat" type="button">Repeat <span class="status">Off</span></button>
                 <button id="shuffle" type="button">Shuffle <span class="status">Off</span></button>
             </div>
             <div id="seekbar">
@@ -81,7 +100,6 @@
 
 <script type="text/html" id="settings-template">
     <h1>Settings</h1>
-
     <div>
         <label for=""></label>
     </div>
