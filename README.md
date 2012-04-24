@@ -2,7 +2,7 @@
 
 ![Screenshot](http://i.imgur.com/7P9au.png)
 
-App for streaming music from any computer running Ruby (and Bundler) to anywhere with a modern browser (Chrome only for now!).
+Web app for streaming music from any computer running Ruby (and Bundler) to anywhere with a modern browser (Chrome only for now!).
 
 ### Installation
 
