@@ -5,7 +5,7 @@ App for streaming music from any computer running Ruby (and Bundler) to anywhere
 Screenshot: http://i.imgur.com/7P9au.png
 
 
-### Installation
+### Installation (via bullets!)
 
 1. Clone/download & extract this repo somewhere
 2. Modify the config/environments/development.rb or production.rb to include the correct MUSIC_PATH
@@ -13,7 +13,7 @@ Screenshot: http://i.imgur.com/7P9au.png
 4. Run in Apache+Passenger or WEBrick
 5. Log in, go to settings, index the media library, wait and listen to music!
 
-# Installation #
+### Installation (via commands!)
 
     $ git clone git://github.com/Darep/Beatstream.git
     $ cd Beatstrem
