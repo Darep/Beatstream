@@ -1,4 +1,4 @@
 Beatstream
 ==========
 
-Beatstream is an app to stream music from your home computer to anywhere with a modern browser.
+App for streaming music from any computer running Ruby on Rails to anywhere with a modern browser.
