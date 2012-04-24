@@ -1,7 +1,7 @@
 Beatstream
 ==========
 
-App for streaming music from any computer running Ruby on Rails to anywhere with a modern browser.
+App for streaming music from any computer running Ruby (and Bundler) to anywhere with a modern browser (Chrome only for now!).
 
 Screenshot: http://i.imgur.com/7P9au.png
 
