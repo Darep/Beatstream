@@ -62,7 +62,6 @@ $(document).ready(function () {
     function newToggleButton(button, key, value) {
         if (store.get(key)) {
             value = store.get(key);
-            console.log(value);
         }
         
         if (value) {
@@ -81,6 +80,14 @@ $(document).ready(function () {
 
     newToggleButton(repeatButton, 'repeat', repeat);
     newToggleButton(shuffleButton, 'shuffle', shuffle);
+
+    function getShuffle() {
+        if (store.get('shuffle')) {
+            return store.get('shuffle');
+        }
+        
+        return false;
+    }
 
     // volume slider
     var volume = 0.3;
@@ -461,6 +468,8 @@ $(document).ready(function () {
                         return;
                     }
                 }
+
+                var shuffle = getShuffle();
 
                 if (shuffle) {
                     new_row = randomToN(number_of_rows);
