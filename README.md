@@ -7,7 +7,7 @@ Screenshot: http://i.imgur.com/7P9au.png
 ### Installation
 
     $ git clone git://github.com/Darep/Beatstream.git
-    $ cd Beatstrem
+    $ cd Beatstream
     $ bundle install
     $ rake db:migrate
     $ vim config/enviroments/development.rb
