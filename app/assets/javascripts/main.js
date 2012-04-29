@@ -89,6 +89,14 @@ $(document).ready(function () {
         return false;
     }
 
+    function getRepeat() {
+        if (store.get('repeat')) {
+            return store.get('repeat');
+        }
+
+        return false;
+    }
+
     // volume slider
     var volume = 0.3;
     if (store.get('volume')) {
@@ -152,7 +160,7 @@ $(document).ready(function () {
 
     nextButton.click(function (e) {
         e.preventDefault();
-        grid.nextSong();
+        grid.nextSong(true);
     });
 
     prevButton.click(function (e) {
@@ -454,7 +462,7 @@ $(document).ready(function () {
                 grid.playSongAtRow(new_row);
             };
 
-            grid.nextSong = function () {
+            grid.nextSong = function (manual) {
                 var number_of_rows = grid.getDataLength();
                 var new_row = 0;
                 var current_row = -1;
@@ -476,6 +484,11 @@ $(document).ready(function () {
                 }
                 else if ((current_row + 1) < number_of_rows) {
                     new_row = current_row + 1;
+                }
+                else if (!manual && getRepeat() == false) {
+                    // automatic advance, at the last song and not repeating -> stop playing
+                    stop();
+                    return;
                 }
 
                 grid.playSongAtRow(new_row);

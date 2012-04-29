@@ -313,10 +313,10 @@ header {
         #slickgrid .playing {
             background-image:url('/assets/icons.png');
             background-repeat: no-repeat;
-            background-position:-234px -194px;
+            background-position:-232px -194px;
         }
         #slickgrid .playing.selected {
-            background-position:-234px -151px;
+            background-position:-232px -151px;
         }
         .slick-cell.tracknum {
             text-align:right;
