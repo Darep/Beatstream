@@ -17,7 +17,7 @@
     <header>
         <h1 id="logo"><a href="/">Beatstream</a> <small><small><small>alpha</small></small></small></h1>
         <div id="user-panel">
-            <a href="#">
+            <a>
                 <!-- <img src="" alt="" /> -->
                 <span class="name"><%= session[:username] ? session[:username] : 'You' %></span>
                 <span class="dropdown"></span>
@@ -35,9 +35,14 @@
             <div id="sidebar-wrap">
                 
                 <ul class="common">
-                    <li class="act">
-                        <a>All music <span class="count">4,096</span></a>
+                    <li class="act all-music">
+                        <a>All music <span class="medialibrary count">-</span></a>
                     </li>
+                <!--
+                    <li class="act browser">
+                        <a>Artist &amp; albums</a>
+                    </li>
+                -->
                 </ul>
 
                 <% if false %>

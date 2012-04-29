@@ -3,6 +3,8 @@
 //= require jquery.ba-hashchange.min
 //= require slick.grid
 //= require routing
+//= require lastfm
+//= require pretty-numbers
 
 var keyCode = {
     ENTER: 13
@@ -51,52 +53,6 @@ $(document).ready(function () {
     var elapsed = $('#player-time .elapsed');
     var duration = $('#player-time .duration');
 
-    var song_scrobbled = false;
-    var scrobble_time = 240;
-
-    var repeatButton = $('#repeat'),
-        shuffleButton = $('#shuffle'),
-        shuffle = false,
-        repeat = false
-
-    function newToggleButton(button, key, value) {
-        if (store.get(key)) {
-            value = store.get(key);
-        }
-        
-        if (value) {
-            button.addClass('enabled');
-        }
-
-        button.click(function (e) {
-            e.preventDefault();
-
-            value = !value;
-            store.set(key, value);
-
-            $(this).toggleClass('enabled');
-        });
-    }
-
-    newToggleButton(repeatButton, 'repeat', repeat);
-    newToggleButton(shuffleButton, 'shuffle', shuffle);
-
-    function getShuffle() {
-        if (store.get('shuffle')) {
-            return store.get('shuffle');
-        }
-        
-        return false;
-    }
-
-    function getRepeat() {
-        if (store.get('repeat')) {
-            return store.get('repeat');
-        }
-
-        return false;
-    }
-
     // volume slider
     var volume = 0.3;
     if (store.get('volume')) {
@@ -132,6 +88,7 @@ $(document).ready(function () {
         min: 0,
         range: 'min',
         slide: function (event, ui) {
+
         },
         start: function(event, ui) {
             user_is_seeking = true;
@@ -142,6 +99,7 @@ $(document).ready(function () {
         }
     });
 
+    // playback buttons
     playPause.click(function (e) {
         e.preventDefault();
 
@@ -174,6 +132,52 @@ $(document).ready(function () {
         var row = dataView.getRowById(grid.playingSongId);
         grid.scrollRowIntoView(row);
     });
+
+
+    // repeat & shuffle buttons
+
+    var repeatButton = $('#repeat'),
+        shuffleButton = $('#shuffle'),
+        shuffle = false,
+        repeat = false
+
+    function newToggleButton(button, key, value) {
+        if (store.get(key)) {
+            value = store.get(key);
+        }
+        
+        if (value) {
+            button.addClass('enabled');
+        }
+
+        button.click(function (e) {
+            e.preventDefault();
+
+            value = !value;
+            store.set(key, value);
+
+            $(this).toggleClass('enabled');
+        });
+    }
+
+    newToggleButton(repeatButton, 'repeat', repeat);
+    newToggleButton(shuffleButton, 'shuffle', shuffle);
+
+    function storeGet(key) {
+        if (key && store.get(key)) {
+            return store.get(key);
+        }
+        
+        return false;
+    }
+
+    function getShuffle() {
+        return storeGet('shuffle');
+    }
+
+    function getRepeat() {
+        return storeGet('repeat');
+    }
 
 
     // audio player events
@@ -251,11 +255,17 @@ $(document).ready(function () {
         url: '/songs/index',
         dataType: 'json',
         error: function (xhr, status, error) {
+            /*
             console.log(xhr);
             console.log(status);
             console.log(error);
+            */
         },
         success: function(data) {
+
+            // update song count on sidebar
+            var count = commify( parseInt(data.length) );
+            $('.medialibrary.count').text(count);
 
             grid = new Slick.Grid("#slickgrid", dataView, columns, options);
             grid.setSelectionModel(new Slick.RowSelectionModel());
@@ -594,23 +604,8 @@ $(document).ready(function () {
 
         playerTrack.text(song.nice_title);
 
-        // set now playing
-        updateNowPlaying(song);
-
-        // set scrobbling time
-        scrobble_time = Math.floor(song.length/2, 10);
-        
-        if (scrobble_time > 240) {
-            scrobble_time = 240;
-        }
-
-        // don't scrobble songs that are under 30 secs (last.fm rule)
-        if (scrobble_time <= 15) {
-            song_scrobbled = true;
-        }
-        else {
-            song_scrobbled = false;
-        }
+        // re-set lastfm scrobbling
+        lastfm.newSong(song);
     }
 
     function stop() {
@@ -642,43 +637,7 @@ $(document).ready(function () {
 
         elapsed.text((mins > 9 ? mins : '0' + mins) + ':' + (secs > 9 ? secs : '0' + secs));
 
-        if (song_scrobbled === false && scrobble_time < elaps) {
-            song_scrobbled = true;
-            scrobble();
-        }
+        lastfm.scrobble(elaps);
     }
 
-    function scrobble() {
-        var song = grid.getPlayingSong();
-
-        var uri = '/songs/scrobble/?artist=' +
-            encodeURIComponent(song.artist) +
-            '&title=' + encodeURIComponent(song.title);
-
-        $.ajax({
-            url: uri,
-            success: function () {
-                //console.log('Scrobbled song: ' + song.artist + ' - ' + song.title);
-            },
-            error: function () {
-                //console.log('Scrobbling failed!');
-            }
-        });
-    }
-
-    function updateNowPlaying(song) {
-        var uri = '/songs/now_playing/?artist=' +
-                  encodeURIComponent(song.artist) +
-                  '&title=' + encodeURIComponent(song.title);
-
-        $.ajax({
-            url: uri,
-            success: function () {
-                //console.log('Updated now playing to: ' + song.artist + ' - ' + song.title);
-            },
-            error: function () {
-                //console.log('Now playing update failed!');
-            }
-        });
-    }
 });
