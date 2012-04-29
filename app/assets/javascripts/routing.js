@@ -25,10 +25,7 @@ var Routing = {
                     beforeShow: function () {
                         var $this = $('.fancybox-inner');
 
-                        console.log($this);
-
                         $this.find('.close').click(function () {
-                            console.log('yey');
                             $.fancybox.close();
 
                             return false;
