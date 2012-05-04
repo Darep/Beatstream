@@ -394,8 +394,7 @@ header {
         padding-right:10px;
     }
     #player-controls {
-        height:40px;
-        line-height:40px;
+        height:48px;
         vertical-align: middle;
     }
         #player-buttons, #player-volume, #player-time {
@@ -412,73 +411,73 @@ header {
             /*opacity:0.2;*/
         }
         #player #play-pause {
-            background-position:-72px -5px;
+            background-position:-68px -1px;
+            height:48px;
+            width:48px;
         }
         #player #play-pause:active {
-            background-position:-72px -92px;
+            background-position:-68px -88px;
         }
         #player #play-pause.playing {
-            background-position:-217px -5px;
+            background-position:-213px -1px;
         }
         #player #play-pause.playing:active {
-            background-position:-217px -92px;
+            background-position:-213px -88px;
         }
         #player #prev {
             background-position:0 -5px;
+            margin-right:-2px;
         }
         #player #prev:active {
             background-position:0 -92px;
         }
         #player #next {
             background-position:-148px -5px;
+            margin-left:-2px;
         }
         #player #next:active {
             background-position:-148px -92px;
         }
+        #player-volume-label {
+            background:url('/assets/icons.png') no-repeat -160px -197px;
+            display:inline-block;
+            float:left;
+            height:16px;
+            margin:17px 0 0 20px;
+            width:16px;
+
+            overflow: hidden;
+            text-indent:100%;
+            white-space: nowrap;
+        }
         #player-volume {
-            height:40px;
-            margin:0 15px 0 5px;
+            margin:20px 15px 0 5px;
             text-align:center;
             width:100px;
         }
-            #player-volume-label {
-                background:url('/assets/icons.png') no-repeat -160px -197px;
-                display:inline-block;
-                float:left;
-                height:16px;
-                margin:12px 0 0 20px;
-                width:16px;
-
-                overflow: hidden;
-                text-indent:100%;
-                white-space: nowrap;
-            }
-            #player-volume-slider {
-                margin-top:15px;
-            }
         #player-time {
+            margin-top:20px;
             text-align:center;
             width:80px;
         }
         #seekbar {
-            height:40px;
             margin:0 75px 0 365px;
             padding:0 15px;
             text-align:center;
         }
             #seekbar-slider {
-                top:14px;
+                top:20px;
             }
         #player-buttons-2 {
             float:right;
             height:40px;
-            margin-right:10px;
+            margin:15px 10px 0 0;
         }
             #player #repeat, #player #shuffle {
                 background:transparent url('/assets/icons.png') no-repeat;
                 display:inline-block;
                 height:24px;
-                margin:10px 0 0 5px;
+                margin:0 0 0 5px;
                 padding:0;
                 width:24px;
             }
