@@ -6,6 +6,7 @@
 //= require lastfm
 //= require pretty-numbers
 //= require soundmanager2/soundmanager2
+//= require audio
 
 soundManager.url = '/swf/';
 soundManager.flashVersion = 9; // optional: shiny features (default = 8)
@@ -53,9 +54,6 @@ $(document).ready(function () {
     var grid = null;
     var dataView = new Slick.Data.DataView({ inlineFilters: true });
 
-    var audio = $('#player audio');
-    audio.css('display', 'none');
-
     var playerTrack = $('#player-song .track');
     var playPause = $('#play-pause');
     var prevButton = $('#prev');
@@ -65,31 +63,29 @@ $(document).ready(function () {
     var volume_label = $('#player-volume-label');
 
     // volume slider
-    var volume = 0.3;
+    var volume = 20;
 
     if (store.get('volume')) {
         volume = parseFloat(store.get('volume'));
     }
 
-    if (volume >= 0 && volume <= 1.0) {
-        audio[0].volume = volume;
-        volume_label.attr('title', parseInt(volume*100));
+    if (volume >= 0 && volume <= 100) {
+        BeatAudio.setVolume(volume);
+        volume_label.attr('title', volume);
     }
 
     $('#player-volume-slider').slider({
         orientation: 'horizontal',
-        value: volume * 100,
+        value: volume,
         max: 100,
         min: 0,
         range: 'min',
         slide: function (event, ui) {
-            volume = parseFloat(ui.value/100);
-            audio[0].volume = volume;
+            BeatAudio.setVolume(ui.value);
             volume_label.attr('title', ui.value);
         },
         stop: function (event, ui) {
-            volume = parseFloat(ui.value/100);
-            store.set('volume', volume);
+            store.set('volume', ui.value);
         }
     });
 
@@ -110,7 +106,7 @@ $(document).ready(function () {
             user_is_seeking = true;
         },
         stop: function(event, ui) {
-            audio[0].currentTime = ui.value;
+            BeatAudio.seekTo(ui.value);
             user_is_seeking = false;
         }
     });
@@ -196,6 +192,9 @@ $(document).ready(function () {
 
     // audio player events
 
+    // FIXME: quick hack
+    var audio = BeatAudio.audio;
+
     audio.bind('play', function() {
         playPause.addClass('playing');
     });
@@ -209,7 +208,7 @@ $(document).ready(function () {
     });
 
     audio.bind('timeupdate', function () {
-        var elaps = parseInt(audio[0].currentTime);
+        var elaps = parseInt(BeatAudio.audio[0].currentTime);
 
         elapsedTimeChanged(elaps);
 
@@ -219,7 +218,7 @@ $(document).ready(function () {
     });
 
     audio.bind('durationchange', function () {
-        var dur = parseInt(audio[0].duration);
+        var dur = parseInt(BeatAudio.audio[0].duration);
         durationChanged(dur);
         seekbar.slider('option', 'disabled', false);
     });
@@ -228,7 +227,7 @@ $(document).ready(function () {
 
     audio.bind('error', function () {
         if (error_counter > 2) {
-            audio[0].pause();
+            BeatAudio.pause();
             error_counter = 0;
             return;
         }
@@ -450,7 +449,12 @@ $(document).ready(function () {
 
                 var song = dataView.getItemById(id);
 
-                playSong(song);
+                var uri = '/songs/play/?file=' + encodeURIComponent(song.path);
+                BeatAudio.play(uri);
+
+                playerTrack.text(song.nice_title);
+                lastfm.newSong(song);
+                
                 grid.playingSongId = song.id;
 
                 // now playing icon
@@ -615,36 +619,12 @@ $(document).ready(function () {
     // enable buttons
     $('#player-buttons button').removeAttr('disabled');
 
-    var currentSMSong = null;
-
-    function playSong(song) {
-        var uri = '/songs/play/?file=' + encodeURIComponent(song.path);
-
-        //audio.attr('src', uri);
-        //audio[0].play();
-        if (currentSMSong != null) {
-            currentSMSong.destruct();
-        }
-        currentSMSong = soundManager.createSound('mySound', uri);
-        currentSMSong.play();
-
-        playerTrack.text(song.nice_title);
-
-        // re-set lastfm scrobbling
-        lastfm.newSong(song);
-    }
-
-    function pause() {
-
-    }
-
     function stop() {
-        if (!audio[0].paused) {
-            audio[0].pause();
-            audio[0].src = '';
-        }
+        BeatAudio.stop();
         grid.playingSongId = null;
         
+        // TODO: hide now playing icon from slickgrid
+
         elapsedTimeChanged(0);
         durationChanged(0);
         seekbar.slider('value', 0);
