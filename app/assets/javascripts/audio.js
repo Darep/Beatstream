@@ -22,8 +22,13 @@
             this.audio[0].play();
         },
 
-        pause : function () {
-
+        togglePause : function () {
+            if (this.audio[0].paused) {
+                this.audio[0].play();
+            }
+            else {
+                this.audio[0].pause();
+            }
         },
 
         stop : function () {
@@ -46,35 +51,41 @@
     };
 
     var SMAudio = {
-        currentSong : null,
+        song : null,
 
         init : function () {
 
         },
 
         setVolume : function (volume) {
-            if (currentSMSong != null) {
-                currentSMSong.setVolume(volume);
-            }
+            if (this.song == null) return;
+            
+            this.song.setVolume(volume);
         },
 
         play : function (uri) {
-            if (currentSMSong != null) {
-                currentSMSong.destruct();
+            if (this.song != null) {
+                this.song.destruct();
             }
-            currentSMSong = soundManager.createSound('mySound', uri);
-            currentSMSong.play();
+            this.song = soundManager.createSound('mySound', uri);
+            this.song.play();
         },
 
-        pause : function () {
-            // TODO: this
+        togglePause : function () {
+            if (this.song == null) return;
+            
+            this.song.togglePause();
         },
 
         stop : function () {
+            if (this.song == null) return;
+
             // TODO: this
         },
 
         seekTo : function (seconds) {
+            if (this.song == null) return;
+
             // TODO: this
         }
     };

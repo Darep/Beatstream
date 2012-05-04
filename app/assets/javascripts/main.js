@@ -121,9 +121,7 @@ $(document).ready(function () {
             return;
         }
 
-        if (currentSMSong != null) {
-            currentSMSong.togglePause();
-        }
+        BeatAudio.togglePause();
     });
 
     nextButton.click(function (e) {
@@ -454,7 +452,7 @@ $(document).ready(function () {
 
                 playerTrack.text(song.nice_title);
                 lastfm.newSong(song);
-                
+
                 grid.playingSongId = song.id;
 
                 // now playing icon
