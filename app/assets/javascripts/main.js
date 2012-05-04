@@ -5,6 +5,16 @@
 //= require routing
 //= require lastfm
 //= require pretty-numbers
+//= require soundmanager2/soundmanager2
+
+soundManager.url = '/swf/';
+soundManager.flashVersion = 9; // optional: shiny features (default = 8)
+soundManager.useFlashBlock = false; // optionally, enable when you're ready to dive in
+soundManager.useHTML5Audio = true;
+
+soundManager.onready(function() {
+    // TODO: stuff here
+});
 
 var keyCode = {
     ENTER: 13
@@ -109,16 +119,14 @@ $(document).ready(function () {
     playPause.click(function (e) {
         e.preventDefault();
 
+        // if not playing anything, start playing the first song on the playlist
         if (grid.playingSongId == null) {
             grid.nextSong();
             return;
         }
 
-        if (audio[0].paused) {
-            audio[0].play();
-        }
-        else {
-            audio[0].pause();
+        if (currentSMSong != null) {
+            currentSMSong.togglePause();
         }
     });
 
@@ -607,16 +615,27 @@ $(document).ready(function () {
     // enable buttons
     $('#player-buttons button').removeAttr('disabled');
 
+    var currentSMSong = null;
+
     function playSong(song) {
         var uri = '/songs/play/?file=' + encodeURIComponent(song.path);
 
-        audio.attr('src', uri);
-        audio[0].play();
+        //audio.attr('src', uri);
+        //audio[0].play();
+        if (currentSMSong != null) {
+            currentSMSong.destruct();
+        }
+        currentSMSong = soundManager.createSound('mySound', uri);
+        currentSMSong.play();
 
         playerTrack.text(song.nice_title);
 
         // re-set lastfm scrobbling
         lastfm.newSong(song);
+    }
+
+    function pause() {
+
     }
 
     function stop() {
