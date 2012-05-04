@@ -52,14 +52,18 @@ $(document).ready(function () {
     var nextButton = $('#next');
     var elapsed = $('#player-time .elapsed');
     var duration = $('#player-time .duration');
+    var volume_label = $('#player-volume-label');
 
     // volume slider
     var volume = 0.3;
+
     if (store.get('volume')) {
         volume = parseFloat(store.get('volume'));
-        if (volume >= 0 && volume <= 1.0) {
-            audio[0].volume = volume;
-        }
+    }
+
+    if (volume >= 0 && volume <= 1.0) {
+        audio[0].volume = volume;
+        volume_label.attr('title', parseInt(volume*100));
     }
 
     $('#player-volume-slider').slider({
@@ -69,11 +73,13 @@ $(document).ready(function () {
         min: 0,
         range: 'min',
         slide: function (event, ui) {
-            var vol = parseFloat(ui.value/100/2);
-            audio[0].volume = vol;
+            volume = parseFloat(ui.value/100);
+            audio[0].volume = volume;
+            volume_label.attr('title', ui.value);
         },
         stop: function (event, ui) {
-            store.set('volume', parseFloat(ui.value/100));
+            volume = parseFloat(ui.value/100);
+            store.set('volume', volume);
         }
     });
 
