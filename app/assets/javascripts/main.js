@@ -583,13 +583,18 @@ $(document).ready(function () {
             dataView.syncGridCellCssStyles(grid, 'currentSong_playing');
 
             // update playlist meta
-            $('.page-header .count').html(data.length);
+            var count = commify( parseInt(data.length) );
+
+            $('.medialibrary.count').text(count);
+            $('.page-header .count').text(count);
+
             if (data.length == 1) {
                 $('.page-header .text').html('song');
             }
             else {
                 $('.page-header .text').html('songs');
             }
+
         }
     }); /* end $.ajax */
 
