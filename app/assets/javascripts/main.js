@@ -5,23 +5,21 @@
 //= require routing
 //= require lastfm
 //= require pretty-numbers
-//= require soundmanager2/soundmanager2
-//= require audio
+//= require audio-modules/html5audio
+//= require audio-modules/soundmanager2
+
+var keyCode = {
+    ENTER: 13
+};
 
 soundManager.url = '/swf/';
 soundManager.flashVersion = 9; // optional: shiny features (default = 8)
 soundManager.useFlashBlock = false; // optionally, enable when you're ready to dive in
 soundManager.useHTML5Audio = true;
 
-soundManager.onready(function() {
-    // TODO: stuff here
-});
-
-var keyCode = {
-    ENTER: 13
-};
-
 $(document).ready(function () {
+soundManager.onready(function() {
+
 
     // resize the main-area to correct height
     resizeMain();
@@ -61,6 +59,45 @@ $(document).ready(function () {
     var elapsed = $('#player-time .elapsed');
     var duration = $('#player-time .duration');
     var volume_label = $('#player-volume-label');
+    var seekbar = $('#seekbar-slider');
+
+    // init audio player
+    var error_counter = 0;
+
+    var BeatAudio = new SM2Audio({
+        onPlay: function () {
+            playPause.addClass('playing');
+        },
+        onPaused: function () {
+            playPause.removeClass('playing');
+        },
+        onSongEnd: function () {
+            grid.nextSong();
+        },
+        onTimeChange: function (elaps) {
+            elapsedTimeChanged(elaps);
+
+            if (!user_is_seeking) {
+                seekbar.slider('option', 'value', elaps);
+            }
+        },
+        onDurationParsed: function (duration_in_seconds) {
+            console.log(duration_in_seconds);
+            durationChanged(duration_in_seconds);
+            seekbar.slider('option', 'disabled', false);
+        },
+        onError: function () {
+            if (error_counter > 2) {
+                BeatAudio.pause();
+                error_counter = 0;
+                return;
+            }
+
+            grid.nextSong();
+            error_counter = error_counter + 1;
+        }
+    });
+
 
     // volume slider
     var volume = 20;
@@ -90,7 +127,6 @@ $(document).ready(function () {
     });
 
     // seekbar
-    var seekbar = $('#seekbar-slider');
     var user_is_seeking = false;
     seekbar.slider({
         orientation: 'horizontal',
@@ -186,53 +222,6 @@ $(document).ready(function () {
     function getRepeat() {
         return storeGet('repeat');
     }
-
-
-    // audio player events
-
-    // FIXME: quick hack
-    var audio = BeatAudio.audio;
-
-    audio.bind('play', function() {
-        playPause.addClass('playing');
-    });
-
-    audio.bind('pause', function() {
-        playPause.removeClass('playing');
-    });
-
-    audio.bind('ended', function () {
-        grid.nextSong();
-    });
-
-    audio.bind('timeupdate', function () {
-        var elaps = parseInt(BeatAudio.audio[0].currentTime);
-
-        elapsedTimeChanged(elaps);
-
-        if (!user_is_seeking) {
-            seekbar.slider('option', 'value', elaps);
-        }
-    });
-
-    audio.bind('durationchange', function () {
-        var dur = parseInt(BeatAudio.audio[0].duration);
-        durationChanged(dur);
-        seekbar.slider('option', 'disabled', false);
-    });
-
-    var error_counter = 0;
-
-    audio.bind('error', function () {
-        if (error_counter > 2) {
-            BeatAudio.pause();
-            error_counter = 0;
-            return;
-        }
-
-        grid.nextSong();
-        error_counter = error_counter + 1;
-    });
 
 
     // sidebar drag & drop
@@ -648,4 +637,5 @@ $(document).ready(function () {
         lastfm.scrobble(elaps);
     }
 
+});
 });
