@@ -5,12 +5,21 @@
 //= require routing
 //= require lastfm
 //= require pretty-numbers
+//= require audio-modules/html5audio
+//= require audio-modules/soundmanager2
 
 var keyCode = {
     ENTER: 13
 };
 
+soundManager.url = '/swf/';
+soundManager.flashVersion = 9; // optional: shiny features (default = 8)
+soundManager.useFlashBlock = false; // optionally, enable when you're ready to dive in
+soundManager.useHTML5Audio = true;
+
 $(document).ready(function () {
+soundManager.onready(function() {
+
 
     // resize the main-area to correct height
     resizeMain();
@@ -43,9 +52,6 @@ $(document).ready(function () {
     var grid = null;
     var dataView = new Slick.Data.DataView({ inlineFilters: true });
 
-    var audio = $('#player audio');
-    audio.css('display', 'none');
-
     var playerTrack = $('#player-song .track');
     var playPause = $('#play-pause');
     var prevButton = $('#prev');
@@ -53,38 +59,81 @@ $(document).ready(function () {
     var elapsed = $('#player-time .elapsed');
     var duration = $('#player-time .duration');
     var volume_label = $('#player-volume-label');
+    var seekbar = $('#seekbar-slider');
+
+    // init audio player
+    var error_counter = 0;
+
+    var eventHandlers = {
+        onPlay: function () {
+            playPause.addClass('playing');
+        },
+        onPaused: function () {
+            playPause.removeClass('playing');
+        },
+        onSongEnd: function () {
+            grid.nextSong();
+        },
+        onTimeChange: function (elaps) {
+            elapsedTimeChanged(elaps);
+
+            if (!user_is_seeking) {
+                seekbar.slider('option', 'value', elaps);
+            }
+        },
+        onDurationParsed: function (duration_in_seconds) {
+            durationChanged(duration_in_seconds);
+            seekbar.slider('option', 'disabled', false);
+        },
+        onError: function () {
+            if (error_counter > 2) {
+                BeatAudio.pause();
+                error_counter = 0;
+                return;
+            }
+
+            grid.nextSong();
+            error_counter = error_counter + 1;
+        }
+    };
+
+    var BeatAudio = null;
+    if (location.search == '?a=sm2') {
+        BeatAudio = new SM2Audio(eventHandlers);
+    }
+    else {
+        BeatAudio = new HTML5Audio(eventHandlers);   
+    }
+
 
     // volume slider
-    var volume = 0.3;
+    var volume = 20;
 
     if (store.get('volume')) {
         volume = parseFloat(store.get('volume'));
     }
 
-    if (volume >= 0 && volume <= 1.0) {
-        audio[0].volume = volume;
-        volume_label.attr('title', parseInt(volume*100));
+    if (volume >= 0 && volume <= 100) {
+        BeatAudio.setVolume(volume);
+        volume_label.attr('title', volume);
     }
 
     $('#player-volume-slider').slider({
         orientation: 'horizontal',
-        value: volume * 100,
+        value: volume,
         max: 100,
         min: 0,
         range: 'min',
         slide: function (event, ui) {
-            volume = parseFloat(ui.value/100);
-            audio[0].volume = volume;
+            BeatAudio.setVolume(ui.value);
             volume_label.attr('title', ui.value);
         },
         stop: function (event, ui) {
-            volume = parseFloat(ui.value/100);
-            store.set('volume', volume);
+            store.set('volume', ui.value);
         }
     });
 
     // seekbar
-    var seekbar = $('#seekbar-slider');
     var user_is_seeking = false;
     seekbar.slider({
         orientation: 'horizontal',
@@ -100,7 +149,7 @@ $(document).ready(function () {
             user_is_seeking = true;
         },
         stop: function(event, ui) {
-            audio[0].currentTime = ui.value;
+            BeatAudio.seekTo(ui.value);
             user_is_seeking = false;
         }
     });
@@ -109,17 +158,13 @@ $(document).ready(function () {
     playPause.click(function (e) {
         e.preventDefault();
 
+        // if not playing anything, start playing the first song on the playlist
         if (grid.playingSongId == null) {
             grid.nextSong();
             return;
         }
 
-        if (audio[0].paused) {
-            audio[0].play();
-        }
-        else {
-            audio[0].pause();
-        }
+        BeatAudio.togglePause();
     });
 
     nextButton.click(function (e) {
@@ -184,50 +229,6 @@ $(document).ready(function () {
     function getRepeat() {
         return storeGet('repeat');
     }
-
-
-    // audio player events
-
-    audio.bind('play', function() {
-        playPause.addClass('playing');
-    });
-
-    audio.bind('pause', function() {
-        playPause.removeClass('playing');
-    });
-
-    audio.bind('ended', function () {
-        grid.nextSong();
-    });
-
-    audio.bind('timeupdate', function () {
-        var elaps = parseInt(audio[0].currentTime);
-
-        elapsedTimeChanged(elaps);
-
-        if (!user_is_seeking) {
-            seekbar.slider('option', 'value', elaps);
-        }
-    });
-
-    audio.bind('durationchange', function () {
-        var dur = parseInt(audio[0].duration);
-        durationChanged(dur);
-        seekbar.slider('option', 'disabled', false);
-    });
-
-    var error_counter = 0;
-
-    audio.bind('error', function () {
-        if (error_counter > 2) {
-            audio[0].pause();
-            error_counter = 0;
-            return;
-        }
-
-        grid.nextSong();
-        error_counter = error_counter + 1;
-    });
 
 
     // sidebar drag & drop
@@ -442,7 +443,12 @@ $(document).ready(function () {
 
                 var song = dataView.getItemById(id);
 
-                playSong(song);
+                var uri = '/songs/play/?file=' + encodeURIComponent(song.path);
+                BeatAudio.play(uri);
+
+                playerTrack.text(song.nice_title);
+                lastfm.newSong(song);
+
                 grid.playingSongId = song.id;
 
                 // now playing icon
@@ -607,25 +613,12 @@ $(document).ready(function () {
     // enable buttons
     $('#player-buttons button').removeAttr('disabled');
 
-    function playSong(song) {
-        var uri = '/songs/play/?file=' + encodeURIComponent(song.path);
-
-        audio.attr('src', uri);
-        audio[0].play();
-
-        playerTrack.text(song.nice_title);
-
-        // re-set lastfm scrobbling
-        lastfm.newSong(song);
-    }
-
     function stop() {
-        if (!audio[0].paused) {
-            audio[0].pause();
-            audio[0].src = '';
-        }
+        BeatAudio.stop();
         grid.playingSongId = null;
         
+        // TODO: hide now playing icon from slickgrid
+
         elapsedTimeChanged(0);
         durationChanged(0);
         seekbar.slider('value', 0);
@@ -651,4 +644,5 @@ $(document).ready(function () {
         lastfm.scrobble(elaps);
     }
 
+});
 });
