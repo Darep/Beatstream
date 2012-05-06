@@ -6,6 +6,7 @@
 //= require lastfm
 //= require pretty-numbers
 //= require audio-modules/html5audio
+//= require audio-modules/soundmanager2
 
 var keyCode = {
     ENTER: 13
@@ -63,7 +64,7 @@ soundManager.onready(function() {
     // init audio player
     var error_counter = 0;
 
-    var BeatAudio = new HTML5Audio({
+    var eventHandlers = {
         onPlay: function () {
             playPause.addClass('playing');
         },
@@ -94,7 +95,15 @@ soundManager.onready(function() {
             grid.nextSong();
             error_counter = error_counter + 1;
         }
-    });
+    };
+
+    var BeatAudio = null;
+    if (location.search == '?a=sm2') {
+        BeatAudio = new SM2Audio(eventHandlers);
+    }
+    else {
+        BeatAudio = new HTML5Audio(eventHandlers);   
+    }
 
 
     // volume slider
