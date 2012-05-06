@@ -37,6 +37,7 @@
         
         var self = this;
         soundManager.play('mySound', {
+            volume: self.volume,
 
             // register events
             onplay: function () {
@@ -52,7 +53,6 @@
                 self.events.onSongEnd();
             },
             onload: function (success) {
-                console.log(success);
                 var duration_in_seconds = parseInt(song.duration / 1000);
                 self.events.onDurationParsed(duration_in_seconds);
             },
@@ -61,8 +61,6 @@
                 self.events.onTimeChange(elapsed_in_seconds);
             }
         });
-
-        song.setVolume(this.volume);
 
         this.song = song;
     };

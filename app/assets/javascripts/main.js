@@ -6,7 +6,6 @@
 //= require lastfm
 //= require pretty-numbers
 //= require audio-modules/html5audio
-//= require audio-modules/soundmanager2
 
 var keyCode = {
     ENTER: 13
@@ -64,7 +63,7 @@ soundManager.onready(function() {
     // init audio player
     var error_counter = 0;
 
-    var BeatAudio = new SM2Audio({
+    var BeatAudio = new HTML5Audio({
         onPlay: function () {
             playPause.addClass('playing');
         },
@@ -82,7 +81,6 @@ soundManager.onready(function() {
             }
         },
         onDurationParsed: function (duration_in_seconds) {
-            console.log(duration_in_seconds);
             durationChanged(duration_in_seconds);
             seekbar.slider('option', 'disabled', false);
         },
