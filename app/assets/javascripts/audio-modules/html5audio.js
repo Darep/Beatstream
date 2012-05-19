@@ -30,12 +30,12 @@
         });
 
         audio.bind('timeupdate', function () {
-            var elaps = parseInt(audio[0].currentTime);
+            var elaps = parseInt(audio[0].currentTime, 10);
             events.onTimeChange(elaps);
         });
 
         audio.bind('durationchange', function () {
-            var dur = parseInt(audio[0].duration);
+            var dur = parseInt(audio[0].duration, 10);
             events.onDurationParsed(dur);
         });
 

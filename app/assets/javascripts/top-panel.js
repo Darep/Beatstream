@@ -19,7 +19,7 @@ $(document).ready(function () {
 
     menu.click(function (e) {
         e.stopPropagation();
-    })
+    });
 
     menu.find('a').click(function () {
         panel.removeClass('act');

@@ -1,5 +1,6 @@
-function pretty_number(num, opts)
-{
+// pretty number
+
+function pretty_number(num, opts) {
     var defaultOpts = {
         short: true,
         lowerCase: false,
@@ -7,13 +8,11 @@ function pretty_number(num, opts)
         round: 2
     };
     
-    if (typeof num != "number")
-    {
+    if (typeof num != "number") {
         return "";
     }
     
-    function round(num, dec)
-    {       
+    function round(num, dec) {
         num = num * Math.pow(10, dec);
 
         num = Math.round(num);
@@ -23,18 +22,15 @@ function pretty_number(num, opts)
         return num;
     }
 
-    if (typeof opts == 'undefined')
-    {
+    if (typeof opts == 'undefined') {
         opts = {};
     }
 
-    for (var i in defaultOpts)
-    {
+    for (var i in defaultOpts) {
         opts[i] = (typeof opts[i] != 'undefined')? opts[i] : defaultOpts[i];
     }
 
-    if (opts.short)
-    {
+    if (opts.short) {
         var decimal_places = Math.floor(Math.log(num) / Math.log(10));
     
         var dec = [{
@@ -45,7 +41,7 @@ function pretty_number(num, opts)
             'divisor': 9
         },{
             'suffix': 'M',
-            'divisor': 6            
+            'divisor': 6
         },{
             'suffix': 'K',
             'divisor': 3
@@ -54,8 +50,7 @@ function pretty_number(num, opts)
             'divisor': 0
         }];
         
-        for (var i in dec)
-        {
+        for (var i in dec) {
             if (decimal_places > dec[i].divisor)
             {
                 num = round((num / Math.pow(10, dec[i].divisor)), 2 - (decimal_places - dec[i].divisor));
@@ -82,9 +77,8 @@ function pretty_number(num, opts)
             num = num.toLowerCase();
         }
     }
-    else if (opts.addCommas)
-    {
-        var decnum = ('' + (round(num, opts.round) - Math.floor(num))).substr(2);   
+    else if (opts.addCommas) {
+        var decnum = ('' + (round(num, opts.round) - Math.floor(num))).substr(2);
         
         var tempnum = '' + Math.floor(num);
         num = '';
@@ -106,7 +100,6 @@ function pretty_number(num, opts)
     return num;
 }
 
-function commify(num)
-{
+function commify(num) {
     return pretty_number(num, {'short': false});
 }

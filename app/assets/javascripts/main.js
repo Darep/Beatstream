@@ -18,8 +18,7 @@ soundManager.useFlashBlock = false; // optionally, enable when you're ready to d
 soundManager.useHTML5Audio = true;
 
 $(document).ready(function () {
-soundManager.onready(function() {
-
+    soundManager.onready(function() {
 
     // resize the main-area to correct height
     resizeMain();
@@ -98,11 +97,11 @@ soundManager.onready(function() {
     };
 
     var BeatAudio = null;
-    if (location.search == '?a=sm2') {
-        BeatAudio = new SM2Audio(eventHandlers);
+    if (location.search == '?a=html5') {
+        BeatAudio = new HTML5Audio(eventHandlers);
     }
     else {
-        BeatAudio = new HTML5Audio(eventHandlers);   
+        BeatAudio = new SM2Audio(eventHandlers);
     }
 
 
@@ -159,7 +158,7 @@ soundManager.onready(function() {
         e.preventDefault();
 
         // if not playing anything, start playing the first song on the playlist
-        if (grid.playingSongId == null) {
+        if (grid.playingSongId === null) {
             grid.nextSong();
             return;
         }
@@ -187,10 +186,10 @@ soundManager.onready(function() {
 
     // repeat & shuffle buttons
 
-    var repeatButton = $('#repeat'),
-        shuffleButton = $('#shuffle'),
-        shuffle = false,
-        repeat = false
+    var repeatButton = $('#repeat');
+    var shuffleButton = $('#shuffle');
+    var shuffle = false;
+    var repeat = false;
 
     function newToggleButton(button, key, value) {
         if (store.get(key)) {
@@ -269,10 +268,6 @@ soundManager.onready(function() {
             */
         },
         success: function(data) {
-
-            // update song count on sidebar
-            var count = commify( parseInt(data.length) );
-            $('.medialibrary.count').text(count);
 
             grid = new Slick.Grid("#slickgrid", dataView, columns, options);
             grid.setSelectionModel(new Slick.RowSelectionModel());
@@ -368,7 +363,7 @@ soundManager.onready(function() {
                     song_count++;
                 }
 
-                if (draggingSelectedRows == false) {
+                if (draggingSelectedRows === false) {
                     var dataItem = grid.getDataItem(cell.row);
                     data = {};
                     data[0] = dataItem;
@@ -395,7 +390,7 @@ soundManager.onready(function() {
 
                 var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
 
-                if (drop_target == undefined || drop_target.parent().parent().hasClass('playlists') == false) {
+                if (drop_target === undefined || drop_target.parent().parent().hasClass('playlists') === false) {
                     // these are not the drops you are looking for
                     $('#sidebar .playlists li').removeClass('hover');
                     return;
@@ -412,7 +407,7 @@ soundManager.onready(function() {
 
                 var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
 
-                if (drop_target == undefined || drop_target.parent().hasClass('.playlists') == false) {
+                if (drop_target === undefined || drop_target.parent().hasClass('.playlists') === false) {
                     // these are not the drops you are looking for
                     return;
                 }
@@ -437,7 +432,7 @@ soundManager.onready(function() {
             grid.playSong = function (id) {
                 var row = dataView.getRowById(id);
 
-                if (row == undefined) {
+                if (row === undefined) {
                     return; // song is not on the current list
                 }
 
@@ -471,7 +466,7 @@ soundManager.onready(function() {
                 var new_row = number_of_rows - 1;
                 var current_row = dataView.getRowById(grid.playingSongId);
 
-                if (current_row == undefined) {
+                if (current_row === undefined) {
                     // current song is not in the grid, stop playing
                     stop();
                     return;
@@ -489,10 +484,10 @@ soundManager.onready(function() {
                 var new_row = 0;
                 var current_row = -1;
 
-                if (grid.playingSongId != null) {
+                if (grid.playingSongId !== null) {
                     current_row = dataView.getRowById(grid.playingSongId);
 
-                    if (current_row == undefined) {
+                    if (current_row === undefined) {
                         // current song is not in the grid, stop playing
                         stop();
                         return;
@@ -507,7 +502,7 @@ soundManager.onready(function() {
                 else if ((current_row + 1) < number_of_rows) {
                     new_row = current_row + 1;
                 }
-                else if (!manual && getRepeat() == false) {
+                else if (!manual && getRepeat() === false) {
                     // automatic advance, at the last song and not repeating -> stop playing
                     stop();
                     return;
@@ -530,7 +525,7 @@ soundManager.onready(function() {
             var searchString = '';
 
             function myFilter(item, args) {
-                if (args.searchString == "") {
+                if (args.searchString === "") {
                     return true;
                 }
 
@@ -542,9 +537,10 @@ soundManager.onready(function() {
 
                 for (var i = 0; i < searchStr.length; i++) {
                     var str = searchStr[i];
-                    if ((item["title"] && item["title"].toLowerCase().indexOf(str) != -1)
-                        || (item["artist"] && item["artist"].toLowerCase().indexOf(str) != -1)
-                        || (item["album"] && item["album"].toLowerCase().indexOf(str) != -1)) {
+                    if ((item["title"] && item["title"].toLowerCase().indexOf(str) != -1) ||
+                        (item["artist"] && item["artist"].toLowerCase().indexOf(str) != -1) ||
+                        (item["album"] && item["album"].toLowerCase().indexOf(str) != -1))
+                    {
                         match = true;
                     }
                     else {
@@ -594,12 +590,12 @@ soundManager.onready(function() {
             dataView.syncGridSelection(grid, false);
             dataView.syncGridCellCssStyles(grid, 'currentSong_playing');
 
-            // update playlist meta
-            var count = commify( parseInt(data.length) );
-
+            // update song count on sidebar
+            var count = commify( parseInt( data.length, 10 ) );
             $('.medialibrary.count').text(count);
             $('.page-header .count').text(count);
 
+            // update count text
             if (data.length == 1) {
                 $('.page-header .text').html('song');
             }
@@ -644,5 +640,5 @@ soundManager.onready(function() {
         lastfm.scrobble(elaps);
     }
 
-});
+    });
 });

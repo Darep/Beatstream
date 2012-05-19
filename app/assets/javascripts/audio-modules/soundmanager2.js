@@ -25,12 +25,12 @@
     AudioModule.prototype.setVolume = function (volume) {
         this.volume = volume;
 
-        if (this.song == null) return;
+        if (this.song === null) return;
         this.song.setVolume(volume);
     };
 
     AudioModule.prototype.play = function (uri) {
-        if (this.song != null) {
+        if (this.song !== null) {
             this.song.destruct();
         }
         var song = soundManager.createSound('mySound', uri);
@@ -53,11 +53,11 @@
                 self.events.onSongEnd();
             },
             onload: function (success) {
-                var duration_in_seconds = parseInt(song.duration / 1000);
+                var duration_in_seconds = parseInt(song.duration / 1000, 10);
                 self.events.onDurationParsed(duration_in_seconds);
             },
             whileplaying: function () {
-                var elapsed_in_seconds = parseInt(song.position / 1000);
+                var elapsed_in_seconds = parseInt(song.position / 1000, 10);
                 self.events.onTimeChange(elapsed_in_seconds);
             }
         });
@@ -66,19 +66,19 @@
     };
 
     AudioModule.prototype.togglePause = function () {
-        if (this.song == null) return;
+        if (this.song === null) return;
         
         this.song.togglePause();
     };
 
     AudioModule.prototype.stop = function () {
-        if (this.song == null) return;
+        if (this.song === null) return;
 
         this.song.stop();
     };
 
     AudioModule.prototype.seekTo = function (seconds) {
-        if (this.song == null) return;
+        if (this.song === null) return;
 
         this.song.setPosition(seconds * 1000);
     };

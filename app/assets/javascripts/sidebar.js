@@ -33,7 +33,7 @@ $(document).ready(function () {
                 value = $this.val() || '',
                 list_name = $.trim(value);
 
-            if (list_name == '') {
+            if (list_name === '') {
                 list_item.remove();
                 return;
             }
