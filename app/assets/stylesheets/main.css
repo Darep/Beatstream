@@ -25,7 +25,6 @@ fieldset,img{border:0;}
 address,caption,cite,dfn,th,var{font-style:normal;font-weight:normal;}
 caption,th{text-align:left;}
 h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}
-q:before,q:after{content:'';}
 abbr,acronym{border:0;}
 
 
@@ -59,6 +58,10 @@ a {
 .btn {
     background:#595959;
     background: -webkit-linear-gradient(top, #707070, #424242);
+    background: -moz-linear-gradient(top, #707070, #424242);
+    background: -o-linear-gradient(top, #707070, #424242);
+    background: -ms-linear-gradient(top, #707070, #424242);
+    background: linear-gradient(top, #707070, #424242);
     color:#fff;
     display:inline-block;
     font-size:12px;
@@ -68,6 +71,8 @@ a {
     padding:0 8px;
     text-align:center;
     text-shadow:0 1px 0 #000;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
     border-radius:3px;
 }
 
@@ -456,22 +461,20 @@ header {
             width:100px;
         }
         #player-time {
-            margin-top:19px;
+            margin-top:18px;
             text-align:center;
             width:80px;
         }
         #seekbar {
             margin:0 75px 0 365px;
             padding:0 15px;
+            position: relative;
             text-align:center;
+            top:19px;
         }
-            #seekbar-slider {
-                top:20px;
-            }
         #player-buttons-2 {
             float:right;
-            height:40px;
-            margin:15px 10px 0 0;
+            margin:12px 10px 0 0;
         }
             #player #repeat, #player #shuffle {
                 background:transparent url('/assets/icons.png') no-repeat;
@@ -482,16 +485,16 @@ header {
                 width:24px;
             }
             #player #repeat {
-                background-position:2px -192px;
+                background-position:3px -189px;
             }
             #player #shuffle {
-                background-position:-35px -192px;
-            }
-            #player #shuffle.enabled {
-                background-position:-35px -167px
+                background-position:-35px -189px;
             }
             #player #repeat.enabled {
-                background-position:2px -167px
+                background-position:3px -164px
+            }
+            #player #shuffle.enabled {
+                background-position:-35px -164px
             }
 
 

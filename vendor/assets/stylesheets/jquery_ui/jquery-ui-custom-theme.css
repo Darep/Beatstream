@@ -19,7 +19,7 @@
 .ui-slider-handle {
 	background:#eee;
 	background:-webkit-linear-gradient(top, #faf9f8, #c3c2c1);
-	border:1px solid #ccc;
+	border:1px solid #bbb;
 	border-top:1px solid #fafafa;
 	display:block;
 	height:8px;
