@@ -1,6 +1,6 @@
 # Beatstream #
 
-![Screenshot](http://i.imgur.com/7P9au.png)
+![Screenshot](http://i.imgur.com/oRGwu.png)
 
 Web app for streaming music from any computer running Ruby (and Bundler) to anywhere with a modern browser (Chrome only for now!).
 
@@ -27,8 +27,8 @@ Copyright (c) 2012 Antti-Jussi Kovalainen
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
 "Software"), to deal in the Software with only one restriction: selling
-of the Software, or software and associated documentation files (the
-"Derived software") derived from it, is only permitted with the
+of the Software, or software and associated documentation files derived from it (the
+"Derived software"), is only permitted with the
 permission of the copyright owner.
 
 The above copyright notice and this permission notice shall be included
