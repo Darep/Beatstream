@@ -1,14 +1,19 @@
 header {
-    background:#222;
-    background: -webkit-linear-gradient(top, #242424, #424242);
+    background:#333;
+    background: -webkit-linear-gradient(left, #242424, #424242);
+    background: -moz-linear-gradient(left, #242424, #424242);
+    background: -o-linear-gradient(left, #242424, #424242);
+    background: -ms-linear-gradient(left, #242424, #424242);
+    background:linear-gradient(left, #242424, #424242);
     border-top:1px solid #000;
     color:#fff;
     height:55px;
     overflow: hidden;
     padding:0 20px 0 15px;
-    
+    -webkit-box-shadow: inset 0 1px 0 #505050;
+    -moz-box-shadow: inset 0 1px 0 #505050;
     box-shadow: inset 0 1px 0 #505050;
-    
+
     #logo {
         font:normal 30px/55px 'PT Sans', sans-serif;
         float:left;
@@ -61,9 +66,12 @@ header {
     right:1em;
     width:140px;
     z-index:2000;
-
-    border-radius:4px;
-    box-shadow:0 5px 10px rgba(0,0,0, 0.2);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 5px 10px rgba(0,0,0, 0.2);
+    -moz-box-shadow: 0 5px 10px rgba(0,0,0, 0.2);
+    box-shadow: 0 5px 10px rgba(0,0,0, 0.2);
 
     .head {
         overflow: hidden;

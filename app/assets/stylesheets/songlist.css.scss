@@ -2,16 +2,14 @@
     overflow: hidden;
     padding:15px 20px;
     position:relative;
-}
-    .page-header .info {
+    
+    .info {
         float:left;    
     }
-        .page-header h2 {
-
-        }
-        .page-header .meta {
+        .meta {
             font-size:13px;
         }
+}
     .search {
         float:right;
         margin-top:5px;
@@ -20,13 +18,20 @@
         #search {
             border:1px solid #bbb;
             height:16px;
-            border-radius:12px;
             outline:0;
             padding:1px 10px 3px;
             width:150px;
-
+            -webkit-border-radius:12px;
+            -moz-border-radius:12px;
+            border-radius:12px;
+            -webkit-box-shadow:inset 0 2px 1px rgba(0,0,0, 0.08);
+            -moz-box-shadow:inset 0 2px 1px rgba(0,0,0, 0.08);
             box-shadow:inset 0 2px 1px rgba(0,0,0, 0.08);
             -webkit-transition: all 100ms ease-in;
+            -moz-transition: all 100ms ease-in;
+            -o-transition: all 100ms ease-in;
+            -ms-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
         }
         #search::-webkit-input-placeholder {
             font-style:italic;
@@ -72,13 +77,18 @@
 }
     #slickgrid .slick-header {
         background:#fafafa;
-        background:-webkit-linear-gradient(top, #fff, #fff 50%, #eee);
+        background: -webkit-linear-gradient(top, #fff, #fff 50%, #eee);
+        background: -moz-linear-gradient(top, #fff, #fff 50%, #eee);
+        background: -o-linear-gradient(top, #fff, #fff 50%, #eee);
+        background: -ms-linear-gradient(top, #fff, #fff 50%, #eee);
+        background:linear-gradient(top, #fff, #fff 50%, #eee);
         border-top:1px solid #d1d1d1;
         border-bottom:1px solid #bbb;
         font-weight:700;
         overflow:visible !important;
         z-index:2;
-
+        -webkit-box-shadow:0 2px 2px rgba(0,0,0, 0.08);
+        -moz-box-shadow:0 2px 2px rgba(0,0,0, 0.08);
         box-shadow:0 2px 2px rgba(0,0,0, 0.08);
     }
         #slickgrid .slick-header-column {
@@ -146,8 +156,11 @@
         text-align:center;
         width:400px;
         z-index:9001;
-
+        -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
         border-radius: 4px;
     }
     .overlay h3 {

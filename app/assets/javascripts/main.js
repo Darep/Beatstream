@@ -13,13 +13,11 @@ var keyCode = {
 };
 
 soundManager.url = '/swf/';
-soundManager.flashVersion = 9; // optional: shiny features (default = 8)
+soundManager.flashVersion = 8; // optional: shiny features (default = 8)
 soundManager.useFlashBlock = false; // optionally, enable when you're ready to dive in
 soundManager.useHTML5Audio = true;
 
-$(document).ready(function () { soundManager.onready(function() {
-
-    $('.preloader').remove();
+$(document).ready(function () { soundManager.onready(function () {
 
     // resize the main-area to correct height
     resizeMain();
@@ -269,6 +267,8 @@ $(document).ready(function () { soundManager.onready(function() {
             */
         },
         success: function(data) {
+            
+            $('.preloader').remove();
 
             grid = new Slick.Grid("#slickgrid", dataView, columns, options);
             grid.setSelectionModel(new Slick.RowSelectionModel());

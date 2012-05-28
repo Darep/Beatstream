@@ -1,4 +1,4 @@
-//= require soundmanager2/soundmanager2-nodebug-jsmin
+//= require soundmanager2/soundmanager2-jsmin
 /*!
  * Beatstream HTML5 <audio> module
  */
@@ -6,6 +6,13 @@
 (function ($, window, document, undefined) {
 
     // SoundManager 2
+
+    var soundManagerIsReady = false;
+
+    soundManager.onready(function() {
+        soundManagerIsReady = true;
+    });
+
 
     function AudioModule(events_in) {
         var events = $.extend({
@@ -20,6 +27,7 @@
         this.song = null;
         this.events = events;
         this.volume = 0;
+
     }
 
     AudioModule.prototype.setVolume = function (volume) {
@@ -30,6 +38,11 @@
     };
 
     AudioModule.prototype.play = function (uri) {
+        if (!soundManagerIsReady) {
+            alert('SoundManager 2 is not ready to play music yet!');
+            return;
+        }
+
         if (this.song !== null) {
             this.song.destruct();
         }
