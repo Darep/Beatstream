@@ -1,6 +1,5 @@
 # -*- encoding : utf-8 -*-
 require 'find'
-#require 'mp3info'
 require 'logger'
 
 MUSIC_PATH = Rails.application.config.MUSIC_PATH
@@ -87,12 +86,15 @@ class SongsController < ApplicationController
             begin
                 mp3 = Mp3File.new(file, songs.length)
                 songs.push(mp3)
-            rescue Mp3InfoError
+            rescue Exception => e
+                Rails.logger.info e
                 Rails.logger.info 'Failed to load MP3: ' + file
                 # TODO: collect the broken mp3s into a separate array
                 # TODO: count the broken mp3s
             end
         end
+
+        songs.sort_by! { |song| song.to_natural_sort_string }
 
         songs_as_json = songs.to_json
         File.open(SONGS_JSON_FILE, 'w') { |f| f.write(songs_as_json) }
@@ -143,6 +145,13 @@ class Mp3File
 
     def to_s
         @nice_title
+    end
+
+    def to_natural_sort_string
+        a = artist
+        a += ' ' + album if !album.nil?
+        a += ' ' + tracknum.to_s if !tracknum.nil?
+        a.scan(/[^\d\.]+|[\d\.]+/).collect { |f| f.match(/\d+(\.\d+)?/) ? f.to_f : f }
     end
 
     private
