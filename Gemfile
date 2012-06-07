@@ -2,12 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.1'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
-#gem 'sqlite3'
-gem 'activerecord-jdbcsqlite3-adapter', :require => 'jdbc-sqlite3', :require =>'arjdbc'
-
 gem 'json'
 
 # Gems used only for assets and not required
@@ -24,8 +18,17 @@ end
 
 gem 'jquery-rails'
 
-#gem 'ruby-mp3info'
+platforms :jruby do
+  gem 'activerecord-jdbcsqlite3-adapter', :require => 'jdbc-sqlite3', :require =>'arjdbc'
+#  gem 'ruby-mp3info'
+end
+platforms :ruby, :mingw, :mswin do
+  gem 'sqlite3'
+#  gem 'taglib-ruby'
+end
+
 gem 'mp3info'
+gem 'rtaglib'
 
 gem 'rockstar', :git => 'git://github.com/bitboxer/rockstar.git'
 
