@@ -94,7 +94,7 @@ class SongsController < ApplicationController
             end
         end
 
-        songs.sort_by! { |song| song.to_natural_sort_string }
+        songs = songs.sort_by { |song| song.to_natural_sort_string }
 
         songs_as_json = songs.to_json
         File.open(SONGS_JSON_FILE, 'w') { |f| f.write(songs_as_json) }
