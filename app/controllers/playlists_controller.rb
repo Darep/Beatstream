@@ -1,8 +1,6 @@
 class PlaylistsController < ApplicationController
     def index
-        playlists = Playlist.all()
-
-        render :text => playlists.to_s
+        # TODO: return a list of users' playlists
     end
 
     def new

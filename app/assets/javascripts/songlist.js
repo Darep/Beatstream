@@ -1,13 +1,424 @@
-//= require store.min
+//= require helpers
+//= require dragtooltip
+/*!
+ * Abstracts SlickGrid away into oblivion!
+ */
 
-var Songlist = (function () {
+(function ($, window, document, undefined) {
 
-	var grid = {};
+    jQuery.event.special.drag.defaults.distance = 7;
+
+    function Songlist(events_in) {
+        var events = $.extend({
+            onPlay : function () {}
+        }, events_in);
+
+        this.events = events;
+
+        // SlickGrid
+
+        var columns = [
+            { id: 'np', resizable: false, width: 22 },
+            { id: 'artist', name: 'Artist', field: 'artist', sortable: true },
+            { id: 'tracknum', name: '', field: 'tracknum', sortable: false, resizable: false, cssClass: 'tracknum', width: 30 },
+            { id: 'title', name: 'Title', field: 'title', sortable: true },
+            { id: 'album', name: 'Album', field: 'album', sortable: true },
+            { id: 'duration', name: 'Duration', field: 'nice_length', sortable: true, cssClass: 'duration', width: 30 },
+            { id: 'path', name: '', field: 'path' }
+        ];
+
+        var options = {
+            editable: false,
+            forceFitColumns: true,
+            enableAutoTooltips: true,
+            enableCellNavigation: true,
+            enableColumnReorder: false,
+            multiSelect: true,
+            rowHeight: 22
+        };
+
+        var dataView = new Slick.Data.DataView({ inlineFilters: true });
+        var grid = new Slick.Grid("#slickgrid", dataView, columns, options);
+        grid.setSelectionModel(new Slick.RowSelectionModel());
+
+        // remove 'path' column
+        grid.setColumns(columns.slice(0, -1));
 
 
-	return {
-		loadPlaylist: function (id) {
+        // events:
 
-		}
-	};
-});
+        grid.onClick.subscribe(function (e) {
+            var cell = grid.getCellFromEvent(e);
+            grid.setSelectedRows([cell.row]);
+        });
+
+        grid.onDblClick.subscribe(function (e) {
+            var cell = grid.getCellFromEvent(e);
+            var dataItem = grid.getDataItem(cell.row);
+
+            grid.playSong(dataItem.id);
+
+            e.stopPropagation();
+        });
+
+        grid.onKeyDown.subscribe(function (e) {
+            if (e.keyCode == keyCode.ENTER) {
+                
+                var rows = grid.getSelectedRows();
+                if (!rows || rows.length <= 0) {
+                    return;
+                }
+
+                var dataItem = grid.getDataItem(rows[0]);
+                
+                grid.playSong(dataItem.id);
+
+                e.stopPropagation();
+            }
+        });
+
+        grid.onSelectedRowsChanged.subscribe(function (e) {
+            //var row = grid.getSelectedRows()[0];
+        });
+
+        grid.onSort.subscribe(function (e, args) {
+            var sortcol = args.sortCol.field;
+
+            function comparer(a, b) {
+                var x = a[sortcol],
+                    y = b[sortcol];
+
+                if (!x) { return -1; }
+                if (!y) { return 1; }
+
+                if (sortcol == 'album') {
+                    x = a['album'] + ' ' + a['tracknum'];
+                    y = b['album'] + ' ' + b['tracknum'];
+                }
+                else if (sortcol == 'artist') {
+                    x = a['artist'] + ' ' + a['album'] + ' ' + a['tracknum'];
+                    y = b['artist'] + ' ' + b['album'] + ' ' + b['tracknum'];
+                }
+
+                return naturalsort(x, y);
+            }
+
+            dataView.sort(comparer, args.sortAsc);
+        });
+
+        // dragging
+
+        grid.onDragInit.subscribe(function (e, dd) {
+            // we're handling drags! Don't you come here knockin'!
+            e.stopImmediatePropagation();
+        });
+
+        grid.onDragStart.subscribe(function (e, dd) {
+
+            var cell = grid.getCellFromEvent(e);
+            var data = {};
+            var song_count = 0;
+
+            // check if dragging selected rows
+            var rows = grid.getSelectedRows();
+            var draggingSelectedRows = false;
+
+            for (var i = 0; i < rows.length; i++) {
+                var dataItem = grid.getDataItem(rows[i]);
+                data[i] = dataItem;
+                if (rows[i] == cell.row) {
+                    draggingSelectedRows = true;
+                }
+                song_count++;
+            }
+
+            if (draggingSelectedRows === false) {
+                var dataItem = grid.getDataItem(cell.row);
+                data = {};
+                data[0] = dataItem;
+                song_count = 1;
+            }
+
+            dd.bestDataEver = data;
+
+            DragTooltip.show(dd.startX, dd.startY, song_count + ' song');
+
+            if (song_count != 1) {
+                DragTooltip.append('s');
+            }
+
+            // make playlists hilight
+            $('#sidebar .playlists li').addClass('targeted');
+
+            // tell grid that we're handling drags!
+            e.stopImmediatePropagation();
+        });
+
+        grid.onDrag.subscribe(function (e, dd) {
+            DragTooltip.update(e.clientX, e.clientY);
+
+            var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
+
+            if (drop_target === undefined || drop_target.parent().parent().hasClass('playlists') === false) {
+                // these are not the drops you are looking for
+                $('#sidebar .playlists li').removeClass('hover');
+                return;
+            }
+
+            $('#sidebar .playlists li').removeClass('hover');
+            drop_target.parent().addClass('hover');
+        });
+
+        grid.onDragEnd.subscribe(function (e, dd) {
+            DragTooltip.hide();
+
+            $('#sidebar .playlists li').removeClass('targeted').removeClass('hover');
+
+            var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
+
+            if (drop_target === undefined || drop_target.parent().hasClass('.playlists') === false) {
+                // these are not the drops you are looking for
+                return;
+            }
+
+            // TODO: add dragged things into playlist (if things can be added)
+        });
+
+
+        // own extensions:
+
+        grid.playingSongId = null;
+
+        grid.getPlayingSong = function () {
+            if (grid.playingSongId === null) {
+                return null;
+            }
+            else {
+                return dataView.getItemById(grid.playingSongId);
+            }
+        };
+
+        grid.playSong = function (id) {
+            var row = dataView.getRowById(id);
+
+            if (row === undefined) {
+                return; // song is not on the current list
+            }
+
+            var song = dataView.getItemById(id);
+
+            events.onPlay(song);
+
+            grid.playingSongId = song.id;
+
+            // now playing icon
+            grid.removeCellCssStyles('currentSong_playing');
+
+            var np_cells = {}; np_cells[row] = { np: 'playing' };
+            grid.addCellCssStyles('currentSong_playing', np_cells);
+
+            grid.setSelectedRows([row]);
+            grid.scrollRowIntoView(row);
+        };
+
+        grid.playSongAtRow = function (row) {
+            var song = dataView.getItem(row); // getItem == getItemAtRow
+            grid.playSong(song.id);
+        };
+
+        grid.prevSong = function () {
+            var number_of_rows = grid.getDataLength();
+            var new_row = number_of_rows - 1;
+            var current_row = dataView.getRowById(grid.playingSongId);
+
+            if (current_row === undefined) {
+                // current song is not in the grid, stop playing
+                stop();
+                return;
+            }
+
+            if ((current_row - 1) >= 0) {
+                new_row = current_row - 1;
+            }
+
+            grid.playSongAtRow(new_row);
+        };
+
+        grid.nextSong = function (shuffle, manual) {
+            var number_of_rows = grid.getDataLength();
+            var new_row = 0;
+            var current_row = -1;
+
+            if (grid.playingSongId !== null) {
+                current_row = dataView.getRowById(grid.playingSongId);
+
+                if (current_row === undefined) {
+                    // current song is not in the grid, stop playing
+                    stop();
+                    return;
+                }
+            }
+
+            if (shuffle) {
+                new_row = randomToN(number_of_rows);
+            }
+            else if ((current_row + 1) < number_of_rows) {
+                new_row = current_row + 1;
+            }
+            else if (!manual && getRepeat() === false) {
+                // automatic advance, at the last song and not repeating -> stop playing
+                stop();
+                return;
+            }
+
+            grid.playSongAtRow(new_row);
+        };
+
+        // wire up model events to drive the grid
+        dataView.onRowCountChanged.subscribe(function (e, args) {
+            grid.updateRowCount();
+            grid.render();
+        });
+
+        dataView.onRowsChanged.subscribe(function (e, args) {
+            grid.invalidateRows(args.rows);
+            grid.render();
+        });
+
+        var searchString = '';
+
+        function myFilter(item, args) {
+            if (args.searchString === "") {
+                return true;
+            }
+
+            var searchStr = args.searchString.toLowerCase();
+
+            searchStr = searchStr.split(' ');
+
+            var match = true;
+
+            for (var i = 0; i < searchStr.length; i++) {
+                var str = searchStr[i];
+                if ((item.title && item.title.toLowerCase().indexOf(str) != -1) ||
+                    (item.artist && item.artist.toLowerCase().indexOf(str) != -1) ||
+                    (item.album && item.album.toLowerCase().indexOf(str) != -1))
+                {
+                    match = true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            return match;
+        }
+        this.myFilter = myFilter;
+
+        // wire up the search textbox to apply the filter to the model
+        $('#search').keyup(function (e) {
+            // clear on Esc
+            if (e.which == 27) {
+                this.value = "";
+            }
+
+            searchString = this.value;
+            updateFilter();
+        });
+
+        $('.search .clear').click(function (e) {
+            $('#search').val('');
+            searchString = '';
+            updateFilter();
+
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        function updateFilter() {
+            dataView.setFilterArgs({
+                searchString: searchString
+            });
+            dataView.refresh();
+        }
+
+        this.grid = grid;
+        this.dataView = dataView;
+        this.searchString = searchString;
+    }
+
+    Songlist.prototype.resizeCanvas = function () {
+        this.grid.resizeCanvas();
+    };
+
+    Songlist.prototype.scrollNowPlayingIntoView = function () {
+        var row = this.dataView.getRowById(this.grid.playingSongId);
+        this.grid.scrollRowIntoView(row);
+    };
+
+    Songlist.prototype.nextSong = function (shuffle, manual) {
+        this.grid.nextSong(shuffle, manual);
+    };
+
+    Songlist.prototype.prevSong = function () {
+        this.grid.prevSong();
+    };
+
+    Songlist.prototype.isPlaying = function () {
+        return (this.grid.playingSongId !== null);
+    };
+
+    Songlist.prototype.resetPlaying = function () {
+        this.grid.playingSongId = null;
+    };
+
+    Songlist.prototype.loadPlaylist = function (url) {
+        var self = this;
+
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            error: function (xhr, status, error) {
+                /*
+                console.log(xhr);
+                console.log(status);
+                console.log(error);
+                */
+            },
+            success: function(data) {
+                $('.preloader').remove();
+                self.loadData(data);
+            }
+        });
+    };
+
+    Songlist.prototype.loadData = function (data) {
+        // initialize data view model
+        this.dataView.beginUpdate();
+        this.dataView.setItems(data);
+        this.dataView.setFilterArgs({
+            searchString: this.searchString
+        });
+        this.dataView.setFilter(this.myFilter);
+        this.dataView.endUpdate();
+
+        this.dataView.syncGridSelection(this.grid, false);
+        this.dataView.syncGridCellCssStyles(this.grid, 'currentSong_playing');
+
+        // update song count on sidebar
+        var count = commify( parseInt( data.length, 10 ) );
+        $('.medialibrary.count').text(count);
+        $('.page-header .count').text(count);
+
+        // update count text
+        if (data.length == 1) {
+            $('.page-header .text').html('song');
+        }
+        else {
+            $('.page-header .text').html('songs');
+        }
+    };
+
+    window.Songlist = Songlist;
+
+})(jQuery, window, document);

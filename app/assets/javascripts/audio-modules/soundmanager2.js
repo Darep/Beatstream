@@ -1,4 +1,4 @@
-//= require soundmanager2/soundmanager2-jsmin
+//= require soundmanager2/soundmanager2-nodebug-jsmin
 /*!
  * Beatstream HTML5 <audio> module
  */

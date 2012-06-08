@@ -8,7 +8,10 @@ class SettingsController < ApplicationController
     def save
         @user = User.find(session[:user_id])
         if @user.update_attributes(params[:user])
-            render :text => 'save ok'
+            respond_to do |format|
+                format.html { redirect_to :action => 'index' }
+                format.json { render :nothing => true }
+            end
         else
             render :action => 'index', :layout => false
         end
@@ -22,11 +25,19 @@ class SettingsController < ApplicationController
         @user = User.find(session[:user_id])
         @user.update_attributes(:lastfm_session_key => lastfm_session.key, :lastfm_username => lastfm_session.username)
 
-        redirect_to :action => 'index'
+        respond_to do |format|
+            format.html { redirect_to :action => 'index' }
+            format.json { render :nothing => true }
+        end
     end
 
     def lastfm_disconnect
-        # TODO: remove last.fm session from db etc.
-        render :text => 'yay'
+        @user = User.find(session[:user_id])
+        @user.update_attributes(:lastfm_session_key => nil, :lastfm_username => nil)
+
+        respond_to do |format|
+            format.html { redirect_to :action => 'index' }
+            format.json { render :nothing => true }
+        end
     end
 end
