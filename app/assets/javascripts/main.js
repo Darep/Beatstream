@@ -243,10 +243,6 @@ $(document).ready(function () { soundManager.onready(function () {
 
     songlist.loadPlaylist('/songs/index');
 
-    setTimeout(function () {
-        songlist.loadPlaylist('/songs/index');
-    }, 10 * 1000);
-
 
     // enable buttons
     $('#player-buttons button').removeAttr('disabled');
