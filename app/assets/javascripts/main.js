@@ -231,6 +231,8 @@ $(document).ready(function () { soundManager.onready(function () {
     }
 
 
+    // open the current playlist (according to the url)
+    // NOTE: atm. always open the "All music" -playlist
     songlist.loadPlaylistByUrl('/songs/index');
 
 
