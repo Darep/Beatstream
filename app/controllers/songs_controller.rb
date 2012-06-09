@@ -38,7 +38,7 @@ class SongsController < ApplicationController
 
     def now_playing
         expires_now # don't cache
-        
+
         artist = params[:artist]
         title = params[:title]
 
@@ -152,7 +152,8 @@ class Mp3File
     end
 
     def to_natural_sort_string
-        a = artist
+        a = ''
+        a += artist if !artist.nil?
         a += ' ' + album if !album.nil?
         a += ' ' + tracknum.to_s if !tracknum.nil?
         a.scan(/[^\d\.]+|[\d\.]+/).collect { |f| f.match(/\d+(\.\d+)?/) ? f.to_f : f }
