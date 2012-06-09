@@ -41,31 +41,19 @@
                     <li class="act all-music">
                         <a>All music <span class="medialibrary count">-</span></a>
                     </li>
-                <!--
+                <% if false %>
                     <li class="act browser">
                         <a>Artist &amp; albums</a>
                     </li>
-                -->
+                <% end %>
                 </ul>
 
-                <% if false %>
-                    <ul class="playlists">
-                        <li>
-                            <a>AC/DC</a>
-                        </li>
-                        <li>
-                            <a>Accept</a>
-                        </li>
-                        <li>
-                            <a>cash</a>
-                        </li>
-                        <li>
-                            <a>New playlist</a>
-                        </li>
-                    </ul>
-                    <a class="btn" id="btn-new-list">+ New Playlist</a>
+                <% #= yield :playlists %>
+                <%= render_cell :playlists, :index %>
+                <% if true %>
+                    <a class="btn btn-new-list">+ New Playlist</a>
                 <% else %>
-                    <p class="none">
+                    <p class="under-construction">
                         Playlists haven't been implemented, yet! Stay tuned.
                     </p>
                 <% end %>
@@ -108,15 +96,29 @@
     <div class="loading">Loading</div>
 </div>
 
-<script type="text/html" id="settings-template">
-    <h1>Settings</h1>
-    <div>
-        <label for=""></label>
-    </div>
-    <input type="text" name="" />
+<div id="templates" style="display:none;">
 
-    <!-- TODO: this -->
-</script>
+    <li class="playlist">
+        <a data-url="" class="name"></a>
+    </li>
+
+    <li class="playlist insync">
+        <a data-url="" class="name">
+            <span class="sync-icon">Syncing...</span>
+        </a>
+    </li>
+
+    <div class="settings">
+        <h1>Settings</h1>
+        <div>
+            <label for=""></label>
+        </div>
+        <input type="text" name="" />
+
+        <!-- TODO: this -->
+    </div>
+
+</div>
 
 </body>
 </html>

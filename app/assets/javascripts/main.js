@@ -231,9 +231,7 @@ $(document).ready(function () { soundManager.onready(function () {
     }
 
 
-    // sidebar drag & drop
-
-    songlist.loadPlaylist('/songs/index');
+    songlist.loadPlaylistByUrl('/songs/index');
 
 
     // enable buttons
