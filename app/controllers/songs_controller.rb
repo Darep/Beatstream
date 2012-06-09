@@ -121,7 +121,7 @@ class Mp3File
         @title = @filename
         @artist = ''
         @album = ''
-        @tracknum = ''
+        @tracknum = nil
         @length = 0
 
         # ID3 tag info
@@ -152,11 +152,27 @@ class Mp3File
     end
 
     def to_natural_sort_string
-        a = ''
+        a = ""
         a += artist if !artist.nil?
         a += ' ' + album if !album.nil?
-        a += ' ' + tracknum.to_s if !tracknum.nil?
-        a.scan(/[^\d\.]+|[\d\.]+/).collect { |f| f.match(/\d+(\.\d+)?/) ? f.to_f : f }
+
+        if !tracknum.nil?
+            track = tracknum.to_s
+            
+            if tracknum < 100
+                track = "0" + track
+            end
+            if tracknum < 10
+                track = "0" + track
+            end
+
+            a += ' ' + track
+        end
+
+        a
+
+        # dis shit don't work, yo
+        #a.to_s.scan(/[^\d\.]+|[\d\.]+/).collect { |f| f.match(/\d+(\.\d+)?/) ? f.to_f : f }
     end
 
     private
