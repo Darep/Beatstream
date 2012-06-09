@@ -152,10 +152,11 @@ class Mp3File
     end
 
     def to_natural_sort_string
-        a = ""
-        a += artist if !artist.nil?
-        a += ' ' + album if !album.nil?
+        str = ""
+        str += artist if !artist.nil?
+        str += ' ' + album if !album.nil?
 
+        # dumb ass way to achieve natural sorting
         if !tracknum.nil?
             track = tracknum.to_s
             
@@ -166,13 +167,14 @@ class Mp3File
                 track = "0" + track
             end
 
-            a += ' ' + track
+            str += ' ' + track
         end
 
-        a
+        if str.empty?
+            str = filename
+        end
 
-        # dis shit don't work, yo
-        #a.to_s.scan(/[^\d\.]+|[\d\.]+/).collect { |f| f.match(/\d+(\.\d+)?/) ? f.to_f : f }
+        str
     end
 
     private
