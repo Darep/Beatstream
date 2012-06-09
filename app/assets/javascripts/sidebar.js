@@ -1,6 +1,7 @@
 //= require helpers
 //= require playlists
 //= require songlist
+//= require transparency.min
 /*!
  * Sidebar
  *
@@ -9,51 +10,68 @@
 $(document).ready(function () {
 
     var NEW_PLAYLIST_NAME = 'New playlist';
+    var playlists = $('#sidebar .playlists');
 
-    for (var i = 0; i < Playlists.count(); i++) {
-        var playlist = Playlists.getAtIndex(i);
-        var id = playlist.id;
-        var name = playlist.name;
-        $('#sidebar .playlists').append('<li><a href="#" data-id="' + id + '">' + name + '</a></li>');
-    }
+    $('#sidebar .playlists a').live('click', function (e) {
+        e.preventDefault();
 
-    $('#sidebar .playlists a').click(function () {
-        var id = $(this).attr('data-id');
-        Songlist.loadPlaylist(id);
+        var $this = $(this);
 
-        return false;
+        if ($this.hasClass('insync')) {
+            return;
+        }
+
+        alert('Playlists haven\'t been implemented yet. Stay tuned!');
+
+        var url = $this.attr('data-url');
+        // TODO: all this
     });
 
-    $('#sidebar .new-list').click(function () {
-        var list_item  = $('<li></li>');
-        var rename_field = $('<input type="text" name="list-name" value="' + NEW_PLAYLIST_NAME + '" />');
-        
-        rename_field.onEnter(function () {
-            var $this = $(this),
-                value = $this.val() || '',
-                list_name = $.trim(value);
+    var newPlaylistInput = playlists.find('.playlist-input');
+    var nameField = newPlaylistInput.find('input');
 
-            if (list_name === '') {
-                list_item.remove();
-                return;
+    nameField.onEnter(function () {
+        console.log('aaa');
+
+        var $this = $(this);
+        var value = $this.val() || '';
+        var list_name = $.trim(value);
+
+        // empty list name, abort
+        if (list_name === '') {
+            list_item.remove();
+            return;
+        }
+
+        // TODO: check that there is no list with the same name
+
+        var playlistInSync = template('.playlist.insync').render({ name: list_name }).clone();
+        console.log(playlistInSync);
+        newPlaylistInput.before(playlistInSync);
+        newPlaylistInput.hide();
+
+        // TODO: ajax post: create playlist with name list_name
+        var data = {};
+        $.ajax({
+            type: 'post',
+            url: 'playlists/new',
+            data: data,
+            dataType: 'json',
+            success: function () {
+
             }
-
-            var playlist = {
-                id: Playlists.nextId(),
-                name: list_name,
-                data: {}
-            };
-
-            Playlists.add(playlist);
-
-            rename_field.replaceWith('<a href="#" data-id="' + playlist.id + '">' + playlist.name + '</a>');
         });
 
-        list_item.append(rename_field);
-        $('#sidebar .playlists').append(list_item);
-        rename_field.focus();
+        //  hide "no playlists" text
+        playlists.prev('.none').hide();
+    });
 
-        return false;
+    $('#sidebar .btn-new-list').click(function (e) {
+        e.preventDefault();
+
+        nameField.val(NEW_PLAYLIST_NAME);
+        newPlaylistInput.show();
+        nameField.focus().select();
     });
 
 });

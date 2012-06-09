@@ -141,6 +141,9 @@
 
             dd.bestDataEver = data;
 
+            // TODO: move this Dragtooltip and sidebar shit elsewhere (main.js)
+            //events.onDragStart();
+
             DragTooltip.show(dd.startX, dd.startY, song_count + ' song');
 
             if (song_count != 1) {
@@ -155,6 +158,7 @@
         });
 
         grid.onDrag.subscribe(function (e, dd) {
+            // TODO: none of this is related to the songlist. Call events.onDrag() and handle this in main.js
             DragTooltip.update(e.clientX, e.clientY);
 
             var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
@@ -170,18 +174,25 @@
         });
 
         grid.onDragEnd.subscribe(function (e, dd) {
+            // TODO: none of this is related to the songlist. Call events.onDragEnd() and handle this in main.js
             DragTooltip.hide();
 
             $('#sidebar .playlists li').removeClass('targeted').removeClass('hover');
 
             var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
 
-            if (drop_target === undefined || drop_target.parent().hasClass('.playlists') === false) {
+            if (drop_target === undefined ||
+                (drop_target.parent().hasClass('playlists') === false &&
+                drop_target.parent().parent().hasClass('playlists') === false))
+            {
                 // these are not the drops you are looking for
+                console.log('bail');
                 return;
             }
 
             // TODO: add dragged things into playlist (if things can be added)
+            var newSongs = dd.bestDataEver;
+            console.log(newSongs);
         });
 
 
@@ -372,7 +383,7 @@
         this.grid.playingSongId = null;
     };
 
-    Songlist.prototype.loadPlaylist = function (url) {
+    Songlist.prototype.loadPlaylistByUrl = function (url) {
         var self = this;
 
         $.ajax({
@@ -387,12 +398,12 @@
             },
             success: function(data) {
                 $('.preloader').remove();
-                self.loadData(data);
+                self.loadPlaylist(data);
             }
         });
     };
 
-    Songlist.prototype.loadData = function (data) {
+    Songlist.prototype.loadPlaylist = function (data) {
         // initialize data view model
         this.dataView.beginUpdate();
         this.dataView.setItems(data);
