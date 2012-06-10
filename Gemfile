@@ -34,8 +34,6 @@ gem 'rockstar', :git => 'git://github.com/bitboxer/rockstar.git'
 
 gem 'dynamic_form'
 
-gem 'cells'
-
 #gem 'mongo_mapper'
 
 # To use ActiveModel has_secure_password
