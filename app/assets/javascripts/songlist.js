@@ -244,7 +244,7 @@
             grid.playSongAtRow(new_row);
         };
 
-        grid.nextSong = function (shuffle, manual) {
+        grid.nextSong = function (shuffle, repeat, manual) {
             var number_of_rows = grid.getDataLength();
             var new_row = 0;
             var current_row = -1;
@@ -263,12 +263,17 @@
                 new_row = randomToN(number_of_rows);
             }
             else if ((current_row + 1) < number_of_rows) {
+                // normal operation, move to next song
                 new_row = current_row + 1;
             }
-            else if (!manual && getRepeat() === false) {
-                // automatic advance, at the last song and not repeating -> stop playing
+            else if ((manual === undefined || manual === false) && repeat === false) {
+                // last song and not repeating -> stop playing
                 stop();
                 return;
+            }
+            else {
+                // start at the top!
+                new_row = 0;
             }
 
             grid.playSongAtRow(new_row);

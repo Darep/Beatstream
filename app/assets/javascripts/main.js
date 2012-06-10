@@ -77,8 +77,7 @@ $(document).ready(function () { soundManager.onready(function () {
             playPause.removeClass('playing');
         },
         onSongEnd: function () {
-            var shuffle = getShuffle();
-            songlist.nextSong(shuffle);
+            songlist.nextSong(getShuffle(), getRepeat());
         },
         onTimeChange: function (elaps) {
             elapsedTimeChanged(elaps);
@@ -98,8 +97,8 @@ $(document).ready(function () { soundManager.onready(function () {
                 return;
             }
 
-            var shuffle = getShuffle();
-            songlist.nextSong(shuffle);
+            songlist.nextSong(getShuffle(), getRepeat());
+
             error_counter = error_counter + 1;
         }
     };
@@ -167,8 +166,7 @@ $(document).ready(function () { soundManager.onready(function () {
 
         // if not playing anything, start playing the first song on the playlist
         if (!songlist.isPlaying()) {
-            var shuffle = getShuffle();
-            songlist.nextSong(shuffle);
+            songlist.nextSong(getShuffle(), getRepeat());
             return;
         }
 
@@ -177,8 +175,7 @@ $(document).ready(function () { soundManager.onready(function () {
 
     nextButton.click(function (e) {
         e.preventDefault();
-        var shuffle = getShuffle();
-        songlist.nextSong(shuffle, true);
+        songlist.nextSong(getShuffle(), getRepeat(), true);
     });
 
     prevButton.click(function (e) {
