@@ -54,6 +54,18 @@ $(document).ready(function () { soundManager.onready(function () {
 
             playerTrack.text(song.nice_title);
             lastfm.newSong(song);
+        },
+        onStop: function () {
+            BeatAudio.stop();
+            songlist.resetPlaying();
+            
+            // TODO: hide now playing icon from slickgrid
+
+            elapsedTimeChanged(0);
+            durationChanged(0);
+            seekbar.slider('value', 0);
+            seekbar.slider('option', 'disabled', true);
+            playerTrack.text('None');
         }
     });
 
@@ -69,7 +81,7 @@ $(document).ready(function () { soundManager.onready(function () {
     // init audio player
     var error_counter = 0;
 
-    var eventHandlers = {
+    var BeatAudio = new SM2Audio({
         onPlay: function () {
             playPause.addClass('playing');
         },
@@ -101,15 +113,7 @@ $(document).ready(function () { soundManager.onready(function () {
 
             error_counter = error_counter + 1;
         }
-    };
-
-    var BeatAudio = null;
-    if (location.search == '?a=html5') {
-        BeatAudio = new HTML5Audio(eventHandlers);
-    }
-    else {
-        BeatAudio = new SM2Audio(eventHandlers);
-    }
+    });
 
 
     // volume slider
@@ -243,19 +247,6 @@ $(document).ready(function () { soundManager.onready(function () {
 
     // enable buttons
     $('#player-buttons button').removeAttr('disabled');
-
-    function stop() {
-        BeatAudio.stop();
-        songlist.resetPlaying();
-        
-        // TODO: hide now playing icon from slickgrid
-
-        elapsedTimeChanged(0);
-        durationChanged(0);
-        seekbar.slider('value', 0);
-        seekbar.slider('option', 'disabled', true);
-        playerTrack.text('None');
-    }
 
     function durationChanged(dur) {
         var mins = Math.floor(dur/60, 10),

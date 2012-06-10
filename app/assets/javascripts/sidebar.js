@@ -21,18 +21,29 @@ $(document).ready(function () {
             return;
         }
 
-        alert('Playlists haven\'t been implemented yet. Stay tuned!');
+        //alert('Playlists haven\'t been implemented yet. Stay tuned!');
 
-        var url = $this.attr('data-url');
-        // TODO: all this
+        var name = $this.text();
+
+        var url = 'playlists/show/' + encodeURIComponent(name);
+
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            success: function () {
+
+            },
+            error: function () {
+                alert('Playlist cannot be opened right now');
+            }
+        });
+        
     });
 
     var newPlaylistInput = playlists.find('.playlist-input');
     var nameField = newPlaylistInput.find('input');
 
     nameField.onEnter(function () {
-        console.log('aaa');
-
         var $this = $(this);
         var value = $this.val() || '';
         var list_name = $.trim(value);
@@ -46,19 +57,19 @@ $(document).ready(function () {
         // TODO: check that there is no list with the same name
 
         var playlistInSync = template('.playlist.insync').render({ name: list_name }).clone();
-        console.log(playlistInSync);
         newPlaylistInput.before(playlistInSync);
         newPlaylistInput.hide();
 
         // TODO: ajax post: create playlist with name list_name
-        var data = {};
+        var data = { name: list_name };
         $.ajax({
-            type: 'post',
+            type: 'POST',
             url: 'playlists/new',
             data: data,
-            dataType: 'json',
-            success: function () {
-
+            success: function (data) {
+                console.log(playlistInSync);
+                playlistInSync.removeClass('insync');
+                playlistInSync.find('.sync-icon').remove();
             }
         });
 
