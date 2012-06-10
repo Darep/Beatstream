@@ -5,6 +5,7 @@
 //= require routing
 //= require lastfm
 //= require songlist
+//= require sidebar
 //= require pretty-numbers
 //= require audio-modules/html5audio
 //= require audio-modules/soundmanager2
@@ -35,13 +36,12 @@ $(document).ready(function () { soundManager.onready(function () {
 
 
     // ::: USER MENU :::
-
     $(window).hashchange(function () {
         Routing.ResolveCurrent();
     });
     
 
-    // ::: INIT songlist / GRID OMG SO BIG SECTION :::
+    // ::: INIT STUFF :::
     var songlist = new Songlist({
         onPlay: function (song) {
             var uri = '/songs/play/?file=' + encodeURIComponent(song.path);
@@ -64,6 +64,7 @@ $(document).ready(function () { soundManager.onready(function () {
         }
     });
 
+    // player buttons
     var playerTrack = $('#player-song .track');
     var playPause = $('#play-pause');
     var prevButton = $('#prev');
@@ -75,7 +76,6 @@ $(document).ready(function () { soundManager.onready(function () {
 
     // init audio player
     var error_counter = 0;
-
     var BeatAudio = new SM2Audio({
         onPlay: function () {
             playPause.addClass('playing');
@@ -110,6 +110,70 @@ $(document).ready(function () { soundManager.onready(function () {
         }
     });
 
+    // open the current playlist (according to the url)
+    // NOTE: atm. always open the "All music" -playlist
+    $.ajax({
+        url: '/songs/index',
+        dataType: 'json',
+        success: function(data) {
+            $('.preloader').remove();
+
+            songlist.loadPlaylist(data);
+
+            // update song count on sidebar
+            var length = data.length;
+            if (length === undefined) {
+                length = 0;
+            }
+
+            var count = commify( parseInt( length, 10 ) );
+            $('.page-header .count').text(count);
+
+            // update count text
+            if (length === 1) {
+                $('.page-header .text').html('song');
+            }
+            else {
+                $('.page-header .text').html('songs');
+            }
+
+            $('.medialibrary.count').text(count);
+        }
+    });
+
+
+    // init sidebar
+    var sidebar = new Sidebar({
+        onLoadPlaylistByUrl: function (url, listName) {
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                success: function(data) {
+
+                    songlist.loadPlaylist(data);
+
+                    // update playlist header data
+                    var length = data.length;
+                    if (length === undefined) {
+                        length = 0;
+                    }
+
+                    var count = commify( parseInt( length, 10 ) );
+                    $('.page-header .count').text(count);
+
+                    // update count text
+                    if (length === 1) {
+                        $('.page-header .text').html('song');
+                    }
+                    else {
+                        $('.page-header .text').html('songs');
+                    }
+
+                    $('.page-header .info h2').html(listName);
+                }
+            });
+        }
+    });
 
     // volume slider
     var volume = 20;
@@ -189,6 +253,9 @@ $(document).ready(function () { soundManager.onready(function () {
     });
 
 
+    // enable buttons
+    $('#player-buttons button').removeAttr('disabled');
+
     // repeat & shuffle buttons
 
     var repeatButton = $('#repeat');
@@ -214,7 +281,6 @@ $(document).ready(function () { soundManager.onready(function () {
             $(this).toggleClass('enabled');
         });
     }
-
     newToggleButton(repeatButton, 'repeat', repeat);
     newToggleButton(shuffleButton, 'shuffle', shuffle);
 
@@ -233,15 +299,6 @@ $(document).ready(function () { soundManager.onready(function () {
     function getRepeat() {
         return storeGet('repeat');
     }
-
-
-    // open the current playlist (according to the url)
-    // NOTE: atm. always open the "All music" -playlist
-    songlist.loadPlaylistByUrl('/songs/index');
-
-
-    // enable buttons
-    $('#player-buttons button').removeAttr('disabled');
 
     function durationChanged(dur) {
         var mins = Math.floor(dur/60, 10),
