@@ -10,7 +10,8 @@
 
     function Songlist(events_in) {
         var events = $.extend({
-            onPlay : function () {}
+            onPlay : function () {},
+            onStop : function () {}
         }, events_in);
 
         this.events = events;
@@ -244,7 +245,7 @@
 
             if (current_row === undefined) {
                 // current song is not in the grid, stop playing
-                stop();
+                events.onStop();
                 return;
             }
 
@@ -265,7 +266,7 @@
 
                 if (current_row === undefined) {
                     // current song is not in the grid, stop playing
-                    stop();
+                    events.onStop();
                     return;
                 }
             }
@@ -279,7 +280,7 @@
             }
             else if ((manual === undefined || manual === false) && repeat === false) {
                 // last song and not repeating -> stop playing
-                stop();
+                events.onStop();
                 return;
             }
             else {

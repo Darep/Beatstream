@@ -19,7 +19,8 @@ BeatStream::Application.routes.draw do
   get 'songs/scrobble'
 
   match 'playlists' => 'playlists#index'
-  get 'playlists/new'
+  post 'playlists/new'
+  match 'playlists/show/:name' => 'playlists#show'
 
   #match '/' => 'main#index'
   root :to => 'main#index'
