@@ -41,15 +41,15 @@
                     <li class="act all-music">
                         <a>All music <span class="medialibrary count">-</span></a>
                     </li>
-                <% if false %>
-                    <li class="act browser">
-                        <a>Artist &amp; albums</a>
-                    </li>
-                <% end %>
+                    <% if false %>
+                        <li class="act browser">
+                            <a>Artist &amp; albums</a>
+                        </li>
+                    <% end %>
                 </ul>
 
-                <% #= yield :playlists %>
-                <%= render_cell :playlists, :index %>
+                <%= render :partial => "layouts/playlists" %>
+                
                 <% if true %>
                     <a class="btn btn-new-list">+ New Playlist</a>
                 <% else %>

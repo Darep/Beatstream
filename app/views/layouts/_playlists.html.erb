@@ -1,9 +1,9 @@
 <% if @playlists.empty? %>
     <p class="none">No playlists yet</p>
-<% end%>
+<% end %>
 <ul class="playlists">
     <% @playlists.each do |playlist| %>
-        <li><a data-url=""><%= playlist %></a></li>
+        <li><a data-id=""><%= playlist %></a></li>
     <% end %>
     <li class="playlist-input" style="display:none;">
         <input type="text" class="new-list" name="list-name" />
