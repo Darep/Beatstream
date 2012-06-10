@@ -392,6 +392,9 @@
     };
 
     Songlist.prototype.loadPlaylist = function (data) {
+
+        this.grid.removeCellCssStyles('currentSong_playing');
+
         // initialize data view model
         this.dataView.beginUpdate();
         this.dataView.setItems(data);

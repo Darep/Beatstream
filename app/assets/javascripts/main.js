@@ -9,6 +9,10 @@
 //= require pretty-numbers
 //= require audio-modules/html5audio
 //= require audio-modules/soundmanager2
+/*!
+ * Main - The God particle
+ * Wires all the stuff together and does some stuff too
+ */
 
 var keyCode = {
     ENTER: 13
