@@ -22,7 +22,8 @@ class PlaylistsController < ApplicationController
 
         FileUtils.mkdir_p playlist_file_dir
 
-        File.open(playlist_file, 'w') { |f| f.write('{}') }
+        # create an empty playlist == empty json array
+        File.open(playlist_file, 'w') { |f| f.write('[]') }
 
         respond_to do |format|
             format.html { render :nothing => true }

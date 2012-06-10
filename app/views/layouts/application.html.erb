@@ -38,17 +38,22 @@
                 
                 <ul class="common">
                     <li class="act all-music">
-                        <a>All music <span class="medialibrary count">-</span></a>
+                        <a>
+                            <span class="name">All music</span>
+                            <span class="medialibrary count">-</span>
+                        </a>
                     </li>
                     <% if false %>
                         <li class="act browser">
-                            <a>Artist &amp; albums</a>
+                            <a>
+                                <span class="name">Artist &amp; albums</span>
+                            </a>
                         </li>
                     <% end %>
                 </ul>
 
                 <%= render :partial => "layouts/playlists" %>
-                
+
                 <% if true %>
                     <a class="btn btn-new-list">+ New Playlist</a>
                 <% else %>

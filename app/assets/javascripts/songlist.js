@@ -6,11 +6,13 @@
 
 (function ($, window, document, undefined) {
 
+    // set jQuery.event.drag plugin's default drag start distance
     jQuery.event.special.drag.defaults.distance = 7;
 
     function Songlist(events_in) {
+
         var events = $.extend({
-            onPlay : function () {},
+            onPlay : function (song) {},
             onStop : function () {}
         }, events_in);
 
@@ -389,26 +391,6 @@
         this.grid.playingSongId = null;
     };
 
-    Songlist.prototype.loadPlaylistByUrl = function (url) {
-        var self = this;
-
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            error: function (xhr, status, error) {
-                /*
-                console.log(xhr);
-                console.log(status);
-                console.log(error);
-                */
-            },
-            success: function(data) {
-                $('.preloader').remove();
-                self.loadPlaylist(data);
-            }
-        });
-    };
-
     Songlist.prototype.loadPlaylist = function (data) {
         // initialize data view model
         this.dataView.beginUpdate();
@@ -421,19 +403,6 @@
 
         this.dataView.syncGridSelection(this.grid, false);
         this.dataView.syncGridCellCssStyles(this.grid, 'currentSong_playing');
-
-        // update song count on sidebar
-        var count = commify( parseInt( data.length, 10 ) );
-        $('.medialibrary.count').text(count);
-        $('.page-header .count').text(count);
-
-        // update count text
-        if (data.length == 1) {
-            $('.page-header .text').html('song');
-        }
-        else {
-            $('.page-header .text').html('songs');
-        }
     };
 
     window.Songlist = Songlist;
