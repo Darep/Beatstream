@@ -16,6 +16,7 @@
 
 # Ignore app generated files
 /public/songs.json
+/public/playlists/*
 
 # Default ignores from github
 *.rbc
