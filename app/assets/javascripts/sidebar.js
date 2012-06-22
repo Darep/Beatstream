@@ -17,38 +17,54 @@
 
         this.events = events;
 
+        var self = this;
         var NEW_PLAYLIST_NAME = 'New playlist';
         var $sidebar = $('#sidebar');
-        var playlists = $sidebar.find('.playlists');
+        var activePlaylist = $sidebar.find('.all-music a');
 
-        playlists.find('a').live('click', function (e) {
+        this.playlistList = $sidebar.find('.playlists');
+        
+        // show playlist when playlist name is clicked
+        this.getPlaylists().live('click', function (e) {
             e.preventDefault();
 
             var $this = $(this);
 
-            if ($this.hasClass('insync')) {
+            if ($this.hasClass('insync') || $this.hasClass('act')) {
                 return;
             }
 
+            setActivePlaylist($this);
+
             //alert('Playlists haven\'t been implemented yet. Stay tuned!');
 
+            // load the playlist from URL x
             var name = $this.text();
-
             var url = 'playlists/show/' + encodeURIComponent(name);
             events.onLoadPlaylistByUrl(url, name);
         });
 
-        $sidebar.find('.all-music').click(function (e) {
+        // show "All music" on click
+        $sidebar.find('.all-music a').click(function (e) {
             e.preventDefault();
 
-            var name = $(this).find('.name').text();
+            var $this = $(this);
+            if ($this.hasClass('act')) {
+                return;
+            }
+
+            var name = $this.find('.name').text();
+
+            setActivePlaylist($this);
 
             events.onLoadPlaylistByUrl('/songs/index', name);
         });
 
 
-        var newPlaylistInput = playlists.find('.playlist-input');
+        // New playlist
+        var newPlaylistInput = this.playlistList.find('.playlist-input');
         var nameField = newPlaylistInput.find('input');
+        var nameErrorField = nameField.next('.error');
 
         nameField.onEnter(function () {
             var $this = $(this);
@@ -67,7 +83,7 @@
             newPlaylistInput.before(playlistInSync);
             newPlaylistInput.hide();
 
-            // TODO: ajax post: create playlist with name list_name
+            // create the playlist
             var data = { name: list_name };
             $.ajax({
                 type: 'POST',
@@ -77,11 +93,23 @@
                     console.log(playlistInSync);
                     playlistInSync.removeClass('insync');
                     playlistInSync.find('.sync-icon').remove();
+                    
+                    // hide error feedback
+                    nameField.removeClass('error');
+                    nameErrorField.hide();
+                },
+                error: function () {
+                    playlistInSync.remove();
+                    $('#sidebar .btn-new-list').click();
+                    
+                    // show error feedback
+                    nameField.val(list_name).select().addClass('error');
+                    nameErrorField.show();
                 }
             });
 
             //  hide "no playlists" text
-            playlists.prev('.none').hide();
+            self.playlistList.prev('.none').hide();
         });
 
         $('#sidebar .btn-new-list').click(function (e) {
@@ -91,7 +119,17 @@
             newPlaylistInput.show();
             nameField.focus().select();
         });
+
+        function setActivePlaylist($this) {
+            if (activePlaylist !== undefined && activePlaylist.length) {
+                activePlaylist.removeClass('act');
+            }
+            $this.addClass('act');
+            activePlaylist = $this;
+        }
     }
+
+    Sidebar.prototype.getPlaylists = function () { return this.playlistList.find('a'); };
 
     window.Sidebar = Sidebar;
 
