@@ -1,8 +1,10 @@
 #sidebar {
     background:#eaeaea;
     border-right:1px solid #d4d4d4;
+    float:left;
     font-size:11px;
     height:100%;
+    overflow:auto;
     width:189px;
 
     ul {
@@ -94,9 +96,19 @@
     }
 
     .new-list {
+        border:1px solid #bbb;
         font-size:11px;
         margin:0 20px;
         padding:3px 4px;
+
+        &.error {
+            border:1px solid red;
+            -webkit-animation:shake 1s ease;
+        }
+    }
+    p.error {
+        color:#c22;
+        margin:0 20px;
     }
 }
     #sidebar-wrap {
@@ -114,4 +126,10 @@
     border-radius:4px;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
+}
+
+@-webkit-keyframes shake {
+    0%, 100% {-webkit-transform: translateX(0);}
+    10%, 30%, 50%, 70% {-webkit-transform: translateX(-5px);}
+    20%, 40%, 60%, 80% {-webkit-transform: translateX(5px);}
 }
