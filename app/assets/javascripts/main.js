@@ -70,6 +70,77 @@ $(document).ready(function () { soundManager.onready(function () {
             seekbar.slider('value', 0);
             seekbar.slider('option', 'disabled', true);
             playerTrack.text('None');
+        },
+        onDragStart: function (e, dd) {
+            var song_count = dd.bestDataEver.length;
+
+            DragTooltip.show(dd.startX, dd.startY, song_count + ' song');
+
+            if (song_count != 1) {
+                DragTooltip.append('s');
+            }
+
+            // make playlists hilight
+            $('#sidebar .playlists li').addClass('targeted');
+        },
+        onDrag: function (e, dd) {
+            DragTooltip.update(e.clientX, e.clientY);
+
+            var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
+
+            if (drop_target === undefined ||
+                (drop_target.parent().hasClass('playlists') === false &&
+                 drop_target.parent().parent().hasClass('playlists') === false))
+            {
+                // these are not the drops you are looking for
+                $('#sidebar .playlists li').removeClass('hover');
+                return;
+            }
+
+            $('#sidebar .playlists li').removeClass('hover');
+            drop_target.parent().addClass('hover');
+        },
+        onDragEnd: function (e, dd) {
+            DragTooltip.hide();
+
+            $('#sidebar .playlists li').removeClass('targeted').removeClass('hover');
+
+            var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
+
+            if (drop_target === undefined ||
+                (drop_target.parent().hasClass('playlists') === false &&
+                 drop_target.parent().parent().hasClass('playlists') === false))
+            {
+                // these are not the drops you are looking for
+                console.log('these are not the drops you are looking for');
+                return;
+            }
+
+            if ( drop_target.is('a.name') === false ) {
+                // still wrong drop target
+                return;
+            }
+
+            // TODO: add dragged things into playlist (if things can be added)
+
+            var name = drop_target.text();
+            var playlist = Playlists.getByName(name);
+
+            // load the playlist if it has not been loaded yet
+            if (playlist === undefined) {
+
+                Playlists.load(name, function (data) {
+                    if (data === undefined) {
+                        console.log('whattafaaaak, no such playlist: ' + name);
+                    }
+
+                    data.push.apply(data, dd.bestDataEver);
+                });
+
+            }
+            else {
+                playlist.push.apply(playlist, dd.bestDataEver);
+            }
         }
     });
 
@@ -119,70 +190,66 @@ $(document).ready(function () { soundManager.onready(function () {
         }
     });
 
-    // open the current playlist (according to the url)
-    // NOTE: atm. always open the "All music" -playlist
-    $.ajax({
-        url: '/songs/index',
-        dataType: 'json',
-        success: function(data) {
-            $('.preloader').remove();
+    // TODO: open the current playlist when launching (according to the url?)
+    // atm. always open the "All music" -playlist
+    function openAllMusic() {
+        $.ajax({
+            url: '/songs/index',
+            dataType: 'json',
+            success: function(data) {
+                $('.preloader').remove();
 
-            songlist.loadPlaylist(data);
+                songlist.loadPlaylist(data);
+                updatePlaylistHeader('All music', data.length);
 
-            // update song count on sidebar
-            var length = data.length;
-            if (length === undefined) {
-                length = 0;
+                // update song count on sidebar next to "All music"
+                var count = commify( parseInt( data.length, 10 ) );
+                $('.medialibrary.count').text(count);
             }
-
-            var count = commify( parseInt( length, 10 ) );
-            $('.page-header .count').text(count);
-
-            // update count text
-            if (length === 1) {
-                $('.page-header .text').html('song');
-            }
-            else {
-                $('.page-header .text').html('songs');
-            }
-
-            $('.medialibrary.count').text(count);
-        }
-    });
-
+        });
+    }
+    openAllMusic();
 
     // init sidebar
     var sidebar = new Sidebar({
-        onLoadPlaylistByUrl: function (url, listName) {
-            $.ajax({
-                url: url,
-                dataType: 'json',
-                success: function(data) {
+        onOpenAllMusic: function () {
+            openAllMusic();
+        },
+        onOpenPlaylist: function (listName) {
+            var playlist = Playlists.getByName(listName);
 
+            if (playlist === undefined) {
+                Playlists.load(listName, function (data) {
                     songlist.loadPlaylist(data);
-
-                    // update playlist header data
-                    var length = data.length;
-                    if (length === undefined) {
-                        length = 0;
-                    }
-
-                    var count = commify( parseInt( length, 10 ) );
-                    $('.page-header .count').text(count);
-
-                    // update count text
-                    if (length === 1) {
-                        $('.page-header .text').html('song');
-                    }
-                    else {
-                        $('.page-header .text').html('songs');
-                    }
-
-                    $('.page-header .info h2').html(listName);
-                }
-            });
+                    updatePlaylistHeader(listName, data.length);
+                });
+            }
+            else {
+                songlist.loadPlaylist(playlist);
+                updatePlaylistHeader(listName, playlist.length);
+            }
         }
     });
+
+    function updatePlaylistHeader(name, songCount) {
+        // update playlist header data
+        if (songCount === undefined) {
+            songCount = 0;
+        }
+
+        var count = commify( parseInt( songCount, 10 ) );
+        $('.page-header .count').text(count);
+
+        if (songCount === 1) {
+            $('.page-header .text').html('song');
+        }
+        else {
+            $('.page-header .text').html('songs');
+        }
+
+        $('.page-header .info h2').html(name);
+    }
+
 
     // volume slider
     var volume = 20;

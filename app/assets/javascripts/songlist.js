@@ -13,7 +13,10 @@
 
         var events = $.extend({
             onPlay : function (song) {},
-            onStop : function () {}
+            onStop : function () {},
+            onDragStart : function (e, dd) {},
+            onDrag: function (e, dd) {},
+            onDragEnd: function (e, dd) {}
         }, events_in);
 
         this.events = events;
@@ -118,8 +121,12 @@
 
         grid.onDragStart.subscribe(function (e, dd) {
 
+            /*
+             * Add the songs (that we are dragging) into the event object
+             */
+
             var cell = grid.getCellFromEvent(e);
-            var data = {};
+            var data = [];
             var song_count = 0;
 
             // check if dragging selected rows
@@ -129,7 +136,7 @@
             for (var i = 0; i < rows.length; i++) {
                 var dataItem = grid.getDataItem(rows[i]);
                 data[i] = dataItem;
-                if (rows[i] == cell.row) {
+                if (rows[i] === cell.row) {
                     draggingSelectedRows = true;
                 }
                 song_count++;
@@ -137,66 +144,21 @@
 
             if (draggingSelectedRows === false) {
                 var dataItem = grid.getDataItem(cell.row);
-                data = {};
+                data = [];
                 data[0] = dataItem;
                 song_count = 1;
             }
 
             dd.bestDataEver = data;
 
-            // TODO: move this Dragtooltip and sidebar shit elsewhere (main.js)
-            //events.onDragStart();
-
-            DragTooltip.show(dd.startX, dd.startY, song_count + ' song');
-
-            if (song_count != 1) {
-                DragTooltip.append('s');
-            }
-
-            // make playlists hilight
-            $('#sidebar .playlists li').addClass('targeted');
+            events.onDragStart(e, dd);
 
             // tell grid that we're handling drags!
             e.stopImmediatePropagation();
         });
 
-        grid.onDrag.subscribe(function (e, dd) {
-            // TODO: none of this is related to the songlist. Call events.onDrag() and handle this in main.js
-            DragTooltip.update(e.clientX, e.clientY);
-
-            var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
-
-            if (drop_target === undefined || drop_target.parent().parent().hasClass('playlists') === false) {
-                // these are not the drops you are looking for
-                $('#sidebar .playlists li').removeClass('hover');
-                return;
-            }
-
-            $('#sidebar .playlists li').removeClass('hover');
-            drop_target.parent().addClass('hover');
-        });
-
-        grid.onDragEnd.subscribe(function (e, dd) {
-            // TODO: none of this is related to the songlist. Call events.onDragEnd() and handle this in main.js
-            DragTooltip.hide();
-
-            $('#sidebar .playlists li').removeClass('targeted').removeClass('hover');
-
-            var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
-
-            if (drop_target === undefined ||
-                (drop_target.parent().hasClass('playlists') === false &&
-                drop_target.parent().parent().hasClass('playlists') === false))
-            {
-                // these are not the drops you are looking for
-                console.log('bail');
-                return;
-            }
-
-            // TODO: add dragged things into playlist (if things can be added)
-            var newSongs = dd.bestDataEver;
-            console.log(newSongs);
-        });
+        grid.onDrag.subscribe(events.onDrag);
+        grid.onDragEnd.subscribe(events.onDragEnd);
 
 
         // own extensions:

@@ -12,7 +12,8 @@
     function Sidebar(events_in) {
 
         var events = $.extend({
-            onLoadPlaylistByUrl: function (url, listName) {}
+            onOpenPlaylist: function (listName) {},
+            onOpenAllMusic: function () {}
         }, events_in);
 
         this.events = events;
@@ -40,8 +41,7 @@
 
             // load the playlist from URL x
             var name = $this.text();
-            var url = 'playlists/show/' + encodeURIComponent(name);
-            events.onLoadPlaylistByUrl(url, name);
+            events.onOpenPlaylist(name);
         });
 
         // show "All music" on click
@@ -57,7 +57,7 @@
 
             setActivePlaylist($this);
 
-            events.onLoadPlaylistByUrl('/songs/index', name);
+            events.onOpenAllMusic();
         });
 
 
