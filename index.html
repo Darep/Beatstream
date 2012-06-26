@@ -1,63 +1,284 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
+<head>
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Beatstream by Darep</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Beatstream</h1>
-        <p>App for streaming music from any computer running Ruby on Rails to anywhere with a modern browser.</p>
-        <p class="view"><a href="https://github.com/Darep/Beatstream">View the Project on GitHub <small>Darep/Beatstream</small></a></p>
-        <ul>
-          <li><a href="https://github.com/Darep/Beatstream/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/Darep/Beatstream/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/Darep/Beatstream">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h3>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/Darep">Darep</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
+    <title>Beatstream &ndash; Your own music streaming service</title>
     
-  </body>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-8682492-10']);
+      _gaq.push(['_setDomainName', 'beatstream.fi']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Beatstream</h1>
+        <h2>
+            Your own music streaming service.
+            <br/>
+            <small>Listen to your music anywhere.</small>
+        </h2>
+    </header>
+
+    <a href="https://a248.e.akamai.net/camo.github.com/072d6239b0518c35fad18919a889e7e104e5163d/687474703a2f2f692e696d6775722e636f6d2f6f524777752e706e67">
+        <img src="https://a248.e.akamai.net/camo.github.com/072d6239b0518c35fad18919a889e7e104e5163d/687474703a2f2f692e696d6775722e636f6d2f6f524777752e706e67" alt="Screenshot of Beatstream, May 2012" />
+    </a>
+
+    <h3>What?</h3>
+    <p> <strong>Beatstream is a free, web-based media server</strong>
+        for streaming your music from your computer to anywhere with a browser. You only need to install it on your computer and set up the access to it. Currently Beatstream runs reliably on Google Chrome and Firefox on the desktop. Also, currently
+        <a href="https://github.com/Darep/Beatstream">in development</a>
+        and open-source!
+    </p>
+    <p>
+        To use Beatstream you need a computer running Beatstream somewhere all the time.
+    </p>
+    <p>
+        <a href="http://demo.beatstream.fi/" class="btn">Check out the demo!</a>
+    </p>
+    <p>
+        I also wrote a short blog post where I am
+        <a href="http://ajk.im/2012/blog/announcing-beatstream">announcing Beatstream</a>
+        and tell a little bit about developing Beatstream.
+    </p>
+
+    <!--
+    <h3>Interested?</h3>
+<p>
+    We are currently developing the app. You can sign-up for a newsletter to be notified of updates!
+</p>
+<form>
+    <input type="text" placeholder="Email">
+    <input type="submit" value="Sign-up"></form>
+-->
+<p>
+    <!-- AddThis Button BEGIN -->
+    <div class="addthis_toolbox addthis_default_style ">
+        <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+        <a class="addthis_button_tweet"></a>
+        <a class="addthis_counter addthis_pill_style"></a>
+    </div>
+    <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4fc649c87892c488"></script>
+    <!-- AddThis Button END -->
+</p>
+
+<h3>Installation</h3>
+<a name="installation"></a>
+<p>
+    Installation is currently <strong>a bit icky</strong>
+    , but we are working to make it smoother! <em>Pinky swear!</em>
+</p>
+<p>
+    <strong>Requirements:</strong>
+    Ruby 1.8.7 or newer, RubyGems, bundler and sqlite3 development files
+</p>
+
+<div id="tabs">
+    <a href="#windows">Windows</a>
+    <a href="#mac">Mac / OSX</a>
+    <a href="#ubuntu">Ubuntu</a>
+    <a href="#other">Other</a>
+</div>
+
+<div id="windows" class="install">
+
+    <div class="note">
+        <h5>
+            <strong>Attention!</strong>
+            Windows installation is currently <em>borked!</em>
+        </h5>
+        <p>
+            Installing Beatstream on Windows is currently a tricky business and this guide does not work.
+            <br/>
+            <strong>We are working to fix this.</strong>
+            Stay tuned!
+        </p>
+    </div>
+
+    <h4>Step 1: Requirements</h4>
+    <p>
+        <strong>Install Ruby 1.8.7</strong>
+        <br/>
+        from
+        <a href="http://rubyinstaller.org/downloads/">RubyInstaller</a>
+        (e.g. Ruby 1.8.7-p358).
+        <br/>
+        Check the
+        <strong>"Add Ruby executables to your PATH"</strong>
+        checkbox while installing.
+    </p>
+    <p>
+        <strong>Install Bundler:</strong>
+        <br/>
+        Open command prompt:
+        <code>Start</code>
+        &rarr; type
+        <code>cmd.exe</code>
+        .
+        <br/>
+        Type into command prompt:
+    </p>
+    <pre><code>gem install bundler</code></pre>
+
+    <h4>Step 2: Get Beatstream</h4>
+    <p>
+        <a href="git://github.com/Darep/Beatstream.git">Clone Beatsream with Git</a>
+        &ndash; or &ndash;
+        <a href="https://github.com/Darep/Beatstream/zipball/master">Download Beatstream as a ZIP</a>
+        and extract.
+    </p>
+
+    <h4>Step 3: Set-up Beatstream</h4>
+    <p>Do this stuff in command prompt:</p>
+    <pre><code>cd Beatstream
+bundle install
+rake db:migrate
+notepad config/enviroments/development.rb
+-&gt; Find config.MUSIC_PATH and change it!
+rails console
+-&gt; User.create(:username =&gt; 'your_name', :email =&gt; 'your_email@example.com', :password =&gt; 'asdf', :password_confirmation =&gt; 'asdf')
+-&gt; exit
+rails server -d</code></pre>
+
+</div>
+
+<div id="mac" class="install">
+
+    <h4>Step 1: Requirements</h4>
+    <p> <b>TODO:</b>
+        How-to get Ruby 1.8.7, RubyGems and sqlite3 development headers on OSX
+    </p>
+    <p>
+        <small>(ruby, rubygems and sqlite3 are included with xcode)</small>
+    </p>
+    <p>
+        <strong>Install Bundler:</strong>
+    </p>
+    <pre><code>$ sudo gem install bundler</code></pre>
+
+    <h4>Step 2: Get Beatstream</h4>
+    <p>
+        <a href="git://github.com/Darep/Beatstream.git">Clone Beatsream with Git</a>
+        &ndash; or &ndash;
+        <a href="https://github.com/Darep/Beatstream/zipball/master">Download Beatstream as a ZIP</a>
+        and extract.
+    </p>
+
+    <h4>Step 3: Set-up Beatstream</h4>
+    <p>Do this stuff in terminal:</p>
+    <pre><code>$ cd Beatstream
+$ bundle install
+$ rake db:migrate
+$ nano config/enviroments/development.rb
+-&gt; Find config.MUSIC_PATH and change it!
+$ rails console
+-&gt; User.create(:username =&gt; 'your_name', :email =&gt; 'your_email@example.com', :password =&gt; 'asdf', :password_confirmation =&gt; 'asdf')
+-&gt; exit
+$ rails server -d</code></pre>
+
+</div>
+
+<div id="ubuntu" class="install">
+
+    <h4>Step 1: Requirements</h4>
+    <p>
+        <strong>Install Ruby 1.8.7, RubyGems, libsqlite3-dev and Bundler:</strong>
+    </p>
+    <pre><code>$ sudo apt-get install ruby1.8-full rubygems libsqlite3-dev
+$ sudo gem install bundler</code></pre>
+
+    <h4>Step 2: Get Beatstream</h4>
+    <p>
+        <a href="git://github.com/Darep/Beatstream.git">Clone Beatsream with Git</a>
+        &ndash; or &ndash;
+        <a href="https://github.com/Darep/Beatstream/zipball/master">Download Beatstream as a ZIP</a>
+        and extract.
+    </p>
+
+    <h4>Step 3: Set-up Beatstream</h4>
+    <p>Do this stuff in terminal:</p>
+    <pre><code>$ cd Beatstream
+$ bundle install
+$ rake db:migrate
+$ nano config/enviroments/development.rb
+-&gt; Find config.MUSIC_PATH and change it!
+$ rails console
+-&gt; User.create(:username =&gt; 'your_name', :email =&gt; 'your_email@example.com', :password =&gt; 'asdf', :password_confirmation =&gt; 'asdf')
+-&gt; exit
+$ rails server -d</code></pre>
+</div>
+
+<div id="other" class="install">
+
+    <h4>Step 1: Requirements</h4>
+    <p>
+        <strong>Install Ruby 1.8.7, RubyGems and SQLite3 development stuff</strong>
+        (libsqlite3-dev, sqlite-devel or something like that)
+    </p>
+    <p>
+        <strong>Install bundler</strong>
+        using RubyGems:
+        <pre><code>gem install bundler</code></pre>
+    </p>
+
+    <h4>Step 2: Get Beatstream</h4>
+    <p>
+        <a href="git://github.com/Darep/Beatstream.git">Clone Beatsream with Git</a>
+        &ndash; or &ndash;
+        <a href="https://github.com/Darep/Beatstream/zipball/master">Download Beatstream as a ZIP</a>
+        and extract.
+    </p>
+
+    <h4>Step 3: Set-up Beatstream</h4>
+    <p>Do this stuff in a terminal:</p>
+    <pre><code>
+bundle install
+rake db:migrate
+-> edit config/enviroments/development.rb
+-&gt; Find config.MUSIC_PATH and change it!
+rails console
+-&gt; User.create(:username =&gt; 'your_name', :email =&gt; 'your_email@example.com', :password =&gt; 'asdf', :password_confirmation =&gt; 'asdf')
+-&gt; exit
+rails server -d</code></pre>
+
+</div>
+
+<p>
+    If you run into any problems, shoot me an email at
+    <a href="mailto:ajk@ajk.im">ajk@ajk.im</a>
+    or drop me a line on twitter
+    <a href="http://twitter.com/darep">@darep</a>
+</p>
+
+<h3>Developers!</h3>
+<p>
+    Fork the source-code on Github:
+    <a href="https://github.com/Darep/Beatstream">https://github.com/Darep/Beatstream</a>
+    <br/>
+    and create some pull requests!
+</p>
+
+<footer>
+    <p>
+        Lovingly created by
+        <a href="http://ajk.im/">ajk</a>
+        .
+    </p>
+</footer>
+
+<script type="text/javascript" src="beatstream.js"></script>
+
+</body>
 </html>
