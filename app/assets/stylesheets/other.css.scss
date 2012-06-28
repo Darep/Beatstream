@@ -82,7 +82,7 @@
     position:fixed;
     text-align:center;
     width:100%;
-    z-index:99998;
+    z-index:998;
 
     * {
         color:#fff;
@@ -101,4 +101,16 @@
     height:16px;
     width:16px;
     @include clear_float;
+}
+
+/* soundmanager 2 */
+.swf_timedout {
+    background:#222;
+    background:rgba(0,0,0, 0.8);
+    position:absolute;
+    left:40%;
+    top:40%;
+    padding:3em;
+    text-align:center;
+    z-index:999;
 }

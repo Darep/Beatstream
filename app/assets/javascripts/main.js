@@ -13,11 +13,6 @@ var keyCode = {
     ENTER: 13
 };
 
-soundManager.url = '/swf/';
-soundManager.flashVersion = 8; // optional: shiny features (default = 8)
-soundManager.useFlashBlock = false; // optionally, enable when you're ready to dive in
-soundManager.useHTML5Audio = true;
-
 $(document).ready(function () { soundManager.onready(function () {
 
     // resize the main-area to correct height

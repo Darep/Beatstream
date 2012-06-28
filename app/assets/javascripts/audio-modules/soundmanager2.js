@@ -1,16 +1,24 @@
 //= require soundmanager2/soundmanager2-nodebug-jsmin
 /*!
- * Beatstream HTML5 <audio> module
+ * Beatstream SoundManager2 module
  */
 
 (function ($, window, document, undefined) {
 
-    // SoundManager 2
+    // SoundManager 2 options
+    soundManager.url = '/swf/';
+    soundManager.flashVersion = 8; // optional: shiny features (default = 8)
+    soundManager.useFlashBlock = true; // optionally, enable when you're ready to dive in
+    soundManager.useHTML5Audio = true;
 
     var soundManagerIsReady = false;
 
     soundManager.onready(function() {
         soundManagerIsReady = true;
+    });
+
+    soundManager.ontimeout(function (status) {
+        console.log(status);
     });
 
 
