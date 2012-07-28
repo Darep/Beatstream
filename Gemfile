@@ -18,11 +18,9 @@ gem 'jquery-rails'
 
 platforms :jruby do
   gem 'activerecord-jdbcsqlite3-adapter', :require => 'jdbc-sqlite3', :require =>'arjdbc'
-#  gem 'ruby-mp3info'
 end
 platforms :ruby, :mingw, :mswin do
   gem 'sqlite3'
-#  gem 'taglib-ruby'
 end
 
 gem 'mp3info'

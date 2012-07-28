@@ -36,8 +36,4 @@ BeatStream::Application.configure do
   config.assets.debug = true
 
   config.serve_static_assets = true
-
-  config.MUSIC_PATH = '/Users/ajk/Music/'
-  config.MUSIC_PATH = 'C:/Users/ajk/Music/'
-#  config.MUSIC_PATH = '/work/Musa/'
 end
