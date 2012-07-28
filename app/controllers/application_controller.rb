@@ -1,40 +1,45 @@
 require 'find'
+require 'fileutils'
 
 class ApplicationController < ActionController::Base
-	before_filter :authorize
-	before_filter :redirect_to_https
-	before_filter :load_sidebar_playlists
-	protect_from_forgery
+    before_filter :authorize
+    before_filter :redirect_to_https
+    before_filter :load_sidebar_playlists
+    protect_from_forgery
 
-	protected
+    protected
 
-	def authorize
-		unless User.find_by_id(session[:user_id])
-			redirect_to login_url
-		end
-	end
+    def authorize
+        unless User.find_by_id(session[:user_id])
+            redirect_to login_url
+        end
+    end
 
-	def redirect_to_https
-		redirect_to :protocol => "https://" unless (request.ssl? || request.local?)
-	end
+    def redirect_to_https
+        redirect_to :protocol => "https://" unless (request.ssl? || request.local?)
+    end
 
-	def load_sidebar_playlists
-		user = User.find_by_id(session[:user_id])
-		@playlists = []
+    def load_sidebar_playlists
+        user = User.find_by_id(session[:user_id])
+        @playlists = []
 
-		if user.nil?
-			return
-		end
+        if user.nil?
+            return
+        end
 
-		playlist_dir = 'public/playlists/' + user.username + '/'
-		Find.find(playlist_dir) do |file|
-			if File.directory?(file)
-				next
-			end
+        playlist_dir = 'public/playlists/' + user.username + '/'
 
-			playlist = file.sub!(playlist_dir, '')
+        # Create the directory if it does not exist
+        FileUtils.mkpath playlist_dir
 
-			@playlists.push(playlist)
-		end
-	end
+        Find.find(playlist_dir) do |file|
+            if File.directory?(file)
+                next
+            end
+
+            playlist = file.sub!(playlist_dir, '')
+
+            @playlists.push(playlist)
+        end
+    end
 end
