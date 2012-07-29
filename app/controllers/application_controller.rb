@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
 	before_filter :authorize
 	before_filter :redirect_to_https
-	protect_from_forgery
+	#protect_from_forgery
 
 	protected
 
