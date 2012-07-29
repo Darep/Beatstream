@@ -82,14 +82,12 @@
     position:fixed;
     text-align:center;
     width:100%;
-    z-index:998;
 
     * {
         color:#fff;
         top:50%;
         left:50%;
         position:absolute;
-        z-index:99999;
     }
     .loading {
         margin:-8px 0 0 -8px;
@@ -105,20 +103,24 @@
 
 /* soundmanager 2 */
 #sm2-container {
-    height:0;
-    width:0;
-    visibility:hidden;
-}
-#sm2-container.swf_timedout {
-    background:#222;
-    background:rgba(0,0,0, 0.8);
     height:300px;
-    padding:3em;
     position:absolute;
     left:40%;
-    top:40%;
+    top:30%;
     text-align:center;
     visibility:visible;
     width:400px;
-    z-index:999;
+    z-index:auto !important;
+
+    &.swf_loaded {
+        height:0;
+        width:0;
+        visibility:hidden;
+        z-index:0;
+    }
+    div {
+        min-height:32px;
+        height:100%;
+        position:relative;
+    }
 }
