@@ -8,7 +8,8 @@ SONGS_JSON_FILE = Rails.root.join('public/songs.json')
 
 class SongsController < ApplicationController
 
-    def index
+    # GET /songs
+    def all
         songs_json = '';
 
         if params[:refresh]
@@ -28,54 +29,24 @@ class SongsController < ApplicationController
         render :text => songs_json
     end
 
+    # GET /songs/play
     def play
+        if params[:file].nil?
+            render :status => :bad_request, :text => "missing required parameter 'file'"
+            return
+        end
+
         filepath = MUSIC_PATH + params[:file]
 
         response.content_type = Mime::Type.lookup_by_extension("mp3")
 
+        # Dumb read streaming
         render :text => File.open(filepath, 'rb') { |f| f.read }
+
+        # True streaming?
         #send_file filepath, :type => 'audio/mpeg'
     end
 
-    def now_playing
-        expires_now # don't cache
-
-        artist = params[:artist]
-        title = params[:title]
-
-        @user = User.find(session[:user_id])
-
-        if @user != nil && @user.lastfm_session_key != nil
-            Rails.logger.info 'Update Now Playing to "' + artist + ' - ' + title + '" for user ' + @user.username
-
-            track = Rockstar::Track.new(artist, title)
-            track.updateNowPlaying(Time.now, @user.lastfm_session_key)
-        end
-
-        respond_to do |format|
-            format.json { render :nothing => true }
-        end
-    end
-
-    def scrobble
-        expires_now # don't cache
-
-        artist = params[:artist]
-        title = params[:title]
-
-        @user = User.find(session[:user_id])
-
-        if @user != nil && @user.lastfm_session_key != nil
-            Rails.logger.info 'Scrobbling track "' + artist + ' - ' + title + '" for user ' + @user.username
-
-            track = Rockstar::Track.new(artist, title)
-            track.scrobble(Time.now, @user.lastfm_session_key)
-        end
-
-        respond_to do |format|
-            format.json { render :nothing => true }
-        end
-    end
 
     private
 

@@ -44,7 +44,7 @@ $(document).ready(function () { soundManager.onready(function () {
     // ::: INIT songlist / GRID OMG SO BIG SECTION :::
     var songlist = new Songlist({
         onPlay: function (song) {
-            var uri = '/songs/play/?file=' + encodeURIComponent(song.path);
+            var uri = '/api/v1/songs/play/?file=' + encodeURIComponent(song.path);
             BeatAudio.play(uri);
 
             playerTrack.text(song.nice_title);
@@ -233,7 +233,7 @@ $(document).ready(function () { soundManager.onready(function () {
 
     // sidebar drag & drop
 
-    songlist.loadPlaylist('/songs/index');
+    songlist.loadPlaylist('/api/v1/songs');
 
 
     // enable buttons
