@@ -97,7 +97,6 @@ GEM
       hpricot (>= 0.4.86)
       i18n
       rake
-    rtaglib (0.3.0)
     sass (3.1.19)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
@@ -134,7 +133,6 @@ DEPENDENCIES
   mp3info
   rails (= 3.2.1)
   rockstar
-  rtaglib
   sass-rails (~> 3.2.3)
   sqlite3
   therubyracer

@@ -24,7 +24,6 @@ platforms :ruby, :mingw, :mswin do
 end
 
 gem 'mp3info'
-gem 'rtaglib'
 
 gem 'rockstar' #, :git => 'git://github.com/bitboxer/rockstar.git'
 
