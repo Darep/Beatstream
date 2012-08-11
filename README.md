@@ -10,8 +10,8 @@ Web app for streaming music from any computer running Ruby (and Bundler) to anyw
     $ cd Beatstream
     $ bundle install
     $ rake db:migrate
-    $ vim config/enviroments/development.rb
-    -> Find config.MUSIC_PATH and change it!
+    $ nano config/musicpaths.yml
+    -> Change 'music_path'
     $ rails console
     -> User.create(:username => 'user', :email => 'aa@testsdfasdf.com', :password => 'asdf', :password_confirmation => 'asdf')
     -> exit
