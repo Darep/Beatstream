@@ -146,8 +146,8 @@
     <pre><code>cd Beatstream
 bundle install
 rake db:migrate
-notepad config/enviroments/development.rb
--&gt; Find config.MUSIC_PATH and change it!
+notepad config/musicpaths.yml
+-&gt; Change 'music_path'
 rails console
 -&gt; User.create(:username =&gt; 'your_name', :email =&gt; 'your_email@example.com', :password =&gt; 'asdf', :password_confirmation =&gt; 'asdf')
 -&gt; exit
@@ -182,8 +182,8 @@ rails server -d</code></pre>
     <pre><code>$ cd Beatstream
 $ bundle install
 $ rake db:migrate
-$ nano config/enviroments/development.rb
--&gt; Find config.MUSIC_PATH and change it!
+$ nano config/musicpaths.yml
+-&gt; Change 'music_path'
 $ rails console
 -&gt; User.create(:username =&gt; 'your_name', :email =&gt; 'your_email@example.com', :password =&gt; 'asdf', :password_confirmation =&gt; 'asdf')
 -&gt; exit
@@ -213,8 +213,8 @@ $ sudo gem install bundler</code></pre>
     <pre><code>$ cd Beatstream
 $ bundle install
 $ rake db:migrate
-$ nano config/enviroments/development.rb
--&gt; Find config.MUSIC_PATH and change it!
+$ nano config/musicpaths.yml
+-&gt; Change 'music_path'
 $ rails console
 -&gt; User.create(:username =&gt; 'your_name', :email =&gt; 'your_email@example.com', :password =&gt; 'asdf', :password_confirmation =&gt; 'asdf')
 -&gt; exit
@@ -247,8 +247,8 @@ $ rails server -d</code></pre>
     <pre><code>
 bundle install
 rake db:migrate
--> edit config/enviroments/development.rb
--&gt; Find config.MUSIC_PATH and change it!
+-&gt; edit config/musicpaths.yml
+-&gt; Change 'music_path'
 rails console
 -&gt; User.create(:username =&gt; 'your_name', :email =&gt; 'your_email@example.com', :password =&gt; 'asdf', :password_confirmation =&gt; 'asdf')
 -&gt; exit
