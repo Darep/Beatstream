@@ -6,14 +6,13 @@
 //= require lastfm
 //= require songlist
 //= require api
-//= require beat-audio
 //= require sidebar
 //= require pretty-numbers
+//= require audio-modules/soundmanager2
 /*!
  * Main - The God particle
  * Wires all the stuff together and does some stuff too
  */
-
 
 var keyCode = {
     ENTER: 13
@@ -47,15 +46,15 @@ $(document).ready(function () { soundManager.onready(function () {
 
 
     // ::: INIT STUFF :::
-    var BeatAudio = null;
+    var beatAudio = null;
     var songlist = new Songlist({
         onPlay: function (song) {
-            BeatAudio.play(Api.getSongURI(song.path));
+            beatAudio.play(Api.getSongURI(song.path));
             playerTrack.text(song.nice_title);
             lastfm.newSong(song);
         },
         onStop: function () {
-            BeatAudio.stop();
+            beatAudio.stop();
             songlist.resetPlaying();
             
             // TODO: hide now playing icon from slickgrid
@@ -151,7 +150,7 @@ $(document).ready(function () { soundManager.onready(function () {
 
     // init audio player module
     var error_counter = 0;
-    BeatAudio = new BeatAudio({
+    beatAudio = new SM2Audio({
         onPlay: function () {
             playPause.addClass('playing');
         },
@@ -174,7 +173,7 @@ $(document).ready(function () { soundManager.onready(function () {
         },
         onError: function () {
             if (error_counter > 2) {
-                BeatAudio.pause();
+                beatAudio.pause();
                 error_counter = 0;
                 return;
             }
@@ -187,7 +186,7 @@ $(document).ready(function () { soundManager.onready(function () {
     // atm. always open the "All music" -playlist
     function openAllMusic() {
         $.ajax({
-            url: '/songs/index',
+            url: '/api/v1/songs',
             dataType: 'json',
             success: function(data) {
                 $('.preloader').remove();
@@ -252,7 +251,7 @@ $(document).ready(function () { soundManager.onready(function () {
     }
 
     if (volume >= 0 && volume <= 100) {
-        BeatAudio.setVolume(volume);
+        beatAudio.setVolume(volume);
         volume_label.attr('title', volume);
     }
 
@@ -263,7 +262,7 @@ $(document).ready(function () { soundManager.onready(function () {
         min: 0,
         range: 'min',
         slide: function (event, ui) {
-            BeatAudio.setVolume(ui.value);
+            beatAudio.setVolume(ui.value);
             volume_label.attr('title', ui.value);
         },
         stop: function (event, ui) {
@@ -287,7 +286,7 @@ $(document).ready(function () { soundManager.onready(function () {
             user_is_seeking = true;
         },
         stop: function(event, ui) {
-            BeatAudio.seekTo(ui.value);
+            beatAudio.seekTo(ui.value);
             user_is_seeking = false;
         }
     });
@@ -302,7 +301,7 @@ $(document).ready(function () { soundManager.onready(function () {
             return;
         }
 
-        BeatAudio.togglePause();
+        beatAudio.togglePause();
     });
 
     nextButton.click(function (e) {
