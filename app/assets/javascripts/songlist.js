@@ -281,6 +281,26 @@
 
             for (var i = 0; i < searchStr.length; i++) {
                 var str = searchStr[i];
+
+                if (str[0] === '"') {
+                    if (str[str.length - 1] !== '"') {
+                        for (var j = i + 1; j < searchStr.length; j++) {
+                            var nextStr = searchStr[j];
+                            str = str + " " + nextStr;
+                            if (nextStr[nextStr.length - 1] === '"') {
+                                i = j;
+                                break;
+                            }
+                        }
+                    }
+                    if (str[str.length - 1] === '"') {
+                        str = str.substr(1, str.length - 2);
+                    }
+                    else {
+                        str = str.substr(1, str.length - 1);
+                    }
+                }
+
                 if ((item.title && item.title.toLowerCase().indexOf(str) != -1) ||
                     (item.artist && item.artist.toLowerCase().indexOf(str) != -1) ||
                     (item.album && item.album.toLowerCase().indexOf(str) != -1))
