@@ -7,15 +7,16 @@
  * be really heavy on the memory.
  */
 
-(function ($, window, document, undefined) {
+(function (Beatstream, $, window, document, undefined) {
 
-    var Playlists = (function () {
+    Beatstream.Playlists = (function () {
 
         var playlists = {};
 
         return {
             add: function (name, data) {
                 playlists[name] = data;
+                console.log(playlists);
             },
 
             getByName: function (name) {
@@ -24,25 +25,17 @@
             },
 
             load: function (name, callback) {
-                var url = 'playlists/show/' + encodeURIComponent(name);
+                var req = Beatstream.Api.getPlaylist(name);
+                req.success(function (data) {
+                    Beatstream.Playlists.add(name, data);
 
-                $.ajax({
-                    url: url,
-                    dataType: 'json',
-                    success: function(data) {
-                        Playlists.add(name, data);
-
-                        if (callback) {
-                            var playlist = Playlists.getByName(name);
-                            callback(playlist);
-                        }
+                    if (callback) {
+                        var playlist = Beatstream.Playlists.getByName(name);
+                        callback(playlist);
                     }
                 });
             }
         };
+    }());
 
-    })();
-
-    window.Playlists = Playlists;
-
-})(jQuery, window, document);
+})(window.Beatstream = window.Beatstream || {}, jQuery, window, document);

@@ -46,22 +46,21 @@ BeatStream::Application.routes.draw do
     #
     # Delete playlist
     # DELETE /playlists/:list_name
-    resources :playlists, :only => [:index, :create, :update, :destroy] do
+    resources :playlists, :only => [:index, :create, :update, :destroy, :show] do
 
       # Get all songs in a playlist
-      # GET /playlists/:list_name/songs
-      #
-      # Add song(s) to playlist
-      # POST /playlists/:list_name/songs
+      # GET /playlists/:list_name
       #
       # Set songs on a playlist
-      # PUT /playlists/:list_name/songs
-      resources :songs, :only => [:index, :create, :update] do
-        collection do
-          # Reorder songs on a playlist
-          # POST /playlists/:list_name/songs/reoder
-          post 'reorder'
-        end
+      # PUT /playlists/:list_name
+      member do
+        # Reorder songs on a playlist
+        # POST /playlists/:list_name/reoder
+        post 'reorder'
+
+        # Add song(s) to playlist
+        # POST /playlists/:list_name
+        post '', :action => :add_songs
       end
     end
 

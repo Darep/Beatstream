@@ -7,9 +7,11 @@
  *
  */
 
-(function ($, window, document, undefined) {
+(function (Beatstream, $, window, document, undefined) {
 
     function Sidebar(events_in) {
+
+        var NEW_PLAYLIST_NAME = 'New playlist';
 
         var events = $.extend({
             onOpenPlaylist: function (listName) {},
@@ -19,7 +21,6 @@
         this.events = events;
 
         var self = this;
-        var NEW_PLAYLIST_NAME = 'New playlist';
         var $sidebar = $('#sidebar');
         var activePlaylist = $sidebar.find('.all-music a');
 
@@ -77,35 +78,33 @@
                 return;
             }
 
-            // TODO: check that there is no list with the same name
+            // TODO: check that there is no list with the same name?
+            //       -- or -- do this server-side?
 
             var playlistInSync = template('.playlist.insync').render({ name: list_name }).clone();
             newPlaylistInput.before(playlistInSync);
             newPlaylistInput.hide();
 
             // create the playlist
-            var data = { name: list_name };
-            $.ajax({
-                type: 'POST',
-                url: '/api/v1/playlists',
-                data: data,
-                success: function (data) {
-                    console.log(playlistInSync);
-                    playlistInSync.removeClass('insync');
-                    playlistInSync.find('.sync-icon').remove();
-                    
-                    // hide error feedback
-                    nameField.removeClass('error');
-                    nameErrorField.hide();
-                },
-                error: function () {
-                    playlistInSync.remove();
-                    $('#sidebar .btn-new-list').click();
-                    
-                    // show error feedback
-                    nameField.val(list_name).select().addClass('error');
-                    nameErrorField.show();
-                }
+            var req = Beatstream.Api.createPlaylist(list_name);
+
+            req.success(function (data) {
+                console.log(playlistInSync);
+                playlistInSync.removeClass('insync');
+                playlistInSync.find('.sync-icon').remove();
+                
+                // hide error feedback
+                nameField.removeClass('error');
+                nameErrorField.hide();
+            });
+
+            req.error(function () {
+                playlistInSync.remove();
+                $('#sidebar .btn-new-list').click();
+                
+                // show error feedback
+                nameField.val(list_name).select().addClass('error');
+                nameErrorField.show();
             });
 
             //  hide "no playlists" text
@@ -131,6 +130,6 @@
 
     Sidebar.prototype.getPlaylists = function () { return this.playlistList.find('a'); };
 
-    window.Sidebar = Sidebar;
+    Beatstream.Sidebar = Sidebar;
 
-})(jQuery, window, document);
+})(window.Beatstream = Beatstream || {}, jQuery, window, document);

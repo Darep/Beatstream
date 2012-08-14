@@ -149,7 +149,7 @@
                 song_count = 1;
             }
 
-            dd.bestDataEver = data;
+            dd.draggedSongs = data;
 
             events.onDragStart(e, dd);
 

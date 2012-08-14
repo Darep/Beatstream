@@ -5,34 +5,8 @@ class PlaylistsController < ApplicationController
     def index
     end
 
-    def new
-        user = User.find_by_id(session[:user_id])
-        
-        if user.nil?
-            raise "You are not logged in?"
-        end
-
-        list_name = params[:name]
-        if list_name.nil? || list_name.empty?
-            raise "No list name supplied"
-        end
-
-        playlist_file_dir = PLAYLISTS_DIR_BASE.to_s + user.username.to_s + "/"
-        playlist_file = playlist_file_dir + list_name
-
-        FileUtils.mkdir_p playlist_file_dir
-
-        # create an empty playlist == empty json array
-        File.open(playlist_file, 'w') { |f| f.write('[]') }
-
-        respond_to do |format|
-            format.html { render :nothing => true }
-            format.json { render :nothing => true }
-        end
-    end
-
     def show
-        list_name = params[:name]
+        list_name = params[:id]
 
         user = User.find_by_id(session[:user_id])
         
@@ -58,8 +32,29 @@ class PlaylistsController < ApplicationController
 
     # POST /playlists
     def create
-        # TODO: create a playlist
-        render :nothing => true
+        user = User.find_by_id(session[:user_id])
+        
+        if user.nil?
+            raise "You are not logged in?"
+        end
+
+        list_name = params[:name]
+        if list_name.nil? || list_name.empty?
+            raise "No list name supplied"
+        end
+
+        playlist_file_dir = PLAYLISTS_DIR_BASE.to_s + user.username.to_s + "/"
+        playlist_file = playlist_file_dir + list_name
+
+        FileUtils.mkdir_p playlist_file_dir
+
+        # create an empty playlist == empty json array
+        File.open(playlist_file, 'w') { |f| f.write('[]') }
+
+        respond_to do |format|
+            format.html { render :nothing => true }
+            format.json { render :nothing => true }
+        end
     end
 
     # POST /playlists/:list_name
@@ -73,29 +68,4 @@ class PlaylistsController < ApplicationController
         # TODO: delete playlist
         render :nothing => true
     end
-
-    # GET /playlists/:list_name/songs
-    def songs_index
-        # TODO: return a list of playlist's songs
-        render :nothing => true
-    end
-
-    # POST /playlists/:list_name/songs
-    def songs_create
-        # TODO: this
-        render :nothing => true
-    end
-
-    # PUT /playlists/:list_name/songs
-    def songs_update
-        # TODO: this
-        render :nothing => true
-    end
-
-    # POST /playlists/:list_name/songs/reoder
-    def songs_reorder
-        # TODO: this
-        render :nothing => true
-    end
-
 end

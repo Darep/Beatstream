@@ -75,7 +75,7 @@
                 playerTrack.text('None');
             },
             onDragStart: function (e, dd) {
-                var song_count = dd.bestDataEver.length;
+                var song_count = dd.draggedSongs.length;
 
                 DragTooltip.show(dd.startX, dd.startY, song_count + ' song');
 
@@ -127,22 +127,22 @@
                 // TODO: add dragged things into playlist (if things can be added)
 
                 var name = drop_target.text();
-                var playlist = Playlists.getByName(name);
+                var playlist = Beatstream.Playlists.getByName(name);
 
                 // load the playlist if it has not been loaded yet
                 if (playlist === undefined) {
 
-                    Playlists.load(name, function (data) {
-                        if (data === undefined) {
+                    Beatstream.Playlists.load(name, function (playlist) {
+                        if (playlist === undefined) {
                             console.log('whattafaaaak, no such playlist: ' + name);
                         }
 
-                        data.push.apply(data, dd.bestDataEver);
+                        playlist.push.apply(data, dd.draggedSongs);
                     });
 
                 }
                 else {
-                    playlist.push.apply(playlist, dd.bestDataEver);
+                    playlist.push.apply(playlist, dd.draggedSongs);
                 }
             }
         });
@@ -192,35 +192,37 @@
         });
 
         // init sidebar
-        var sidebar = new Sidebar({
+        var sidebar = new Beatstream.Sidebar({
             onOpenAllMusic: function () {
                 openAllMusic();
             },
             onOpenPlaylist: function (listName) {
-                var playlist = Playlists.getByName(listName);
+                var playlist = Beatstream.Playlists.getByName(listName);
 
                 if (playlist === undefined) {
-                    Playlists.load(listName, function (data) {
-                        songlist.loadPlaylist(data);
-                        updatePlaylistHeader(listName, data.length);
+                    Beatstream.Playlists.load(listName, function (data) {
+                        openPlaylist(listName, data);
                     });
+                    return;
                 }
-                else {
-                    songlist.loadPlaylist(playlist);
-                    updatePlaylistHeader(listName, playlist.length);
-                }
+
+                openPlaylist(listName, playlist);
             }
         });
+
+        function openPlaylist(name, data) {
+            songlist.loadPlaylist(data);
+            updatePlaylistHeader(name, data.length);
+        }
 
         // TODO: open the current playlist when launching (according to the url?)
         // atm. always open the "All music" -playlist
         function openAllMusic() {
             var req = Beatstream.Api.getAllMusic();
             req.success(function (data) {
-                songlist.loadPlaylist(data);
-                updatePlaylistHeader('All music', data.length);
-
                 $('.preloader').remove();
+
+                openPlaylist('All music', data);
 
                 // update "All music" song count on sidebar
                 var count = commify( parseInt( data.length, 10 ) );

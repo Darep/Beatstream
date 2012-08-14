@@ -10,14 +10,6 @@
             }
         },
 
-        reorderListTasks: function (list_id, data) {
-            return $.ajax({
-                type: 'POST',
-                url: this.baseUrl + '/lists/' + list_id + '/tasks/reorder',
-                data: data
-            });
-        },
-
         getSongURI: function (songPath) {
             return this.baseUrl + '/songs/play/?file=' + encodeURIComponent(songPath);
         },
@@ -26,6 +18,38 @@
             return $.ajax({
                 url: this.baseUrl + '/songs',
                 dataType: 'json'
+            });
+        },
+
+        getPlaylist: function (name) {
+            return $.ajax({
+                url: this.baseUrl + '/playlists/' + encodeURIComponent(name),
+                dataType: 'json'
+            });
+        },
+
+        createPlaylist: function (name) {
+            return $.ajax({
+                type: 'POST',
+                url: this.baseUrl + '/playlists',
+                data: { name: name }
+            });
+        },
+
+        addToPlaylist: function (playlist, songs) {
+            // TODO: finish this
+            return $.ajax({
+                type: 'POST',
+                url: this.baseUrl + '/playlists/' + encodeURIComponent(playlist),
+                data: songs
+            });
+        },
+
+        setPlaylistSongs: function (playlist, songs) {
+            // TODO: finish this
+            return $.ajax({
+                type: 'PUT',
+                url: this.baseUrl + '/playlists/' + encodeURIComponent(playlist)
             });
         }
     };
