@@ -5,19 +5,21 @@
         baseUrl: '/api/v1',
 
         init: function (apiBaseUrl) {
-            baseUrl = apiBaseUrl;
+            if (baseUrl) {
+                baseUrl = apiBaseUrl;
+            }
         },
 
         reorderListTasks: function (list_id, data) {
             return $.ajax({
                 type: 'POST',
-                url: baseUrl + '/lists/' + list_id + '/tasks/reorder',
+                url: this.baseUrl + '/lists/' + list_id + '/tasks/reorder',
                 data: data
             });
         },
 
         getSongURI: function (songPath) {
-            return baseUrl + 'songs/play/?file=' + encodeURIComponent(song.path);
+            return this.baseUrl + '/songs/play/?file=' + encodeURIComponent(songPath);
         }
     };
 

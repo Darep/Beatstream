@@ -6,7 +6,7 @@ BeatStream::Application.routes.draw do
     controller :scrobbling do
       # Set now playing song
       # PUT /nowplaying
-      put 'nowplaying' => :now_playing
+      put 'now-playing' => :now_playing
 
       # Scrobble a song
       # POST /scrobble
