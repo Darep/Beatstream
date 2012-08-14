@@ -6,11 +6,17 @@
 
 (function ($, window, document, undefined) {
 
+    // set jQuery.event.drag plugin's default drag start distance
     jQuery.event.special.drag.defaults.distance = 7;
 
     function Songlist(events_in) {
+
         var events = $.extend({
-            onPlay : function () {}
+            onPlay : function (song) {},
+            onStop : function () {},
+            onDragStart : function (e, dd) {},
+            onDrag: function (e, dd) {},
+            onDragEnd: function (e, dd) {}
         }, events_in);
 
         this.events = events;
@@ -115,8 +121,12 @@
 
         grid.onDragStart.subscribe(function (e, dd) {
 
+            /*
+             * Add the songs (that we are dragging) into the event object
+             */
+
             var cell = grid.getCellFromEvent(e);
-            var data = {};
+            var data = [];
             var song_count = 0;
 
             // check if dragging selected rows
@@ -126,7 +136,7 @@
             for (var i = 0; i < rows.length; i++) {
                 var dataItem = grid.getDataItem(rows[i]);
                 data[i] = dataItem;
-                if (rows[i] == cell.row) {
+                if (rows[i] === cell.row) {
                     draggingSelectedRows = true;
                 }
                 song_count++;
@@ -134,55 +144,21 @@
 
             if (draggingSelectedRows === false) {
                 var dataItem = grid.getDataItem(cell.row);
-                data = {};
+                data = [];
                 data[0] = dataItem;
                 song_count = 1;
             }
 
             dd.bestDataEver = data;
 
-            DragTooltip.show(dd.startX, dd.startY, song_count + ' song');
-
-            if (song_count != 1) {
-                DragTooltip.append('s');
-            }
-
-            // make playlists hilight
-            $('#sidebar .playlists li').addClass('targeted');
+            events.onDragStart(e, dd);
 
             // tell grid that we're handling drags!
             e.stopImmediatePropagation();
         });
 
-        grid.onDrag.subscribe(function (e, dd) {
-            DragTooltip.update(e.clientX, e.clientY);
-
-            var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
-
-            if (drop_target === undefined || drop_target.parent().parent().hasClass('playlists') === false) {
-                // these are not the drops you are looking for
-                $('#sidebar .playlists li').removeClass('hover');
-                return;
-            }
-
-            $('#sidebar .playlists li').removeClass('hover');
-            drop_target.parent().addClass('hover');
-        });
-
-        grid.onDragEnd.subscribe(function (e, dd) {
-            DragTooltip.hide();
-
-            $('#sidebar .playlists li').removeClass('targeted').removeClass('hover');
-
-            var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
-
-            if (drop_target === undefined || drop_target.parent().hasClass('.playlists') === false) {
-                // these are not the drops you are looking for
-                return;
-            }
-
-            // TODO: add dragged things into playlist (if things can be added)
-        });
+        grid.onDrag.subscribe(events.onDrag);
+        grid.onDragEnd.subscribe(events.onDragEnd);
 
 
         // own extensions:
@@ -233,7 +209,7 @@
 
             if (current_row === undefined) {
                 // current song is not in the grid, stop playing
-                stop();
+                events.onStop();
                 return;
             }
 
@@ -254,7 +230,7 @@
 
                 if (current_row === undefined) {
                     // current song is not in the grid, stop playing
-                    stop();
+                    events.onStop();
                     return;
                 }
             }
@@ -268,7 +244,7 @@
             }
             else if ((manual === undefined || manual === false) && repeat === false) {
                 // last song and not repeating -> stop playing
-                stop();
+                events.onStop();
                 return;
             }
             else {
@@ -377,27 +353,10 @@
         this.grid.playingSongId = null;
     };
 
-    Songlist.prototype.loadPlaylist = function (url) {
-        var self = this;
+    Songlist.prototype.loadPlaylist = function (data) {
 
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            error: function (xhr, status, error) {
-                /*
-                console.log(xhr);
-                console.log(status);
-                console.log(error);
-                */
-            },
-            success: function(data) {
-                $('.preloader').remove();
-                self.loadData(data);
-            }
-        });
-    };
+        this.grid.removeCellCssStyles('currentSong_playing');
 
-    Songlist.prototype.loadData = function (data) {
         // initialize data view model
         this.dataView.beginUpdate();
         this.dataView.setItems(data);
@@ -409,19 +368,6 @@
 
         this.dataView.syncGridSelection(this.grid, false);
         this.dataView.syncGridCellCssStyles(this.grid, 'currentSong_playing');
-
-        // update song count on sidebar
-        var count = commify( parseInt( data.length, 10 ) );
-        $('.medialibrary.count').text(count);
-        $('.page-header .count').text(count);
-
-        // update count text
-        if (data.length == 1) {
-            $('.page-header .text').html('song');
-        }
-        else {
-            $('.page-header .text').html('songs');
-        }
     };
 
     window.Songlist = Songlist;

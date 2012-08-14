@@ -1,5 +1,5 @@
 /* mixins */
-@mixin clear_float {
+@mixin ir {
     overflow:hidden;
     text-indent:100%;
     white-space:nowrap;
@@ -98,7 +98,15 @@
     background:url('/assets/preloader.gif') no-repeat;
     height:16px;
     width:16px;
-    @include clear_float;
+    @include ir;
+}
+
+.sync-icon {
+    background:url('/assets/sync.gif') no-repeat;
+    display:inline-block;
+    height:16px;
+    width:16px;
+    @include ir;
 }
 
 /* soundmanager 2 */

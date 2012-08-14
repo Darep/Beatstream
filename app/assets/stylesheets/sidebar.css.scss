@@ -1,79 +1,120 @@
 #sidebar {
     background:#eaeaea;
     border-right:1px solid #d4d4d4;
+    float:left;
     font-size:11px;
     height:100%;
+    overflow:auto;
     width:189px;
+
+    ul {
+        border-bottom:1px solid #c7c7c7;
+        list-style:none;
+        margin:0 -20px 15px;
+        padding:0 0 10px;
+        -webkit-box-shadow: 0 1px 0 #fff;
+        -moz-box-shadow: 0 1px 0 #fff;
+        box-shadow: 0 1px 0 #fff;
+    }
+
+    li {
+        display:block;
+        line-height:1.4em;
+        position: relative;
+        z-index:0;
+        
+        a {
+            color:#777;
+            display:block;
+            padding:5px 20px;
+            text-decoration:none;
+
+            &:hover {
+                color:#222;
+            }
+
+            &:after {
+                background:#aaa;
+                content:'';
+                display:block;
+                height:100%;
+                position: absolute;
+                left:0;
+                top:0;
+                width:5px;
+            }
+        }
+        
+        &.hover a {
+            color:#222;
+        }
+        
+        &.act {
+
+        }
+    }
+
+    .count {
+        font-weight:400;
+        float:right;
+    }
+
+    .common {
+        font-size:13px;
+        font-weight:700;
+
+        a {
+            color:#222;
+        }
+    }
+    
+    .none {
+        padding-bottom:0;
+    }
+
+    .insync {
+        font-style:italic;
+
+        a:hover {
+            color:#777;
+            cursor:default;
+        }
+    }
+    .sync-icon {
+        margin-left:5px;
+        position:relative;
+    }
+
+    .playlist-input {
+        margin-top:10px;
+    }
+
+    .btn-new-list {
+        display:block;
+        margin:0 auto;
+        width:82px;
+    }
+
+    .new-list {
+        border:1px solid #bbb;
+        font-size:11px;
+        margin:0 20px;
+        padding:3px 4px;
+
+        &.error {
+            border:1px solid red;
+            -webkit-animation:shake 1s ease;
+        }
+    }
+    p.error {
+        color:#c22;
+        margin:0 20px;
+    }
 }
     #sidebar-wrap {
         padding:10px 20px;
         min-width:100px;
     }
-        #sidebar ul {
-            border-bottom:1px solid #c7c7c7;
-            list-style:none;
-            margin:0 -20px 15px;
-            padding:0 0 10px;
-            -webkit-box-shadow: 0 1px 0 #fff;
-            -moz-box-shadow: 0 1px 0 #fff;
-            box-shadow: 0 1px 0 #fff;
-        }
-            #sidebar li {
-                display:block;
-                height:28px;
-                line-height:28px;
-                position: relative;
-                z-index:0;
-            }
-                #sidebar li a {
-                    color:#777;
-                    display:block;
-                    padding:0 20px;
-                    text-decoration:none;
-                }
-                    #sidebar .count {
-                        font-weight:400;
-                        float:right;
-                    }
-                #sidebar a:hover {
-                    color:#222;
-                }
-                #sidebar li.hover a {
-                    color:#222;
-                }
-                #sidebar li a:after {
-                    background:#aaa;
-                    content:'';
-                    display:block;
-                    height:28px;
-                    position: absolute;
-                    left:0;
-                    top:0;
-                    width:5px;
-                }
-            #sidebar li.act {
-            }
-        .common {
-            font-size:13px;
-            font-weight:700;
-        }
-            #sidebar .common a {
-                color:#222;
-            }
-        #sidebar .none {
-            border:2px dashed #bbb;
-            color:#666;
-            margin:15px 0;
-            padding:10px 12px;
-            -webkit-border-radius: 8px;
-            -moz-border-radius: 8px;
-            border-radius: 8px;
-        }
-        #btn-new-list {
-            display:block;
-            margin:0 auto;
-            width:82px;
-        }
 
 /* draginfo */
 #draginfo {
@@ -85,4 +126,10 @@
     border-radius:4px;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
+}
+
+@-webkit-keyframes shake {
+    0%, 100% {-webkit-transform: translateX(0);}
+    10%, 30%, 50%, 70% {-webkit-transform: translateX(-5px);}
+    20%, 40%, 60%, 80% {-webkit-transform: translateX(5px);}
 }

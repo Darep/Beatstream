@@ -1,59 +1,136 @@
 //= require helpers
 //= require playlists
 //= require songlist
+//= require transparency.min
 /*!
  * Sidebar
  *
  */
 
-$(document).ready(function () {
+(function ($, window, document, undefined) {
 
-    var NEW_PLAYLIST_NAME = 'New playlist';
+    function Sidebar(events_in) {
 
-    for (var i = 0; i < Playlists.count(); i++) {
-        var playlist = Playlists.getAtIndex(i);
-        var id = playlist.id;
-        var name = playlist.name;
-        $('#sidebar .playlists').append('<li><a href="#" data-id="' + id + '">' + name + '</a></li>');
-    }
+        var events = $.extend({
+            onOpenPlaylist: function (listName) {},
+            onOpenAllMusic: function () {}
+        }, events_in);
 
-    $('#sidebar .playlists a').click(function () {
-        var id = $(this).attr('data-id');
-        Songlist.loadPlaylist(id);
+        this.events = events;
 
-        return false;
-    });
+        var self = this;
+        var NEW_PLAYLIST_NAME = 'New playlist';
+        var $sidebar = $('#sidebar');
+        var activePlaylist = $sidebar.find('.all-music a');
 
-    $('#sidebar .new-list').click(function () {
-        var list_item  = $('<li></li>');
-        var rename_field = $('<input type="text" name="list-name" value="' + NEW_PLAYLIST_NAME + '" />');
+        this.playlistList = $sidebar.find('.playlists');
         
-        rename_field.onEnter(function () {
-            var $this = $(this),
-                value = $this.val() || '',
-                list_name = $.trim(value);
+        // show playlist when playlist name is clicked
+        this.getPlaylists().live('click', function (e) {
+            e.preventDefault();
 
+            var $this = $(this);
+
+            if ($this.hasClass('insync') || $this.hasClass('act')) {
+                return;
+            }
+
+            setActivePlaylist($this);
+
+            //alert('Playlists haven\'t been implemented yet. Stay tuned!');
+
+            // load the playlist from URL x
+            var name = $this.text();
+            events.onOpenPlaylist(name);
+        });
+
+        // show "All music" on click
+        $sidebar.find('.all-music a').click(function (e) {
+            e.preventDefault();
+
+            var $this = $(this);
+            if ($this.hasClass('act')) {
+                return;
+            }
+
+            var name = $this.find('.name').text();
+
+            setActivePlaylist($this);
+
+            events.onOpenAllMusic();
+        });
+
+
+        // New playlist
+        var newPlaylistInput = this.playlistList.find('.playlist-input');
+        var nameField = newPlaylistInput.find('input');
+        var nameErrorField = nameField.next('.error');
+
+        nameField.onEnter(function () {
+            var $this = $(this);
+            var value = $this.val() || '';
+            var list_name = $.trim(value);
+
+            // empty list name, abort
             if (list_name === '') {
                 list_item.remove();
                 return;
             }
 
-            var playlist = {
-                id: Playlists.nextId(),
-                name: list_name,
-                data: {}
-            };
+            // TODO: check that there is no list with the same name
 
-            Playlists.add(playlist);
+            var playlistInSync = template('.playlist.insync').render({ name: list_name }).clone();
+            newPlaylistInput.before(playlistInSync);
+            newPlaylistInput.hide();
 
-            rename_field.replaceWith('<a href="#" data-id="' + playlist.id + '">' + playlist.name + '</a>');
+            // create the playlist
+            var data = { name: list_name };
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/playlists',
+                data: data,
+                success: function (data) {
+                    console.log(playlistInSync);
+                    playlistInSync.removeClass('insync');
+                    playlistInSync.find('.sync-icon').remove();
+                    
+                    // hide error feedback
+                    nameField.removeClass('error');
+                    nameErrorField.hide();
+                },
+                error: function () {
+                    playlistInSync.remove();
+                    $('#sidebar .btn-new-list').click();
+                    
+                    // show error feedback
+                    nameField.val(list_name).select().addClass('error');
+                    nameErrorField.show();
+                }
+            });
+
+            //  hide "no playlists" text
+            self.playlistList.prev('.none').hide();
         });
 
-        list_item.append(rename_field);
-        $('#sidebar .playlists').append(list_item);
-        rename_field.focus();
+        $('#sidebar .btn-new-list').click(function (e) {
+            e.preventDefault();
 
-        return false;
-    });
+            nameField.val(NEW_PLAYLIST_NAME);
+            newPlaylistInput.show();
+            nameField.focus().select();
+        });
 
-});
+        function setActivePlaylist($this) {
+            if (activePlaylist !== undefined && activePlaylist.length) {
+                activePlaylist.removeClass('act');
+            }
+            $this.addClass('act');
+            activePlaylist = $this;
+        }
+    }
+
+    Sidebar.prototype.getPlaylists = function () { return this.playlistList.find('a'); };
+
+    window.Sidebar = Sidebar;
+
+})(jQuery, window, document);
