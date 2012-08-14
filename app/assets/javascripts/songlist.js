@@ -4,7 +4,7 @@
  * Abstracts SlickGrid away into oblivion!
  */
 
-(function ($, window, document, undefined) {
+(function (Beatstream, $, window, document, undefined) {
 
     // set jQuery.event.drag plugin's default drag start distance
     jQuery.event.special.drag.defaults.distance = 7;
@@ -370,6 +370,6 @@
         this.dataView.syncGridCellCssStyles(this.grid, 'currentSong_playing');
     };
 
-    window.Songlist = Songlist;
+    Beatstream.Songlist = Songlist;
 
-})(jQuery, window, document);
+})(window.Beatstream = window.Beatstream || {}, jQuery, window, document);

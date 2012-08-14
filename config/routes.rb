@@ -15,13 +15,25 @@ BeatStream::Application.routes.draw do
 
     # Songs
 
-    # Stream song
-    # GET /songs/play
-    match 'songs/play' => 'songs#play'
-
     # Get All Songs
     # GET /songs
-    match 'songs' => 'songs#all'
+    #
+    # Refresh media library
+    # POST /songs
+    #
+    # Stream song
+    # GET /songs/play
+    resources :songs, :only => [:index, :create] do
+      collection do
+        get 'play'
+      end
+
+      # Stream song
+      # GET /songs/:song_id/play
+      get 'play'
+    end
+
+    # Playlists
 
     # Get all playlists
     # GET /playlists
@@ -52,10 +64,6 @@ BeatStream::Application.routes.draw do
         end
       end
     end
-
-    # Refresh media library
-    # PUT /songs
-    match 'songs' => 'songs#refresh', :via => :put
 
     # User information
     resources :users, :only => [:show, :update] do

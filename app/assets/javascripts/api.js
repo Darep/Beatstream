@@ -1,12 +1,12 @@
 
-(function (App, $, document, window, undefined) {
+(function (Beatstream, $, document, window, undefined) {
 
-    var Api = {
-        baseUrl: '/api/v1',
+    Beatstream.Api = {
+        baseUrl: '',
 
         init: function (apiBaseUrl) {
-            if (baseUrl) {
-                baseUrl = apiBaseUrl;
+            if (apiBaseUrl) {
+                this.baseUrl = apiBaseUrl;
             }
         },
 
@@ -20,9 +20,14 @@
 
         getSongURI: function (songPath) {
             return this.baseUrl + '/songs/play/?file=' + encodeURIComponent(songPath);
+        },
+
+        getAllMusic: function () {
+            return $.ajax({
+                url: this.baseUrl + '/songs',
+                dataType: 'json'
+            });
         }
     };
 
-    window.Api = Api;
-
-})(window.App = window.App || {}, jQuery, document, window);
+})(window.Beatstream = window.Beatstream || {}, jQuery, document, window);
