@@ -5,9 +5,9 @@
 //= require routing
 //= require lastfm
 //= require songlist
+//= require api
 //= require pretty-numbers
-//= require audio-modules/html5audio
-//= require audio-modules/soundmanager2
+//= require beat-audio
 
 var keyCode = {
     ENTER: 13
@@ -39,14 +39,13 @@ $(document).ready(function () { soundManager.onready(function () {
     $(window).hashchange(function () {
         Routing.ResolveCurrent();
     });
-    
+
 
     // ::: INIT songlist / GRID OMG SO BIG SECTION :::
+    var BeatAudio = null;
     var songlist = new Songlist({
         onPlay: function (song) {
-            var uri = '/api/v1/songs/play/?file=' + encodeURIComponent(song.path);
-            BeatAudio.play(uri);
-
+            BeatAudio.play(Api.getSongURI(song.path));
             playerTrack.text(song.nice_title);
             lastfm.newSong(song);
         }
@@ -61,10 +60,9 @@ $(document).ready(function () { soundManager.onready(function () {
     var volume_label = $('#player-volume-label');
     var seekbar = $('#seekbar-slider');
 
-    // init audio player
+    // init audio player module
     var error_counter = 0;
-
-    var eventHandlers = {
+    BeatAudio = new BeatAudio({
         onPlay: function () {
             playPause.addClass('playing');
         },
@@ -91,20 +89,10 @@ $(document).ready(function () { soundManager.onready(function () {
                 error_counter = 0;
                 return;
             }
-
             songlist.nextSong(getShuffle(), getRepeat());
-
             error_counter = error_counter + 1;
         }
-    };
-
-    var BeatAudio = null;
-    if (location.search == '?a=html5') {
-        BeatAudio = new HTML5Audio(eventHandlers);
-    }
-    else {
-        BeatAudio = new SM2Audio(eventHandlers);
-    }
+    });
 
 
     // volume slider
@@ -231,8 +219,8 @@ $(document).ready(function () { soundManager.onready(function () {
     }
 
 
-    // sidebar drag & drop
-
+    // Load the initial playlist
+    // TODO: do an API call to get the playlist and pass that data to 'songlist'
     songlist.loadPlaylist('/api/v1/songs');
 
 

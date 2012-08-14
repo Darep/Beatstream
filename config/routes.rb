@@ -1,6 +1,6 @@
 BeatStream::Application.routes.draw do
 
-  scope "/api/v1" do
+  scope "/api/v1", :as => "api" do
     # Scrobbling
 
     controller :scrobbling do
@@ -34,36 +34,38 @@ BeatStream::Application.routes.draw do
     #
     # Delete playlist
     # DELETE /playlists/:list_name
-    resources :playlists do
+    resources :playlists, :only => [:index, :create, :update, :destroy] do
 
       # Get all songs in a playlist
       # GET /playlists/:list_name/songs
-      match 'songs' => 'playlists#songs_index', :via => :get
-
-      # Add songs to playlist
+      #
+      # Add song(s) to playlist
       # POST /playlists/:list_name/songs
-      match 'songs' => 'playlists#songs_create', :via => :post
-
+      #
       # Set songs on a playlist
       # PUT /playlists/:list_name/songs
-      match 'songs' => 'playlists#songs_update', :via => :put
-
-      # Reorder songs on a playlist
-      # POST /playlists/:list_name/songs/reoder
-      match 'songs/reorder' => 'playlists#songs_reorder', :via => :post
+      resources :songs, :only => [:index, :create, :update] do
+        collection do
+          # Reorder songs on a playlist
+          # POST /playlists/:list_name/songs/reoder
+          post 'reorder'
+        end
+      end
     end
-
 
     # Refresh media library
     # PUT /songs
     match 'songs' => 'songs#refresh', :via => :put
 
     # User information
-    resources :users do
-      match 'lastfm_callback' => 'users#lastfm_callback'
-      match 'lastfm_callback' => 'users#lastfm_disconnect'
+    resources :users, :only => [:show, :update] do
+      member do
+        scope "lastfm" do
+          get 'callback', :action => :lastfm_callback
+          get 'disconnect', :action => :lastfm_disconnect
+        end
+      end
     end
-
   end # /api/v1
 
   # Login
@@ -75,5 +77,4 @@ BeatStream::Application.routes.draw do
   end
 
   root :to => 'main#index'
-
 end
