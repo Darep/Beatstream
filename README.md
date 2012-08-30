@@ -2,7 +2,7 @@
 
 ![Screenshot](http://i.imgur.com/oRGwu.png)
 
-Web app for streaming music from any computer running Ruby (and Bundler) to anywhere with a modern browser (Chrome only for now!).
+Web app for streaming music from any computer running Ruby (and Bundler) to anywhere with a modern browser. Works in Firefox and Chrome. **Note!** Remember to disable flash block if you have one!
 
 ### Installation
 
@@ -10,13 +10,13 @@ Web app for streaming music from any computer running Ruby (and Bundler) to anyw
     $ cd Beatstream
     $ bundle install
     $ rake db:migrate
-    $ vim config/enviroments/development.rb
-    -> Find config.MUSIC_PATH and change it!
+    $ vim config/musicpaths.yml
+    -> Change music_path
     $ rails console
     -> User.create(:username => 'user', :email => 'aa@testsdfasdf.com', :password => 'asdf', :password_confirmation => 'asdf')
     -> exit
-    $ rails server -d 
-    
+    $ rails server -d
+
 Open Chrome and surf to http://0.0.0.0:3000 address. Log in and wait when indexing ends, refresh page and happy listening!
 
 
