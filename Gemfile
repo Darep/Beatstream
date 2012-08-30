@@ -9,6 +9,14 @@ gem 'rockstar' #, :git => 'git://github.com/bitboxer/rockstar.git'
 
 gem 'thin'
 
+platforms :jruby do
+  gem 'activerecord-jdbcsqlite3-adapter', :require => 'jdbc-sqlite3', :require =>'arjdbc'
+end
+
+platforms :ruby, :mingw, :mswin do
+  gem 'sqlite3'
+end
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -21,12 +29,4 @@ end
 
 group :development do
   gem 'quiet_assets'
-end
-
-platforms :jruby do
-  gem 'activerecord-jdbcsqlite3-adapter', :require => 'jdbc-sqlite3', :require =>'arjdbc'
-end
-
-platforms :ruby, :mingw, :mswin do
-  gem 'sqlite3'
 end
