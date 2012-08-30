@@ -1,5 +1,6 @@
 //= require helpers
 //= require dragtooltip
+//= require slick.grid
 /*!
  * Abstracts SlickGrid away into oblivion!
  */
@@ -69,14 +70,14 @@
 
         grid.onKeyDown.subscribe(function (e) {
             if (e.keyCode == keyCode.ENTER) {
-                
+
                 var rows = grid.getSelectedRows();
                 if (!rows || rows.length <= 0) {
                     return;
                 }
 
                 var dataItem = grid.getDataItem(rows[0]);
-                
+
                 grid.playSong(dataItem.id);
 
                 e.stopPropagation();

@@ -1,13 +1,9 @@
 //= require helpers
 //= require store.min
-//= require jquery.ba-hashchange.min
-//= require slick.grid
-//= require routing
 //= require lastfm
 //= require songlist
 //= require api
 //= require sidebar
-//= require pretty-numbers
 //= require audio-modules/soundmanager2
 /*!
  * Main - The God particle
@@ -48,12 +44,6 @@
         Beatstream.Api.init(opts.apiUrl);
 
 
-        // ::: USER MENU :::
-        $(window).hashchange(function () {
-            Routing.ResolveCurrent();
-        });
-
-
         // ::: INIT STUFF :::
         var beatAudio = null;
         var songlist = new Beatstream.Songlist({
@@ -65,7 +55,7 @@
             onStop: function () {
                 beatAudio.stop();
                 songlist.resetPlaying();
-                
+
                 // TODO: hide now playing icon from slickgrid
 
                 elapsedTimeChanged(0);
@@ -318,7 +308,7 @@
 
         playerTrack.dblclick(function (e) {
             e.preventDefault();
-            
+
             songlist.scrollNowPlayingIntoView();
         });
 
@@ -337,7 +327,7 @@
             if (store.get(key)) {
                 value = store.get(key);
             }
-            
+
             if (value) {
                 button.addClass('enabled');
             }
@@ -358,7 +348,7 @@
             if (key && store.get(key)) {
                 return store.get(key);
             }
-            
+
             return false;
         }
 
