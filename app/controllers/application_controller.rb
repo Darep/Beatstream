@@ -3,9 +3,7 @@ require 'fileutils'
 
 class ApplicationController < ActionController::Base
     before_filter :authorize
-    before_filter :redirect_to_https
     before_filter :load_sidebar_playlists
-    #protect_from_forgery
 
     protected
 
@@ -13,10 +11,6 @@ class ApplicationController < ActionController::Base
         unless User.find_by_id(session[:user_id])
             redirect_to login_url
         end
-    end
-
-    def redirect_to_https
-        redirect_to :protocol => "https://" unless (request.ssl? || request.local?)
     end
 
     def load_sidebar_playlists
