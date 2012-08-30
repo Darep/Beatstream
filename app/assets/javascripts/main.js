@@ -5,9 +5,14 @@
 //= require routing
 //= require lastfm
 //= require songlist
+//= require sidebar
 //= require pretty-numbers
 //= require audio-modules/html5audio
 //= require audio-modules/soundmanager2
+/*!
+ * Main - The God particle
+ * Wires all the stuff together and does some stuff too
+ */
 
 var keyCode = {
     ENTER: 13
@@ -35,13 +40,12 @@ $(document).ready(function () { soundManager.onready(function () {
 
 
     // ::: USER MENU :::
-
     $(window).hashchange(function () {
         Routing.ResolveCurrent();
     });
     
 
-    // ::: INIT songlist / GRID OMG SO BIG SECTION :::
+    // ::: INIT STUFF :::
     var songlist = new Songlist({
         onPlay: function (song) {
             var uri = '/songs/play/?file=' + encodeURIComponent(song.path);
@@ -49,9 +53,93 @@ $(document).ready(function () { soundManager.onready(function () {
 
             playerTrack.text(song.nice_title);
             lastfm.newSong(song);
+        },
+        onStop: function () {
+            BeatAudio.stop();
+            songlist.resetPlaying();
+            
+            // TODO: hide now playing icon from slickgrid
+
+            elapsedTimeChanged(0);
+            durationChanged(0);
+            seekbar.slider('value', 0);
+            seekbar.slider('option', 'disabled', true);
+            playerTrack.text('None');
+        },
+        onDragStart: function (e, dd) {
+            var song_count = dd.bestDataEver.length;
+
+            DragTooltip.show(dd.startX, dd.startY, song_count + ' song');
+
+            if (song_count != 1) {
+                DragTooltip.append('s');
+            }
+
+            // make playlists hilight
+            $('#sidebar .playlists li').addClass('targeted');
+        },
+        onDrag: function (e, dd) {
+            DragTooltip.update(e.clientX, e.clientY);
+
+            var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
+
+            if (drop_target === undefined ||
+                (drop_target.parent().hasClass('playlists') === false &&
+                 drop_target.parent().parent().hasClass('playlists') === false))
+            {
+                // these are not the drops you are looking for
+                $('#sidebar .playlists li').removeClass('hover');
+                return;
+            }
+
+            $('#sidebar .playlists li').removeClass('hover');
+            drop_target.parent().addClass('hover');
+        },
+        onDragEnd: function (e, dd) {
+            DragTooltip.hide();
+
+            $('#sidebar .playlists li').removeClass('targeted').removeClass('hover');
+
+            var drop_target = $(document.elementFromPoint(e.clientX, e.clientY));
+
+            if (drop_target === undefined ||
+                (drop_target.parent().hasClass('playlists') === false &&
+                 drop_target.parent().parent().hasClass('playlists') === false))
+            {
+                // these are not the drops you are looking for
+                console.log('these are not the drops you are looking for');
+                return;
+            }
+
+            if ( drop_target.is('a.name') === false ) {
+                // still wrong drop target
+                return;
+            }
+
+            // TODO: add dragged things into playlist (if things can be added)
+
+            var name = drop_target.text();
+            var playlist = Playlists.getByName(name);
+
+            // load the playlist if it has not been loaded yet
+            if (playlist === undefined) {
+
+                Playlists.load(name, function (data) {
+                    if (data === undefined) {
+                        console.log('whattafaaaak, no such playlist: ' + name);
+                    }
+
+                    data.push.apply(data, dd.bestDataEver);
+                });
+
+            }
+            else {
+                playlist.push.apply(playlist, dd.bestDataEver);
+            }
         }
     });
 
+    // player buttons
     var playerTrack = $('#player-song .track');
     var playPause = $('#play-pause');
     var prevButton = $('#prev');
@@ -63,8 +151,7 @@ $(document).ready(function () { soundManager.onready(function () {
 
     // init audio player
     var error_counter = 0;
-
-    var eventHandlers = {
+    var BeatAudio = new SM2Audio({
         onPlay: function () {
             playPause.addClass('playing');
         },
@@ -96,14 +183,66 @@ $(document).ready(function () { soundManager.onready(function () {
 
             error_counter = error_counter + 1;
         }
-    };
+    });
 
-    var BeatAudio = null;
-    if (location.search == '?a=html5') {
-        BeatAudio = new HTML5Audio(eventHandlers);
+    // TODO: open the current playlist when launching (according to the url?)
+    // atm. always open the "All music" -playlist
+    function openAllMusic() {
+        $.ajax({
+            url: '/songs/index',
+            dataType: 'json',
+            success: function(data) {
+                $('.preloader').remove();
+
+                songlist.loadPlaylist(data);
+                updatePlaylistHeader('All music', data.length);
+
+                // update song count on sidebar next to "All music"
+                var count = commify( parseInt( data.length, 10 ) );
+                $('.medialibrary.count').text(count);
+            }
+        });
     }
-    else {
-        BeatAudio = new SM2Audio(eventHandlers);
+    openAllMusic();
+
+    // init sidebar
+    var sidebar = new Sidebar({
+        onOpenAllMusic: function () {
+            openAllMusic();
+        },
+        onOpenPlaylist: function (listName) {
+            var playlist = Playlists.getByName(listName);
+
+            if (playlist === undefined) {
+                Playlists.load(listName, function (data) {
+                    songlist.loadPlaylist(data);
+                    updatePlaylistHeader(listName, data.length);
+                });
+            }
+            else {
+                songlist.loadPlaylist(playlist);
+                updatePlaylistHeader(listName, playlist.length);
+            }
+        }
+    });
+
+    function updatePlaylistHeader(name, songCount) {
+        // update playlist header data
+        if (songCount === undefined) {
+            songCount = 0;
+        }
+
+        var count = commify( parseInt( songCount, 10 ) );
+        $('.page-header .count').text(count);
+
+        if (songCount === 1) {
+            $('.page-header .text').html('song');
+        }
+        else {
+            $('.page-header .text').html('songs');
+        }
+
+        $('.page-header .info h2').html(name);
     }
 
 
@@ -185,6 +324,9 @@ $(document).ready(function () { soundManager.onready(function () {
     });
 
 
+    // enable buttons
+    $('#player-buttons button').removeAttr('disabled');
+
     // repeat & shuffle buttons
 
     var repeatButton = $('#repeat');
@@ -210,7 +352,6 @@ $(document).ready(function () { soundManager.onready(function () {
             $(this).toggleClass('enabled');
         });
     }
-
     newToggleButton(repeatButton, 'repeat', repeat);
     newToggleButton(shuffleButton, 'shuffle', shuffle);
 
@@ -228,28 +369,6 @@ $(document).ready(function () { soundManager.onready(function () {
 
     function getRepeat() {
         return storeGet('repeat');
-    }
-
-
-    // sidebar drag & drop
-
-    songlist.loadPlaylist('/songs/index');
-
-
-    // enable buttons
-    $('#player-buttons button').removeAttr('disabled');
-
-    function stop() {
-        BeatAudio.stop();
-        songlist.resetPlaying();
-        
-        // TODO: hide now playing icon from slickgrid
-
-        elapsedTimeChanged(0);
-        durationChanged(0);
-        seekbar.slider('value', 0);
-        seekbar.slider('option', 'disabled', true);
-        playerTrack.text('None');
     }
 
     function durationChanged(dur) {

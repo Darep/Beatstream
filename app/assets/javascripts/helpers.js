@@ -67,3 +67,22 @@ function naturalsort(a, b) {
   }
   return aa.length - bb.length;
 }
+
+(function (document, window) {
+
+    var templates = null;
+
+    $(document).ready(function () {
+        templates = $('#templates');
+    });
+
+
+    function template(selector) {
+        var tmpl = templates.find(selector);
+        return tmpl;
+    }
+
+    window.template = template;
+
+})(document, window);
+

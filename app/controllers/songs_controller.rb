@@ -12,17 +12,17 @@ class SongsController < ApplicationController
         songs_json = '';
 
         if params[:refresh]
-            Rails.logger.info 'Forced song list refresh'
+            Rails.logger.info 'Forced songs JSON refresh'
             refresh(songs_json)
-        else
-            begin
-                f = File.open(SONGS_JSON_FILE, 'r')
-                Rails.logger.info 'Songs JSON modified: ' + f.mtime.to_s
-                songs_json = f.read
-            rescue Errno::ENOENT
-                Rails.logger.info 'Songs JSON file not found --> refreshing songs list'
-                refresh(songs_json)
-            end
+        end
+        
+        begin
+            f = File.open(SONGS_JSON_FILE, 'r')
+            Rails.logger.info 'Songs JSON last modified: ' + f.mtime.to_s
+            songs_json = f.read
+        rescue Errno::ENOENT
+            Rails.logger.info 'Songs JSON file not found --> refreshing songs list'
+            refresh(songs_json)
         end
 
         render :text => songs_json
