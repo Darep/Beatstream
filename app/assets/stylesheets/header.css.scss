@@ -1,18 +1,15 @@
 header {
     background:#333;
-    background: -webkit-linear-gradient(left, #242424, #424242);
-    background: -moz-linear-gradient(left, #242424, #424242);
-    background: -o-linear-gradient(left, #242424, #424242);
-    background: -ms-linear-gradient(left, #242424, #424242);
-    background:linear-gradient(left, #242424, #424242);
-    border-top:1px solid #000;
+    background: -webkit-linear-gradient(top, #242424, #424242);
+    background: -moz-linear-gradient(top, #242424, #424242);
+    background: -o-linear-gradient(top, #242424, #424242);
+    background: -ms-linear-gradient(top, #242424, #424242);
+    background:linear-gradient(top, #242424, #424242);
     color:#fff;
     height:55px;
     overflow: hidden;
     padding:0 20px 0 15px;
-    -webkit-box-shadow: inset 0 1px 0 #505050;
-    -moz-box-shadow: inset 0 1px 0 #505050;
-    box-shadow: inset 0 1px 0 #505050;
+    box-shadow: inset 0 1px 0 #302d2a;
 
     #logo {
         font:normal 30px/55px 'PT Sans', sans-serif;

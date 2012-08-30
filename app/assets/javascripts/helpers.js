@@ -39,6 +39,7 @@ function randomToN(maxVal,floatVal)
 }
 
 
+// function: naturalsort(a, b)
 function naturalsort(a, b) {
   function chunkify(t) {
     var tz = [], x = 0, y = -1, n = 0, i, j;
@@ -67,3 +68,43 @@ function naturalsort(a, b) {
   }
   return aa.length - bb.length;
 }
+
+// function: window.template(selector)
+(function (document, window) {
+
+    var templates = null;
+
+    $(document).ready(function () {
+        templates = $('#templates');
+    });
+
+
+    function template(selector) {
+        var tmpl = templates.find(selector);
+        return tmpl;
+    }
+
+    window.template = template;
+
+})(document, window);
+
+
+// Returns a plural or singular text based on the count
+// function: pluralize(count, singular_text, plural_text = undefined)
+(function (window) {
+
+    function pluralize(count, singular_text, plural_text) {
+        if (count === 1) {
+            return singular_text;
+        }
+        else {
+            if (!plural_text) {
+                return singular_text + 's';
+            }
+            return plural_text;
+        }
+    }
+
+    window.pluralize = pluralize;
+
+}(window));
