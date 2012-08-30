@@ -1,47 +1,32 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.1'
+ruby '1.9.3'
+
+gem 'rails', '3.2.8'
+
+gem 'mp3info'
+gem 'rockstar' #, :git => 'git://github.com/bitboxer/rockstar.git'
+
+gem 'thin'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'sass-rails'
+  gem 'coffee-rails'
+  gem 'jquery-rails', '2.0.2'
 
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'therubyracer', :platforms => :ruby
-
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier'
 end
 
-gem 'jquery-rails'
+group :development do
+  gem 'quiet_assets'
+end
 
 platforms :jruby do
   gem 'activerecord-jdbcsqlite3-adapter', :require => 'jdbc-sqlite3', :require =>'arjdbc'
 end
+
 platforms :ruby, :mingw, :mswin do
   gem 'sqlite3'
 end
-
-gem 'mp3info'
-
-gem 'rockstar' #, :git => 'git://github.com/bitboxer/rockstar.git'
-
-gem 'dynamic_form'
-
-#gem 'mongo_mapper'
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the web server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'ruby-debug'
