@@ -53,6 +53,14 @@ class SongsController < ApplicationController
         songs = []
 
         Find.find(MUSIC_PATH) do |file|
+            @invalid = false
+            file = sanitize(file)
+
+            if @invalid
+                Rails.logger.warn "#{file} Contains Invalid UTF-8 byte sequences"
+                # TODO: collect files with invalid UTF-8 and show them to the user
+            end
+
             # Skip directories
             if File.directory?(file)
                 next
@@ -60,7 +68,7 @@ class SongsController < ApplicationController
 
             # Skip non-mp3 files
             if file !~ /.*\.mp3$/i || file =~ /^\./
-                Rails.logger.info 'Skipping file as not MP3 file: ' + file
+#                Rails.logger.info 'Skipping file as not MP3 file: ' + file
                 next
             end
 
@@ -79,5 +87,16 @@ class SongsController < ApplicationController
 
         songs_as_json = songs.to_json
         File.open(SONGS_JSON_FILE, 'w') { |f| f.write(songs_as_json) }
+    end
+
+    def sanitize(str)
+        str.each_char.map do |char|
+          begin
+            char if !!char.unpack('U')
+          rescue
+            @invalid = true
+            "\xEF\xBF\xBD" # => "\uFFFD"
+          end
+        end.join
     end
 end
