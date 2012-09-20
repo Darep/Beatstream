@@ -20,7 +20,6 @@ class Song
         # ID3 tag info
         Mp3Info.open(path) do |info|
             tag = info.tag
-            puts info.inspect
             @title = tag['title'] if (!tag['title'].nil?)
             @artist = tag['artist'] if (!tag['title'].nil?)
             @album = tag['album']

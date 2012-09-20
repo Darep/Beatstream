@@ -54,7 +54,7 @@ class SongsController < ApplicationController
 
         Find.find(MUSIC_PATH) do |file|
             if File.directory?(file) || file !~ /.*\.mp3$/i || file =~ /^\./
-                #Rails.logger.info 'Skipping file: ' + file
+                Rails.logger.info 'Skipping file as not MP3 file: ' + file
                 next
             end
 
