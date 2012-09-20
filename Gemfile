@@ -9,6 +9,8 @@ gem 'rockstar' #, :git => 'git://github.com/bitboxer/rockstar.git'
 
 gem 'thin'
 
+gem 'therubyracer'
+
 platforms :jruby do
   gem 'activerecord-jdbcsqlite3-adapter', :require => 'jdbc-sqlite3', :require =>'arjdbc'
 end
