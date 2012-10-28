@@ -88,15 +88,16 @@ class SongsController < ApplicationController
                 next
             end
 
-            begin
+#            begin
+                #file.gsub(MUSIC_PATH, '')
                 mp3 = Mp3File.new(file, songs.length)
                 songs.push(mp3)
-            rescue Exception => e
+ #           rescue Exception => e
                 Rails.logger.info e
                 Rails.logger.info 'Failed to load MP3: ' + file
                 # TODO: collect the broken mp3s into a separate array
                 # TODO: count the broken mp3s
-            end
+  #          end
         end
 
         songs = songs.sort_by { |song| song.to_natural_sort_string }
@@ -107,45 +108,39 @@ class SongsController < ApplicationController
 
 end
 
+
 class Mp3File
 
-    attr_reader :id, :filename, :path, :artist, :title, :album, :tracknum, :length
+    attr_reader :id, :filename, :path, :artist, :title, :album, :tracknum, :length, :year
 
     def initialize(path, id)
-        #file = File.new(path)
-        #@size = file.stat.size()
-
         @filename = File.basename(path)
-        @path = path.gsub(MUSIC_PATH, '')
         @id = id
 
+        # Defaults
         @title = @filename
         @artist = ''
         @album = ''
         @tracknum = nil
         @length = 0
+        @year = nil
 
-        # ID3 tag info
-        info = Mp3Info.open(path)
-        tag = info.tag()
-        @title = tag['title'] if (!tag['title'].nil?)
-        @artist = tag['artist'] if (!tag['title'].nil?)
-        @album = tag['album']
-        @tracknum = tag['tracknum']
-        @length = info.length
-        
+        # Read the tags
+        tag = TagLib::File.new(path)
+
+        @title = tag.title if (!tag.title.nil?)
+        @artist = tag.artist if (!tag.title.nil?)
+        @album = tag.album
+        @tracknum = tag.track
+        @length = tag.length
+        @year = tag.year
+
+        # Create some nicer looking alternatives
         @nice_title = ''
         @nice_title += (@artist.to_s + ' - ') if !@artist.nil?
         @nice_title += @title.to_s
 
-        @nice_length = (Time.mktime(0)+@length).strftime("%M:%S")
-
-        # convert outgoing strings into valid utf-8
-
-        @title = to_utf8(@title)
-        @artist = to_utf8(@artist) if !@artist.nil?
-        @album = to_utf8(@album) if !@album.nil?
-        @nice_title = to_utf8(@nice_title)
+        @nice_length = (Time.mktime(0) + @length).strftime("%M:%S")
     end
 
     def to_s
@@ -176,18 +171,5 @@ class Mp3File
         end
 
         str
-    end
-
-    private
-
-    # Iconv UTF-8 helper
-    # Converts string into valid UTF-8
-    #
-    # @param [String] untrusted_string the string to convert to UTF-8
-    # @return [String] passed string in UTF-8
-    def to_utf8 untrusted_string=""
-        ic = Iconv.new('UTF-8//IGNORE', 'ISO-8859-15')
-        ic.iconv(untrusted_string)
-        #ic.iconv(untrusted_string + ' ')[0..-2]
     end
 end
