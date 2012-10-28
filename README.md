@@ -1,8 +1,9 @@
 # Beatstream #
 
-![Screenshot](http://i.imgur.com/oRGwu.png)
+Beatstream is an app for streaming music from your computer to anywhere with a modern Web browser!  
+(Beatstream currently requires Ruby to be installed on your computer)
 
-Web app for streaming music from any computer running Ruby to anywhere with a modern browser.
+![Screenshot](http://i.imgur.com/oRGwu.png)
 
 ### Installation
 
