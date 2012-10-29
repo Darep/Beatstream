@@ -22,8 +22,6 @@ end
 
 group :assets do
   gem 'sass-rails'
-  gem 'coffee-rails'
-  gem 'jquery-rails', '2.0.2'
 
   gem 'uglifier'
 end
