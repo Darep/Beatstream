@@ -15,8 +15,8 @@
 /tmp/*
 
 # Ignore app generated files
-/public/songs.json
-/public/playlists/*
+#/public/songs.json
+#/public/playlists/*
 
 # Default ignores from github
 *.rbc
@@ -25,7 +25,6 @@
 capybara-*.html
 .rspec
 /vendor/bundle
-/public/system/*
 /coverage/
 /spec/tmp/*
 **.orig
