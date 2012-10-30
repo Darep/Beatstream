@@ -1,6 +1,6 @@
 class PlaylistsController < ApplicationController
 
-    PLAYLISTS_DIR_BASE = Rails.root.join('public/playlists/')
+    PLAYLISTS_DIR_BASE = Rails.root.join('data/playlists/')
 
     def index
     end
@@ -9,7 +9,7 @@ class PlaylistsController < ApplicationController
         list_name = params[:id]
 
         user = User.find_by_id(session[:user_id])
-        
+
         if user.nil?
             raise "You are not logged in?"
         end
@@ -33,7 +33,7 @@ class PlaylistsController < ApplicationController
     # POST /playlists
     def create
         user = User.find_by_id(session[:user_id])
-        
+
         if user.nil?
             raise "You are not logged in?"
         end

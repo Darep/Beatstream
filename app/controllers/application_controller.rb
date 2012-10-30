@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
             return
         end
 
-        playlist_dir = Rails.root.join('public', 'playlists', user.username)
+        playlist_dir = Rails.root.join('data', 'playlists', user.username)
 
         # Create the directory if it does not exist
         FileUtils.mkpath playlist_dir
