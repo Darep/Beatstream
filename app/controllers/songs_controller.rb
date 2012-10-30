@@ -52,7 +52,11 @@ class SongsController < ApplicationController
     def refresh(songs_as_json)
         songs = []
 
-        Find.find(MUSIC_PATH) do |file|
+        # TODO: TEST THAT Dir.glob RETURNS THE SAME SET OF SONGS AS Find.find !!111!21!112!!!#!3121
+
+        #Find.find(MUSIC_PATH) do |file|
+        Dir.chdir(MUSIC_PATH)
+        Dir.glob('**/*').each do |file|
             @invalid = false
             file = sanitize(file)
 
