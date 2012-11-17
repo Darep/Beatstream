@@ -21,6 +21,7 @@ platforms :ruby, :mingw, :mswin do
 end
 
 group :assets do
+  gem 'compass'
   gem 'sass-rails'
 
   gem 'uglifier'
