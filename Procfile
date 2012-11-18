@@ -1,2 +1,3 @@
 backend: bundle exec rails server -p $PORT
-client: compass watch public/
+compass: compass watch public/
+yalr: ./start_yalr.sh

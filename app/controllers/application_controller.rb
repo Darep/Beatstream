@@ -9,7 +9,14 @@ class ApplicationController < ActionController::Base
 
     def authorize
         unless User.find_by_id(session[:user_id])
-            redirect_to login_url
+            respond_to do |format|
+                format.html {
+                    redirect_to login_url
+                }
+                format.js {
+                    render :nothing => true, :status => 401
+                }
+            end
         end
     end
 
