@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '1.9.3'
 
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.11'
 
 gem 'ruby-mp3info'
 gem 'rockstar' #, :git => 'git://github.com/bitboxer/rockstar.git'
