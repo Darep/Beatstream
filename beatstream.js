@@ -1,3 +1,75 @@
+// beatstream.js
+// www.beatstream.fi
+
+(function () {
+
+    // hook manual toggle button
+    var theManual = document.getElementById('the-manual'),
+        theManualToggleButton = document.getElementById('the-manual-toggle');
+
+    theManualToggleButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        toggleClass(theManual, 'show');
+    });
+
+
+    // control tab clicks
+    var tabs = document.getElementById('tabs').children,
+        active_tab = tabs[0],
+        active_guide_id;
+
+    for (var i = 0; i < tabs.length; ++i) {
+        tabs[i].addEventListener('click', didClickTab);
+    }
+
+    function didClickTab(e) {
+        e.preventDefault();
+
+        var guide_id = this.getAttribute('href').substr(1),
+            active_guide_id = active_tab.getAttribute('href').substr(1);
+
+        removeClass(active_tab, 'act');
+        hideGuide(active_guide_id);
+        viewGuide(guide_id);
+
+        addClass(this, 'act');
+        active_tab = this;
+    }
+
+    function viewGuide(guide_id) {
+        var guide = document.getElementById(guide_id);
+        addClass(guide, 'show');
+    }
+
+    function hideGuide(guide_id) {
+        var guide = document.getElementById(guide_id);
+        removeClass(guide, 'show');
+    }
+
+
+    // helpers
+    function toggleClass(elem, cl) {
+        if (elem.className.indexOf(cl) != -1) {
+            elem.className = elem.className.replace(cl, '');
+        } else {
+            elem.className += ' ' + cl;
+        }
+    }
+
+    function addClass(elem, cl) {
+        if (elem.className.indexOf(cl) == -1) {
+            elem.className += ' ' + cl;
+        }
+    }
+
+    function removeClass(elem, cl) {
+        if (elem.className.indexOf(cl) != -1) {
+            elem.className = elem.className.replace(cl, '');
+        }
+    }
+}());
+
+
 //addEventListener polyfill 1.0 / Eirik Backer / MIT Licence
 (function(win, doc){
     if(win.addEventListener)return;     //No need to polyfill
@@ -27,47 +99,3 @@
         addListen(doc.all);
     }
 })(window, document);
-
-var tabs = document.getElementById('tabs').children;
-var contents = [];
-
-for (var i = tabs.length; i--;) {
-    var tab = tabs[i];
-    var id = tab.getAttribute('href').substr(1);
-
-    var content = document.getElementById(id);
-    if (content === null) continue;
-
-    contents.push(content);
-
-    tab.addEventListener('click', showTab);
-}
-
-function showTab(e, dontSetHash) {
-    if (e) {
-        e.preventDefault();
-    }
-
-    var tab = this;
-    var id = tab.getAttribute('href').substr(1);
-
-    if (!dontSetHash) {
-        window.location.hash = id;
-    }
-
-    var content = document.getElementById(id);
-
-    for (var k = tabs.length; k--;) {
-        tabs[k].setAttribute('class', '');
-    }
-
-    tab.setAttribute('class', 'act');
-
-    for (var j = contents.length; j--;) {
-        contents[j].style.display = 'none';
-    }
-    content.style.display = 'block';
-}
-
-showTab.call(tabs[0], undefined, true);
-

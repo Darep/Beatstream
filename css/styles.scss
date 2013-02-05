@@ -1,0 +1,291 @@
+@import "compass/css3";
+
+$color-bg: #191919; // #19140f; // #181615;
+$color-black: #242424;
+$color-white: #f0f0f0;
+$color-gray: darken($color-white, 60%);
+$color-text: #c6c4bd;
+$color-orange: #b66721;
+
+$baseline: 24px;
+$baseline: 1.5rem;
+$breakpoint-1: 480px;
+
+
+/* Reset */
+*{border:0;margin:0;padding:0;}
+
+
+/* Base */
+body {
+    background: $color-bg;
+    @include background-image(radial-gradient(50% 160px, 600px 300px, #313131, $color-bg));
+    color: $color-text;
+    font: 1em/1.5 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+
+    @media (max-width: $breakpoint-1) {
+        font-size: 0.875em;
+        line-height: 1.5;
+    }
+}
+
+
+/* Typographic */
+h1, h2, h3, h4, p, ul, ol, pre {
+    margin: 0 0 $baseline;
+}
+
+h1 {
+    font-size: 42/16*1em;
+    font-weight: 300;
+    line-height: $baseline*2;
+    margin-bottom: $baseline*3;
+
+    @media (max-width: $breakpoint-1) {
+        font-size: 36/16*1em;
+        line-height: 1.4;
+    }
+}
+h2 {
+    color: $color-white;
+    font-size: 24/16*1em;
+    line-height: $baseline;
+}
+
+ul, ol {
+    padding-left: 2.2em;
+}
+
+strong {
+    color: $color-white;
+    font-weight: 600;
+}
+
+a {
+    border-bottom: 1px solid $color-gray;
+    color: inherit;
+    text-decoration: none;
+    @include transition(.12s);
+
+    &:hover {
+        border-color: inherit;
+        color: $color-white;
+    }
+}
+
+code {
+    font:1em/1.3 "Ubuntu Mono",Consolas,"DejaVu Sans Mono",Monaco,"Courier New",Courier,monospace;
+}
+
+pre {
+    background: $color-gray;
+    border-radius: 3px;
+    color: $color-white;
+    overflow-x: auto;
+    padding: $baseline/2;
+}
+
+
+/* Layout */
+.wrap {
+    margin: 0 auto;
+    max-width: 580px;
+    padding: 0 15px;
+}
+
+
+/* Common */
+.center {
+    margin: 0 auto;
+    text-align: center;
+}
+
+
+/* Site Header */
+.logo {
+    border: 0;
+    display: block;
+    text-align: center;
+
+    img {
+        margin: $baseline*3 0;
+        max-width: 8.75em;
+
+        @media (max-width: $breakpoint-1) {
+            margin: $baseline*2 auto;
+        }
+    }
+}
+
+
+/* Site footer */
+footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    font-size: 0.85em;
+    margin: $baseline*2 0;
+    padding-top: $baseline*2;
+    text-align: center;
+
+    a {
+        color: $color-white;
+    }
+}
+
+
+/* Objects */
+img {
+    width: 100%;
+}
+
+.slideshow {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    a {
+        border: 0;
+    }
+}
+
+.btn {
+    @include background(linear-gradient(top, #707070, #424242));
+    @include background(linear-gradient(top, #d0852a 20%, #ae5a0f 70%, #5d2c04));
+    border: 0;
+    border-radius: 3px;
+    color: $color-white;
+    display: block;
+    font-size: 0.875em;
+    font-weight: 700;
+    height: $baseline;
+    line-height: $baseline;
+    margin: 0 auto;
+    padding: $baseline/4 14px;
+    text-decoration: none;
+    text-align: center;
+    text-shadow: 0 1px 0 #000;
+    width: 90px;
+    @include transition(.12s);
+
+    &:hover {
+        @include background(linear-gradient(top, #888888, #424242));
+    }
+}
+
+.ethereal-btn {
+    border: 0;
+    color: inherit;
+    display: block;
+    font-size: 0.875em;
+    font-weight: 600;
+    margin: -6px -12px 0;
+    padding: 6px 12px 0;
+    text-decoration: none;
+    -webkit-appearance: none;
+
+    .icon-dropdown {
+        float: right;
+        font-size: 0.75em;
+        position: relative;
+        top: 3px;
+        @include transition(.2s);
+    }
+}
+
+[class|="icon"] {
+    font-style: normal;
+}
+
+#the-manual {
+    border: 2px solid $color-gray;
+    border-radius: 3px;
+    color: darken($color-white, 50%);
+    margin-bottom: $baseline;
+    padding: 6px 12px 0;
+    @include transition(.12s);
+
+    .ethereal-btn {
+        margin-bottom: 6px;
+    }
+
+    .ins-strutz {
+        border-top: 1px solid $color-white;
+        display: none;
+        font-size: 0.875em;
+        padding-top: $baseline;
+    }
+
+    .install {
+        display: none;
+
+        &.show {
+            display: block
+        }
+    }
+
+    &:hover, &.show {
+        border-color: inherit;
+        color: inherit;
+    }
+
+    &.show {
+        .ins-strutz {
+            display: block;
+        }
+
+        .icon-dropdown {
+            @include transform(rotate(180deg));
+        }
+    }
+}
+
+#tabs a {
+    border: 0;
+    border-radius: 3px;
+    color: inherit;
+    display: inline-block;
+    font-weight: 400;
+    margin-bottom: $baseline;
+    padding: 6px 12px;
+    text-decoration: none;
+    @include transition(.12s);
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.07);
+    }
+
+    &.act {
+        background: $color-orange;
+        color: $color-bg;
+    }
+}
+
+.quirks strong {
+    color: inherit;
+}
+
+.todo {
+    .done {
+        list-style: none;
+        position: relative;
+    }
+
+    .icon-tick {
+        background: $color-text;
+        border-radius: 100%;
+        color: $color-bg;
+        font-size: 0.875em;
+        font-weight: 700;
+        height: 1em;
+        line-height: 1em;
+        margin: .35em .5em 0 0;
+        position: absolute;
+        text-align: center;
+        right: 100%;
+        width: 1em;
+    }
+}
+
+.addthis_toolbox a {
+    border: 0;
+}
