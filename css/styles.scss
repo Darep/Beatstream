@@ -286,6 +286,11 @@ img {
     }
 }
 
-.addthis_toolbox a {
-    border: 0;
+.addthis_toolbox {
+    display: inline-block;
+    margin-top: $baseline;
+
+    a {
+        border: 0;
+    }
 }
