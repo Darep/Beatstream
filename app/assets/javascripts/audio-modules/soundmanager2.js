@@ -62,7 +62,6 @@
 
             // register events
             onplay: function () {
-                console.log('play');
                 self.events.onPlay();
             },
             onresume: function () {
@@ -72,7 +71,6 @@
                 self.events.onPaused();
             },
             onfinish: function () {
-                console.log('finish');
                 self.events.onSongEnd();
             },
             onload: function (success) {
