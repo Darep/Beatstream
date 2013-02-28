@@ -1,4 +1,4 @@
-//= require soundmanager2/soundmanager2-nodebug-jsmin
+//= require soundmanager2/soundmanager2-nodebug
 /*!
  * Beatstream SoundManager2 module
  */
@@ -7,8 +7,8 @@
 
     // SoundManager 2 options
     soundManager.url = '/swf/';
-    soundManager.flashVersion = 8; // optional: shiny features (default = 8)
-    soundManager.useFlashBlock = true; // optionally, enable when you're ready to dive in
+    soundManager.flashVersion = 9;
+    soundManager.useFlashBlock = true;
     soundManager.useHTML5Audio = true;
 
     var soundManagerIsReady = false;
@@ -55,13 +55,14 @@
             this.song.destruct();
         }
         var song = soundManager.createSound('mySound', uri);
-        
+
         var self = this;
         soundManager.play('mySound', {
             volume: self.volume,
 
             // register events
             onplay: function () {
+                console.log('play');
                 self.events.onPlay();
             },
             onresume: function () {
@@ -71,6 +72,7 @@
                 self.events.onPaused();
             },
             onfinish: function () {
+                console.log('finish');
                 self.events.onSongEnd();
             },
             onload: function (success) {
@@ -88,7 +90,7 @@
 
     AudioModule.prototype.togglePause = function () {
         if (this.song === null) return;
-        
+
         this.song.togglePause();
     };
 
