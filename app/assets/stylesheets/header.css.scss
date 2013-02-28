@@ -1,10 +1,10 @@
 header {
     background:#333;
-    background: -webkit-linear-gradient(left, #242424, #424242);
-    background: -moz-linear-gradient(left, #242424, #424242);
-    background: -o-linear-gradient(left, #242424, #424242);
-    background: -ms-linear-gradient(left, #242424, #424242);
-    background:linear-gradient(left, #242424, #424242);
+    background: -webkit-linear-gradient(top, #424242, #242424);
+    background: -moz-linear-gradient(top, #424242, #242424);
+    background: -o-linear-gradient(top, #424242, #242424);
+    background: -ms-linear-gradient(top, #424242, #242424);
+    background: linear-gradient(top, #424242, #242424);
     border-top:1px solid #000;
     color:#fff;
     height:55px;
@@ -15,8 +15,10 @@ header {
     box-shadow: inset 0 1px 0 #505050;
 
     #logo {
-        font:normal 30px/55px 'PT Sans', sans-serif;
+        font:700 30px/55px 'PT Sans', sans-serif;
         float:left;
+        position: relative;
+        text-shadow:0 1px 3px #000;
     }
 }
 
@@ -28,7 +30,7 @@ header {
     a {
         color:#bbb;
         display:block;
-        
+
         &:hover *, &.act * {
             color:#fff;
             border-top-color:#fff;
@@ -91,7 +93,7 @@ header {
             position: absolute;
             z-index:2002;
         }
-    
+
     a {
         color:#222;
         display:block;
