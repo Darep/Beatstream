@@ -151,6 +151,7 @@ img {
 .btn {
     @include background(linear-gradient(top, #707070, #424242));
     @include background(linear-gradient(top, #d0852a 20%, #ae5a0f 70%, #5d2c04));
+    @include background(linear-gradient(top, rgb(240, 175, 106) 4%,rgb(241, 167, 55) 7%,rgb(163, 82, 18) 90%,rgb(117, 64, 28)));
     border: 0;
     border-radius: 3px;
     color: $color-white;
