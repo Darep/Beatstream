@@ -1,8 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '1.9.3'
-
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.12'
 
 gem 'ruby-mp3info'
 gem 'rockstar' #, :git => 'git://github.com/bitboxer/rockstar.git'
@@ -29,6 +27,13 @@ end
 
 group :development do
   gem 'quiet_assets'
+
+  # Better debugging
+  gem 'better_errors'
+  gem 'binding_of_caller'
+
+  # for RailsPanel
+  gem 'meta_request'
 end
 
 group :test do

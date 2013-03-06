@@ -1,1 +1,1 @@
-rails: bundle exec rails server -p $PORT
+rails: bundle exec rails server -b beatstream.dev -p 80
