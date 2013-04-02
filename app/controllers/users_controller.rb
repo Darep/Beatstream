@@ -1,14 +1,15 @@
 class UsersController < ApplicationController
 
-    def show
-        @user = User.find(params[:id])
-        render :layout => false
+    def profile
+        user = User.find(session[:user_id])
+
+        respond_to do |format|
+            format.json { render :json => user }
+        end
     end
 
-    def me
-        @user = User.find(session[:user_id])
-        render :layout => false
-    end
+
+    # OLD:
 
     def save
         @user = User.find(session[:user_id])

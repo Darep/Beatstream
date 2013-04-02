@@ -65,9 +65,14 @@ BeatStream::Application.routes.draw do
     end
 
     # User information
+
+    # Current user's basic information
+    # GET /profile
+    match '/profile' => 'users#profile'
+
     resources :users, :only => [:show, :update] do
       member do
-        scope "lastfm" do
+        scope 'lastfm' do
           get 'callback', :action => :lastfm_callback
           get 'disconnect', :action => :lastfm_disconnect
         end

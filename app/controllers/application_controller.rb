@@ -13,6 +13,9 @@ class ApplicationController < ActionController::Base
                 format.html {
                     redirect_to login_url
                 }
+                format.json {
+                    render :nothing => true, :status => 401
+                }
                 format.js {
                     render :nothing => true, :status => 401
                 }
