@@ -5,7 +5,7 @@ $color-black: #242424;
 $color-white: #f0f0f0;
 $color-gray: darken($color-white, 60%);
 $color-text: #c6c4bd;
-$color-orange: #b66721;
+$color-orange: #d78721;
 
 $baseline: 24px;
 $baseline: 1.5rem;
@@ -79,7 +79,7 @@ code {
 }
 
 pre {
-    background: $color-gray;
+    background: darken($color-gray, 15%);
     border-radius: 3px;
     color: $color-white;
     overflow-x: auto;
@@ -121,7 +121,6 @@ pre {
 
 /* Site footer */
 footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.16);
     font-size: 0.85em;
     margin: $baseline*2 0;
     padding-top: $baseline*2;
@@ -151,12 +150,11 @@ img {
 .btn {
     @include background(linear-gradient(top, #707070, #424242));
     @include background(linear-gradient(top, #d0852a 20%, #ae5a0f 70%, #5d2c04));
-    @include background(linear-gradient(top, rgb(240, 175, 106) 4%,rgb(241, 167, 55) 7%,rgb(163, 82, 18) 90%,rgb(117, 64, 28)));
+    @include background(linear-gradient(top, #F0AF6A 4%, #F1A737 7%, #A35212 90%, #75401C));
     border: 0;
     border-radius: 3px;
     color: $color-white;
     display: block;
-    font-size: 0.875em;
     font-weight: 700;
     height: $baseline;
     line-height: $baseline;
@@ -166,10 +164,16 @@ img {
     text-align: center;
     text-shadow: 0 1px 0 #000;
     width: 90px;
-    @include transition(.12s);
+    @include transition(120ms);
 
     &:hover {
         @include background(linear-gradient(top, #888888, #424242));
+        @include background(linear-gradient(top, #ffbc72 4%, #ffb23c 7%, #b55b14 90%, #8b4c21));
+    }
+
+    &:active {
+        position: relative;
+        top: 1px;
     }
 }
 
@@ -294,4 +298,10 @@ img {
     a {
         border: 0;
     }
+}
+
+.bookmark {
+    border: 0;
+    color: $color-gray;
+    font-weight: 400;
 }

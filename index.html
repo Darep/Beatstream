@@ -59,7 +59,7 @@
     </ul>
 
 
-    <h2>Installation</h2>
+    <h2 id="install">Installation <a href="#install" class="bookmark">#</a></h2>
 
     <p>Beatstream currently runs on Ruby on Rails and its installation is a lengthy and difficult process. We are working on making it better, but that won't happen until Beatstream itself is running better. Nevertheless, if you are a bad enough dude, here it is:</p>
 
@@ -72,16 +72,16 @@
                 <a href="#ubuntu-guide">Ubuntu/other</a>
             </div>
             <div id="windows-guide" class="install show">
-                <p>First, install <a href="http://rubyinstaller.org/downloads/">Ruby 1.8.7</a>, and remember to check the "Add Ruby executables to your PATH" checkbox while installing.</p>
-
-                <p>Second, install Bundler by running:</p>
-                <pre><code>gem install bundler</code></pre>
+                <p>Install Ruby via <a href="http://rubyinstaller.org/downloads/">RubyInstaller</a>. Remember to check the "Add Ruby executables to your PATH" checkbox while installing.</p>
 
                 <p>
-                    Third, <a href="git://github.com/Darep/Beatstream.git">clone Beatsream with Git</a> or <a href="https://github.com/Darep/Beatstream/zipball/master">Download Beatstream as a ZIP</a> and extract.
+                    After that, <a href="git://github.com/Darep/Beatstream.git">clone Beatsream with Git</a> or <a href="https://github.com/Darep/Beatstream/zipball/master">Download Beatstream as a ZIP</a> and extract.
                 </p>
 
-                <p>Four. Set-up Beatstream by doing this stuff in command prompt (cmd):</p>
+                <p>Then install Bundler:</p>
+                <pre><code>gem install bundler</code></pre>
+
+                <p>Set-up Beatstream by doing this stuff in command prompt (cmd):</p>
                 <pre><code>cd Beatstream
 bundle install
 rake db:migrate
@@ -93,16 +93,16 @@ bundle exec rails console
 bundle exec rails server -d</code></pre>
             </div><!-- #windows -->
             <div id="mac-guide" class="install">
-                <p>First, you need to have Ruby 1.8.7, RubyGems and sqlite3 development headers installed. All of these can be installed by installing Xcode and the command-line tools.</p>
-
-                <p>Second, install Bundler by running:</p>
-                <pre><code>$ sudo gem install bundler</code></pre>
+                <p>First, you need to have Ruby at least 1.8.7, RubyGems and sqlite3 development headers installed. All of these can be installed by installing Xcode and the command-line tools.</p>
 
                 <p>
-                    Third, <a href="git://github.com/Darep/Beatstream.git">clone Beatsream with Git</a> or <a href="https://github.com/Darep/Beatstream/zipball/master">Download Beatstream as a ZIP</a> and extract.
+                    When you're set, <a href="git://github.com/Darep/Beatstream.git">clone Beatsream with Git</a> or <a href="https://github.com/Darep/Beatstream/zipball/master">Download Beatstream as a ZIP</a> and extract.
                 </p>
 
-                <p>Four. Set-up Beatstream by doing this stuff in terminal:</p>
+                <p>Then install Bundler:</p>
+                <pre><code>$ sudo gem install bundler</code></pre>
+
+                <p>Set-up Beatstream by doing this stuff in terminal:</p>
                 <pre><code>$ cd Beatstream
 $ bundle install
 $ rake db:migrate
@@ -114,13 +114,13 @@ $ bundle exec rails console
 $ bundle exec rails server -d</code></pre>
             </div><!-- #mac -->
             <div id="ubuntu-guide" class="install">
-                <p>First, install Ruby 1.8.7, RubyGems, libsqlite3-dev and Bundler:</p>
+                <p>Install Ruby 1.8.7 or newer, RubyGems, libsqlite3-dev and Bundler:</p>
                 <pre><code>$ sudo apt-get install ruby1.8-full rubygems libsqlite3-dev
 $ sudo gem install bundler</code></pre>
 
-                <p>Second, <a href="git://github.com/Darep/Beatstream.git">clone Beatsream with Git</a> or <a href="https://github.com/Darep/Beatstream/zipball/master">Download Beatstream as a ZIP</a> and extract.</p>
+                <p>When you're set, <a href="git://github.com/Darep/Beatstream.git">clone Beatsream with Git</a> or <a href="https://github.com/Darep/Beatstream/zipball/master">Download Beatstream as a ZIP</a> and extract.</p>
 
-                <p>Third, set-up Beatstream by doing this stuff in terminal:</p>
+                <p>Set-up Beatstream by doing this stuff in terminal:</p>
                 <pre><code>$ cd Beatstream
 $ bundle install
 $ rake db:migrate
@@ -137,7 +137,7 @@ $ bundle exec rails server -d</code></pre>
     </div><!-- #the-manual -->
 
 
-    <h2>Current quirks</h2>
+    <h2 id="quirks">Current quirks <a href="#quirks" class="bookmark">#</a></h2>
 
     <ul class="quirks">
         <li>
