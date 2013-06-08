@@ -15,6 +15,7 @@
 /tmp/*
 
 # Ignore app generated files
+/data/*
 /public/songs.json
 /public/playlists/*
 

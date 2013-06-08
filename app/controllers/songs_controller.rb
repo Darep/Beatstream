@@ -2,9 +2,9 @@
 require 'find'
 require 'logger'
 
-MUSIC_PATH = Rails.application.config.music_paths['music_path']
+MUSIC_PATH = Rails.application.config.music_paths
 
-SONGS_JSON_FILE = Rails.root.join('public/songs.json')
+SONGS_JSON_FILE = Rails.root.join('data/songs.json')
 
 class SongsController < ApplicationController
 
@@ -133,7 +133,7 @@ class Mp3File
         @album = tag['album']
         @tracknum = tag['tracknum']
         @length = info.length
-        
+
         @nice_title = ''
         @nice_title += (@artist.to_s + ' - ') if !@artist.nil?
         @nice_title += @title.to_s
@@ -160,7 +160,7 @@ class Mp3File
         # dumb ass way to achieve natural sorting
         if !tracknum.nil?
             track = tracknum.to_s
-            
+
             if tracknum < 100
                 track = "0" + track
             end
