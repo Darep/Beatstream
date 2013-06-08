@@ -15,9 +15,14 @@
 /tmp/*
 
 # Ignore app generated files
-/data/*
-#/public/songs.json
-#/public/playlists/*
+/data/songs.json
+/data/playlists/
+
+# Ignore personalized configs
+/config/initializers/music_paths.rb
+
+# Ignore pow / powder
+.powder
 
 # Default ignores from github
 *.rbc
@@ -26,6 +31,7 @@
 capybara-*.html
 .rspec
 /vendor/bundle
+/public/system/*
 /coverage/
 /spec/tmp/*
 **.orig

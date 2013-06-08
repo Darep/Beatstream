@@ -5,7 +5,9 @@
 
     <%= form_for @user, :url => { :action => 'save' }, :method => 'post' do |f| %>
 
-        <%= f.error_messages %>
+        <% @user.errors.full_messages.each do |msg| %>
+            <p><%= msg %></p>
+        <% end %>
 
         <fieldset>
             <%= f.label :username %>

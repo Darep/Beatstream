@@ -2,7 +2,7 @@
 require 'find'
 require 'logger'
 
-MUSIC_PATH = Rails.application.config.music_paths['music_path']
+MUSIC_PATH = Rails.application.config.music_paths
 
 SONGS_JSON_FILE = Rails.root.join('data/songs.json')
 
