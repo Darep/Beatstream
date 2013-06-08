@@ -2,26 +2,39 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.12'
 
+# ID3 info parser
 gem 'mp3info'
 gem 'rtaglib'
-gem 'rockstar' #, :git => 'git://github.com/bitboxer/rockstar.git'
+
+# Last.fm
+gem 'rockstar'
 
 platforms :jruby do
-  gem 'therubyrhino'
-  gem 'activerecord-jdbcsqlite3-adapter', :require => 'jdbc-sqlite3', :require =>'arjdbc'
+  gem 'activerecord-jdbcsqlite3-adapter'
+
+  # Tomcat-based server
   gem 'trinidad'
 end
 
 platforms :ruby, :mingw, :mswin do
-  gem 'therubyracer'
   gem 'sqlite3'
+
+  # Event-machine -based server
   gem 'thin'
 end
 
 group :assets do
   gem 'jquery-rails', '2.0.2'
+
+  # Use Sass
   gem 'sass-rails'
+
+  # Minify & compact JS
   gem 'uglifier'
+
+  # Execute JS in Ruby
+  gem 'therubyrhino', :platform => :jruby
+  gem 'therubyracer', :platform => :ruby
 end
 
 group :development do
