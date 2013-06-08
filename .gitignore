@@ -17,11 +17,12 @@
 # Ignore app generated files
 /data/songs.json
 /data/playlists/
-/public/songs.json
-/public/playlists/*
 
 # Ignore personalized configs
 /config/initializers/music_paths.rb
+
+# Ignore pow / powder
+.powder
 
 # Default ignores from github
 *.rbc
