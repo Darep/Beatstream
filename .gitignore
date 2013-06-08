@@ -19,6 +19,9 @@
 /public/songs.json
 /public/playlists/*
 
+# Ignore personalized configs
+/config/initializers/music_paths.rb
+
 # Default ignores from github
 *.rbc
 *.sassc
