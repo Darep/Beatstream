@@ -1,37 +1,34 @@
-# Beatstream #
+# Beatstream
 
-Beatstream is an app for streaming music from your computer to anywhere with a modern Web browser!  
+Beatstream is an app for streaming music from your computer to anywhere with a modern Web browser!
 (Beatstream currently requires Ruby to be installed on your computer)
 
 ![Screenshot](http://i.imgur.com/oRGwu.png)
 
 ### Installation
 
-    $ git clone git://github.com/Darep/Beatstream.git
+    $ git clone --recursive git://github.com/Darep/Beatstream.git
     $ cd Beatstream
-    $ bundle install
+    $ bundle
     $ rake db:migrate
-    $ nano config/musicpaths.yml
+    $ cp config/initializers/music_paths.rb.sample config/initializers/music_paths.rb
+    $ nano config/initializers/music_paths.rb
     -> Change 'music_path'
     $ rails console
     -> User.create(:username => 'you', :email => 'you@where.ever', :password => 'secret', :password_confirmation => 'secret')
     -> exit
-    $ rails server -d 
-    
+    $ rails server -d
+
 Open Chrome and surf to http://0.0.0.0:3000 address. Log in and wait when indexing ends, refresh page and happy listening!
 
 
 ### Known issues
 
-**Endlessly spinning loader**  
-Flash block! If you have flash block installed, you need to allow flash on Beatstream.
-
-**bundle: command not found**  
-Install bundler by typing in `gem install bundler`
+Check [http://www.beatstream.fi/#quirks](http://www.beatstream.fi/#quirks) for the most up-to-date list of issues and quirks.
 
 ### License
 
-Copyright (c) 2012 Antti-Jussi Kovalainen
+Copyright (c) 2012-2013 Antti-Jussi Kovalainen
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
