@@ -4,7 +4,7 @@ class Song
   MUSIC_PATH = Rails.application.config.music_paths
   SONGS_JSON_FILE = Rails.root.join('data/songs.json')
 
-  attr_reader :id, :filename, :path, :artist, :title, :album, :tracknum, :length
+  attr_reader :id, :filename, :path, :artist, :title, :album, :tracknum, :length, :year
 
   def initialize(path, id)
     #file = File.new(path)
@@ -19,15 +19,17 @@ class Song
     @album = ''
     @tracknum = nil
     @length = 0
+    @year = nil
 
     # ID3 tag info
-    Mp3Info.open(path) do |info|
-      tag = info.tag
+    Mp3Info.open(path) do |file|
+      tag = file.tag
       @title = tag['title'] if (!tag['title'].nil?)
       @artist = tag['artist'] if (!tag['title'].nil?)
       @album = tag['album']
       @tracknum = tag['tracknum']
-      @length = info.length
+      @year = tag['year']
+      @length = file.length
     end
 
     @nice_title = ''
