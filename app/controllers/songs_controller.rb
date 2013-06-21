@@ -36,4 +36,5 @@ class SongsController < ApplicationController
     Song.refresh
     render :json => Song.all
   end
+
 end
