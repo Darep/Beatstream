@@ -1,5 +1,7 @@
 # Beatstream
 
+**IMPORTANT:** I am currently re-writing the front-end and the rails back-end, so the _most_ up-to-date version is here: <https://github.com/Darep/Beatstream/tree/dev>
+
 Beatstream is an app for streaming music from your computer to anywhere with a modern Web browser!
 (Beatstream currently requires Ruby to be installed on your computer)
 
