@@ -115,6 +115,11 @@ class Song
     Rails.logger.info 'Done!'
   end
 
+  def self.find(id)
+    # TODO: this is really slow, but it was very quick to implement! ;)
+    self.read_all.find { |s| s['id'].to_i == id.to_i }
+  end
+
   def self.all
     begin
       self.read_all
@@ -128,18 +133,19 @@ class Song
   def self.read_all
     f = File.open(SONGS_JSON_FILE, 'r')
     Rails.logger.info 'Songs JSON last refreshed on ' + f.mtime.to_s
-    f.read
+    JSON.parse(f.read)
   end
 
   def self.find_by_path(path)
     Song.new(path, -1)
   end
 
-  def self.get_path(filepath)
-    MUSIC_PATH + filepath
+  def self.MUSIC_PATH
+    MUSIC_PATH
   end
 
   private
+
     def self.sanitize(str)
       str.each_char.map do |char|
         begin
@@ -150,4 +156,5 @@ class Song
         end
       end.join
     end
+
 end
