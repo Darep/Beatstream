@@ -1,6 +1,6 @@
 BeatStream::Application.routes.draw do
 
-  scope "/api/v1", format: false do
+  scope "/api/v1", format: 'json' do
     controller :scrobbling do
       put 'now-playing' => :now_playing
       post 'scrobble' => :scrobble
