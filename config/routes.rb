@@ -6,8 +6,14 @@ BeatStream::Application.routes.draw do
       post 'scrobble' => :scrobble
     end
 
-    resources :songs, :only => [:index, :create] do
-      get 'play'
+    resources :songs, :only => [:index, :create, :show, :update] do
+      collection do
+        post 'refresh' => :refresh
+      end
+
+      member do
+        get 'play'
+      end
     end
 
     # resources :playlists, :only => [:index, :create, :update, :destroy, :show]
