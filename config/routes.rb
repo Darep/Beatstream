@@ -18,6 +18,8 @@ BeatStream::Application.routes.draw do
 
     # resources :playlists, :only => [:index, :create, :update, :destroy, :show]
 
+    get '/profile' => 'users#profile'
+
     resources :users, :only => [:show, :update] do
       member do
         scope 'lastfm' do
