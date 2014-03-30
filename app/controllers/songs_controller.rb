@@ -46,7 +46,7 @@ class SongsController < ApplicationController
   def refresh
     # refresh the song list and return new list of songs
     Song.refresh
-    render 'index'
+    redirect_to action: :index
   end
 
 end
