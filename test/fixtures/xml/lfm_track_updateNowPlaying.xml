@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<lfm status="ok">
+  <nowplaying>
+    <track corrected="0">Silence</track>
+    <artist corrected="0">30 second silence</artist>
+    <album corrected="0"></album>
+    <albumArtist corrected="0"></albumArtist>
+    <ignoredMessage code="0"></ignoredMessage>
+  </nowplaying>
+</lfm>

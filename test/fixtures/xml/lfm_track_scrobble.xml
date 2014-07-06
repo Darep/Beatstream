@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<lfm status="ok">
+  <scrobbles accepted="1" ignored="0">
+    <scrobble>
+      <track corrected="0">Silence</track>
+      <artist corrected="0">30 second silence</artist>
+      <album corrected="0"></album>
+      <albumArtist corrected="0"></albumArtist>
+      <timestamp>1287140447</timestamp>
+      <ignoredMessage code="0"></ignoredMessage>
+    </scrobble>
+  </scrobbles>
+</lfm>

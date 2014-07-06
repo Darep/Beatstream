@@ -41,5 +41,9 @@ group :development do
 end
 
 group :test do
+  # Mock the filesystem
   gem 'fakefs', :require => 'fakefs/safe'
+
+  # Mock web requests
+  gem 'webmock'
 end

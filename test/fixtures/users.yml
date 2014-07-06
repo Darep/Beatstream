@@ -1,9 +1,10 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
+claire:
   username: Claire
   email: claire@example.com
 
-two:
+jack:
   username: Jack
   email: jack@example.com
+  lastfm_session_key: '1234567890abcdefghijklmn'

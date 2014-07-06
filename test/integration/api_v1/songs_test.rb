@@ -5,8 +5,20 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
   setup do
     FakeFS.deactivate!
 
-    @one = File.open(Rails.root.join('test', 'fixtures', 'files', '1sec.mp3')).read
-    @thirty = File.open(Rails.root.join('test', 'fixtures', 'files', '30sec.mp3')).read
+    @user = users(:jack)
+
+    fixtures_dir = Rails.root.join('test', 'fixtures')
+
+    # Mock last.fm requests
+    stub_request(:post, /https?:\/\/ws\.audioscrobbler\.com\/.*method=track\.updateNowPlaying.*/).
+      to_return(:status => 200, :headers => {}, :body => File.new(File.join(fixtures_dir, 'xml/lfm_track_updateNowPlaying.xml')))
+
+    stub_request(:post, /https?:\/\/ws\.audioscrobbler\.com\/.*method=track\.scrobble.*/).
+      to_return(:status => 200, :headers => {}, :body => File.new(File.join(fixtures_dir, 'xml/lfm_track_scrobble.xml')))
+
+    # Sample MP3 files
+    @one = File.open(File.join(fixtures_dir, 'files', '1sec.mp3')).read
+    @thirty = File.open(File.join(fixtures_dir, 'files', '30sec.mp3')).read
 
     # Mock the filesystem
     FakeFS.activate!
@@ -54,5 +66,17 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     # assert
     get_json '/songs/play?file=test_dir/1s.mp3'
     assert_equal @response.body, @one.force_encoding('ASCII-8BIT')
+  end
+
+  test 'should send now_playing info to last.fm at /songs/now_playing' do
+    session[:user_id] = @user.id
+    get '/songs/now_playing?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
+    assert_response :success
+  end
+
+  test 'should send scrobble to last.fm at /songs/scrobble' do
+    session[:user_id] = @user.id
+    get '/songs/scrobble?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
+    assert_response :success
   end
 end
