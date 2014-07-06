@@ -1,4 +1,4 @@
-MUSIC_PATH = Rails.application.config.music_paths
+MUSIC_PATH = Rails.application.config.music_paths unless defined?(MUSIC_PATH)
 
 class Song
   attr_reader :id, :filename, :path, :artist, :title, :album, :tracknum, :length
