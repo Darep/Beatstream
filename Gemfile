@@ -3,20 +3,20 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.19'
 
 # ID3 info parser
-gem 'mp3info'
+gem 'mp3info', '0.6.18'
 
 # Last.fm
-gem 'rockstar'
+gem 'rockstar', '0.7.1'
 
 platforms :jruby do
-  gem 'activerecord-jdbcsqlite3-adapter'
+  gem 'activerecord-jdbcsqlite3-adapter', '1.2.9'
 
   # Tomcat-based server
   gem 'trinidad', '1.4.6'
 end
 
 platforms :ruby, :mingw, :mswin do
-  gem 'sqlite3'
+  gem 'sqlite3', '1.3.7'
 
   # Event-machine -based server
   gem 'thin', '1.6.2'
@@ -26,14 +26,14 @@ group :assets do
   gem 'jquery-rails', '2.0.2'
 
   # Use Sass
-  gem 'sass-rails'
+  gem 'sass-rails', '3.2.6'
 
   # Minify & compact JS
-  gem 'uglifier'
+  gem 'uglifier', '2.1.1'
 
   # Execute JS in Ruby
-  gem 'therubyrhino', :platform => :jruby
-  gem 'therubyracer', :platform => :ruby
+  gem 'therubyrhino', '2.0.2', :platform => :jruby
+  gem 'therubyracer', '0.11.4', :platform => :ruby
 end
 
 group :development do

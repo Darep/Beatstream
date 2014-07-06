@@ -137,16 +137,16 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
-  activerecord-jdbcsqlite3-adapter
+  activerecord-jdbcsqlite3-adapter (= 1.2.9)
   jquery-rails (= 2.0.2)
-  mp3info
+  mp3info (= 0.6.18)
   quiet_assets
   rails (= 3.2.19)
-  rockstar
-  sass-rails
-  sqlite3
-  therubyracer
-  therubyrhino
+  rockstar (= 0.7.1)
+  sass-rails (= 3.2.6)
+  sqlite3 (= 1.3.7)
+  therubyracer (= 0.11.4)
+  therubyrhino (= 2.0.2)
   thin (= 1.6.2)
   trinidad (= 1.4.6)
-  uglifier
+  uglifier (= 2.1.1)
