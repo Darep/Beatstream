@@ -40,6 +40,7 @@ GEM
     eventmachine (1.0.3-x86-mingw32)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    fakefs (0.5.2)
     hike (1.2.3)
     hpricot (0.8.6)
     hpricot (0.8.6-java)
@@ -138,6 +139,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-jdbcsqlite3-adapter (= 1.2.9)
+  fakefs
   jquery-rails (= 2.0.2)
   mp3info (= 0.6.18)
   quiet_assets
