@@ -1,4 +1,4 @@
-BeatStream::Application.routes.draw do
+Beatstream::Application.routes.draw do
 
   match 'settings' => 'settings#index'
   match 'settings/save' => 'settings#save'

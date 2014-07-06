@@ -6,4 +6,4 @@ require File.expand_path('../config/application', __FILE__)
 
 require 'rake/dsl_definition'
 
-BeatStream::Application.load_tasks
+Beatstream::Application.load_tasks
