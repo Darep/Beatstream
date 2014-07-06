@@ -5,13 +5,6 @@ Beatstream::Application.routes.draw do
   match 'settings/lastfm_callback' => 'settings#lastfm_callback'
   match 'settings/lastfm_disconnect' => 'settings#lastfm_disconnect'
 
-  controller :sessions do
-    get 'login' => :new
-    post 'login' => :create
-    delete 'logout' => :destroy
-    get 'logout' => :destroy
-  end
-
   match 'songs' => 'songs#index'
   get 'songs/index'
   get 'songs/play'
@@ -21,7 +14,13 @@ Beatstream::Application.routes.draw do
   match 'playlists' => 'playlists#index'
   get 'playlists/new'
 
-  #match '/' => 'main#index'
+  controller :sessions do
+    get 'login' => :new
+    post 'login' => :create
+    delete 'logout' => :destroy
+    get 'logout' => :destroy
+  end
+
   root :to => 'main#index'
 
 end
