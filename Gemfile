@@ -13,14 +13,14 @@ platforms :jruby do
   gem 'activerecord-jdbcsqlite3-adapter'
 
   # Tomcat-based server
-  gem 'trinidad'
+  gem 'trinidad', '1.4.6'
 end
 
 platforms :ruby, :mingw, :mswin do
   gem 'sqlite3'
 
   # Event-machine -based server
-  gem 'thin'
+  gem 'thin', '1.6.2'
 end
 
 group :assets do
