@@ -95,7 +95,6 @@ GEM
       hpricot (>= 0.4.86)
       i18n
       rake
-    rtaglib (0.3.0)
     sass (3.2.9)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -144,7 +143,6 @@ DEPENDENCIES
   quiet_assets
   rails (= 3.2.19)
   rockstar
-  rtaglib
   sass-rails
   sqlite3
   therubyracer

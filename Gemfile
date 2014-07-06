@@ -4,7 +4,6 @@ gem 'rails', '3.2.19'
 
 # ID3 info parser
 gem 'mp3info'
-gem 'rtaglib'
 
 # Last.fm
 gem 'rockstar'
