@@ -1,6 +1,17 @@
 Changelog
 =========
 
+## 1.0.2
+
+### Major changes
+
+- None
+
+### Minor changes
+
+- Renamed app from BeatStream to Beatstream
+
+
 ## 1.0.1
 
 ### Major changes
