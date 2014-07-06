@@ -4,7 +4,7 @@ require 'logger'
 
 MUSIC_PATH = Rails.application.config.music_paths
 
-SONGS_JSON_FILE = Rails.root.join('data/songs.json')
+SONGS_JSON_FILE = Rails.root.join('data/songs.json').to_s
 
 class SongsController < ApplicationController
 
