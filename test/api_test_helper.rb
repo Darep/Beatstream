@@ -1,6 +1,6 @@
 # API test helpers
 def get_json(url)
-  get url, format: :json
+  get url, :format => :json
 end
 
 def post_json(url, data)
@@ -12,7 +12,7 @@ def put_json(url, data)
 end
 
 def delete_json(url)
-  delete url, format: :json
+  delete url, :format => :json
 end
 
 def post_multipart(url, data)
