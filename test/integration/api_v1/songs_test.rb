@@ -23,6 +23,10 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     # Mock the filesystem
     FakeFS.activate!
 
+    # Clean the mocks
+    File.delete(Rails.root.join('data/songs.json').to_s) if File.exists?(Rails.root.join('data/songs.json'))
+    FileUtils.rm_rf(Rails.application.config.music_paths) if Dir.exists?(Rails.application.config.music_paths)
+
     # Mock the directories required by songs controller
     FileUtils.mkdir_p(Rails.application.config.music_paths)
     FileUtils.mkdir_p(Rails.root.join('data'))
@@ -40,6 +44,8 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     @songs_json = "[{\"filename\":\"1sec.mp3\",\"path\":\"1sec.mp3\",\"id\":0,\"title\":\"1sec silence\",\"artist\":\"Sample\",\"album\":\"Silence is golden\",\"tracknum\":1,\"length\":1.071,\"nice_title\":\"Sample - 1sec silence\",\"nice_length\":\"00:01\"},{\"filename\":\"30sec.mp3\",\"path\":\"30sec.mp3\",\"id\":1,\"title\":\"30sec silence\",\"artist\":\"Sample\",\"album\":\"Silence is golden\",\"tracknum\":30,\"length\":30.066833333333335,\"nice_title\":\"Sample - 30sec silence\",\"nice_length\":\"00:30\"}]"
   end
 
+# /songs
+
   test 'should return all songs from /songs' do
     get_json '/songs'
     assert_equal @songs_json, @response.body
@@ -49,6 +55,53 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     get_json '/songs/index'
     assert_equal @songs_json, @response.body
   end
+
+# songs.json
+
+  test 'should create all songs index if it\'s missing' do
+    new_song = File.open(File.join(Rails.application.config.music_paths, 'new_song.mp3'), 'wb')
+    new_song.write(@one)
+
+    # Populate the songs.json file
+    File.delete Rails.root.join('data/songs.json')
+    get_json '/songs'
+
+    # Get the new list of songs
+    get_json '/songs'
+
+    match = false
+    json_response.each do |i|
+      if i['path'] == 'new_song.mp3'
+        match = true
+        return
+      end
+    end
+
+    assert match, 'new_song not found in JSON response'
+  end
+
+  test 'should refresh songs index when ?refresh is present' do
+    new_song = File.open(File.join(Rails.application.config.music_paths, 'new_song.mp3'), 'wb')
+    new_song.write(@one)
+
+    # Trigger the refresh
+    get_json '/songs?refresh=true'
+
+    # Ask for the index again
+    get_json '/songs'
+
+    match = false
+    json_response.each do |i|
+      if i['path'] == 'new_song.mp3'
+        match = true
+        return
+      end
+    end
+
+    assert match, 'new_song not found in JSON response'
+  end
+
+# /songs/play
 
   test 'should play song from /songs/play?file=1sec.mp3' do
     get_json '/songs/play?file=1sec.mp3'
@@ -67,6 +120,8 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     get_json '/songs/play?file=test_dir/1s.mp3'
     assert_equal @response.body, @one.force_encoding('ASCII-8BIT')
   end
+
+# scrobbling
 
   test 'should send now_playing info to last.fm at /songs/now_playing' do
     session[:user_id] = @user.id
