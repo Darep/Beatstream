@@ -1,7 +1,12 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
-require 'webmock/minitest'
+
+if RUBY_VERSION.starts_with? '1.8'
+  require 'webmock/test_unit'
+else
+  require 'webmock/minitest'
+end
 
 WebMock.disable_net_connect! :allow_localhost => true
 
