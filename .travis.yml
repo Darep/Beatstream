@@ -4,7 +4,7 @@ rvm:
   - 1.9.2
   - 1.8.7
 before_script:
-  - sed "s/'\/Users\/ajk\/Music\/'/Rails.root.join('data')/" config/initializers/music_paths.rb.sample > config/initializers/music_paths.rb
+  - cp config/initializers/music_paths.rb.sample config/initializers/music_paths.rb
 script:
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - RAILS_ENV=test bundle exec rake test
