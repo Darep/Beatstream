@@ -20,7 +20,7 @@ module ApiV1
       render :json => {
         :code => 404,
         :errors => [message || "Couldn't find #{class_name} with id=#{params[:id]}"]
-      }, :status => not_found
+      }, :status => :not_found
     end
 
     def set_default_render_format
