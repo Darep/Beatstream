@@ -46,4 +46,14 @@ class ApiV1::ScrobblesTest < ActionDispatch::IntegrationTest
     get '/songs/scrobble?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
     assert_response 422
   end
+
+  test 'should return error if artist is missing' do
+    get '/songs/scrobble?title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
+    assert_response 422
+  end
+
+  test 'should return error if title is missing' do
+    get '/songs/scrobble?artist=Silence', { :format => 'json' }, 'rack.session' => session
+    assert_response 422
+  end
 end

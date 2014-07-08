@@ -2,6 +2,7 @@ module ApiV1
   class ScrobblesController < ApiController
     before_filter :expires_now
     before_filter :check_lastfm_session_key
+    before_filter :check_and_set_artist_and_title
 
     def now_playing
       artist = params[:artist]
@@ -32,6 +33,11 @@ module ApiV1
       def check_and_set_artist_and_title
         @artist = params[:artist]
         @title = params[:title]
+
+        errors = []
+        errors << 'Required parameter "artist" is missing' if @artist.blank?
+        errors << 'Required parameter "title" is missing' if @title.blank?
+        render_errors errors if errors.any?
       end
 
       def track
