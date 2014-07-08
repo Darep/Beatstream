@@ -55,11 +55,13 @@ def mock_mp3s
 
   FakeFS do
     # Create a few mock MP3 files
-    one_mock = File.open(File.join(Song.MUSIC_PATH, '1sec.mp3'), 'wb')
-    one_mock.write(@one)
+    @one_path = File.join(Song.MUSIC_PATH, '1sec.mp3').to_s
+    @one_mock = File.open(@one_path, 'wb')
+    @one_mock.write(@one)
 
-    thirty_mock = File.open(File.join(Song.MUSIC_PATH, '30sec.mp3'), 'wb')
-    thirty_mock.write(@thirty)
+    @thirty_path = File.join(Song.MUSIC_PATH, '30sec.mp3')
+    @thirty_mock = File.open(@thirty_path, 'wb')
+    @thirty_mock.write(@thirty)
   end
 
   FakeFS.activate! if was_active

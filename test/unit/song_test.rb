@@ -41,6 +41,11 @@ class SongTest < ActiveSupport::TestCase
     end
   end
 
+  test 'initialize parses ID3 info' do
+    song = Song.new(@one_path, 1)
+    assert_equal '1sec silence', song.title
+  end
+
   test 'refresh populates the Songs' do
     Song.refresh
     assert_not_empty Song.all_as_json
