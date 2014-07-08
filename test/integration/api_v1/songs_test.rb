@@ -7,14 +7,6 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:jack)
 
-    # Mock last.fm requests
-    fixtures_dir = Rails.root.join('test', 'fixtures')
-    stub_request(:post, /https?:\/\/ws\.audioscrobbler\.com\/.*method=track\.updateNowPlaying.*/).
-      to_return(:status => 200, :headers => {}, :body => File.new(File.join(fixtures_dir, 'xml/lfm_track_updateNowPlaying.xml')))
-
-    stub_request(:post, /https?:\/\/ws\.audioscrobbler\.com\/.*method=track\.scrobble.*/).
-      to_return(:status => 200, :headers => {}, :body => File.new(File.join(fixtures_dir, 'xml/lfm_track_scrobble.xml')))
-
     mock_mp3s
     FakeFS.activate!
 
