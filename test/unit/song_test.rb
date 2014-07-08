@@ -46,6 +46,13 @@ class SongTest < ActiveSupport::TestCase
     assert_equal '1sec silence', song.title
   end
 
+  test 'initialize uses filename if ID3 does not contain title' do
+    FakeFS.deactivate!
+    id3less = File.join(@fixtures_files_dir, 'id3less.mp3')
+    song = Song.new(id3less, 1)
+    assert_equal 'id3less.mp3', song.title
+  end
+
   test 'refresh populates the Songs' do
     Song.refresh
     assert_not_empty Song.all_as_json

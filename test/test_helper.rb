@@ -48,6 +48,7 @@ def mock_mp3s
   FakeFS.deactivate! if was_active
 
   # Read the sample MP3 files into memory
+  @fixtures_files_dir = Rails.root.join('test', 'fixtures', 'files')
   @one = File.open(Rails.root.join('test', 'fixtures', 'files', '1sec.mp3').to_s).read
   @thirty = File.open(Rails.root.join('test', 'fixtures', 'files', '30sec.mp3').to_s).read
 
