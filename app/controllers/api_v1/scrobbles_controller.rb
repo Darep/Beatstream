@@ -7,11 +7,8 @@ module ApiV1
       artist = params[:artist]
       title = params[:title]
 
-      if user != nil && user.lastfm_session_key != nil
-        Rails.logger.info 'Update Now Playing to "' + artist + ' - ' + title + '" for user ' + user.username
-
-        track.updateNowPlaying(Time.now, user.lastfm_session_key)
-      end
+      Rails.logger.info 'Update Now Playing to "' + artist + ' - ' + title + '" for user ' + user.username
+      track.updateNowPlaying(Time.now, user.lastfm_session_key)
 
       render :nothing => true
     end
@@ -20,11 +17,8 @@ module ApiV1
       artist = params[:artist]
       title = params[:title]
 
-      if user != nil && user.lastfm_session_key != nil
-        Rails.logger.info 'Scrobbling track "' + artist + ' - ' + title + '" for user ' + user.username
-
-        track.scrobble(Time.now, user.lastfm_session_key)
-      end
+      Rails.logger.info 'Scrobbling track "' + artist + ' - ' + title + '" for user ' + user.username
+      track.scrobble(Time.now, user.lastfm_session_key)
 
       render :nothing => true
     end
@@ -33,6 +27,11 @@ module ApiV1
 
       def check_lastfm_session_key
         render_error "User with id=#{params[:id]} is not connected to Last.fm" if user.lastfm_session_key.blank?
+      end
+
+      def check_and_set_artist_and_title
+        @artist = params[:artist]
+        @title = params[:title]
       end
 
       def track
