@@ -21,9 +21,12 @@ class ActiveSupport::TestCase
 end
 
 def mock_mp3s
+  was_active = FakeFS.activated?
+  FakeFS.deactivate! if was_active
+
   # Sample MP3 files
-  @one = File.open(Rails.root.join('test', 'fixtures', 'files', '1sec.mp3')).read
-  @thirty = File.open(Rails.root.join('test', 'fixtures', 'files', '30sec.mp3')).read
+  @one = File.open(Rails.root.join('test', 'fixtures', 'files', '1sec.mp3').to_s).read
+  @thirty = File.open(Rails.root.join('test', 'fixtures', 'files', '30sec.mp3').to_s).read
 
   FakeFS do
     # Clean the mocks
@@ -41,4 +44,6 @@ def mock_mp3s
     thirty_mock = File.open(File.join(Song.MUSIC_PATH, '30sec.mp3'), 'wb')
     thirty_mock.write(@thirty)
   end
+
+  FakeFS.activate! if was_active
 end
