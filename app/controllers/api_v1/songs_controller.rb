@@ -77,29 +77,8 @@ module ApiV1
     private
 
       def refresh(songs_as_json)
-        songs = []
-
-        Find.find(Song.MUSIC_PATH) do |file|
-          if File.directory?(file) || file !~ /.*\.mp3$/i || file =~ /^\./
-            #Rails.logger.info 'Skipping file: ' + file
-            next
-          end
-
-          begin
-            mp3 = Song.new(file, songs.length)
-            songs.push(mp3)
-          rescue Exception => e
-            Rails.logger.info e
-            Rails.logger.info 'Failed to load MP3: ' + file
-            # TODO: collect the broken mp3s into a separate array
-            # TODO: count the broken mp3s
-          end
-        end
-
-        songs = songs.sort_by { |song| song.to_natural_sort_string }
-
-        songs_as_json = songs.to_json
-        File.open(Song.SONGS_JSON_FILE, 'w') { |f| f.write(songs_as_json) }
+        Song.refresh
+        songs_as_json = Song.all_as_json
       end
 
   end
