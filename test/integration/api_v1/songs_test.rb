@@ -70,12 +70,7 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     get_json '/songs'
 
     match = false
-    json_response.each do |i|
-      if i['path'] == 'new_song.mp3'
-        match = true
-        return
-      end
-    end
+    json_response.each { |i| match ||= (i['path'] == 'new_song.mp3') }
 
     assert match, 'new_song not found in JSON response'
   end
@@ -91,12 +86,7 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     get_json '/songs'
 
     match = false
-    json_response.each do |i|
-      if i['path'] == 'new_song.mp3'
-        match = true
-        return
-      end
-    end
+    json_response.each { |i| match ||= (i['path'] == 'new_song.mp3') }
 
     assert match, 'new_song not found in JSON response'
   end
