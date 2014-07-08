@@ -15,9 +15,7 @@ module ApiV1
         track.updateNowPlaying(Time.now, @user.lastfm_session_key)
       end
 
-      respond_to do |format|
-        format.json { render :nothing => true }
-      end
+      render :nothing => true
     end
 
     def scrobble
@@ -33,9 +31,7 @@ module ApiV1
         track.scrobble(Time.now, @user.lastfm_session_key)
       end
 
-      respond_to do |format|
-        format.json { render :nothing => true }
-      end
+      render :nothing => true
     end
 
   end
