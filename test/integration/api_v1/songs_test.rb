@@ -98,18 +98,4 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     get_json '/songs/play?file=test_dir/1s.mp3'
     assert_equal @response.body, in_binary(@one)
   end
-
-# scrobbling
-
-  test 'should send now_playing info to last.fm at /songs/now_playing' do
-    session[:user_id] = @user.id
-    get '/songs/now_playing?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
-    assert_response :success
-  end
-
-  test 'should send scrobble to last.fm at /songs/scrobble' do
-    session[:user_id] = @user.id
-    get '/songs/scrobble?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
-    assert_response :success
-  end
 end
