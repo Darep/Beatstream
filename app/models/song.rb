@@ -21,6 +21,15 @@ class Song
     json.present? ? json : '[]'
   end
 
+  def self.find(param)
+    song_hash = all.find { |s| s['id'].to_i == param }
+    if song_hash.blank?
+      raise ActiveRecord::RecordNotFound, "Couldn't find Song with id=#{param}"
+    else
+      song_hash
+    end
+  end
+
   def self.refresh
     songs = []
 

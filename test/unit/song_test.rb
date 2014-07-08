@@ -32,4 +32,17 @@ class SongTest < ActiveSupport::TestCase
     populate
     assert_equal '1sec.mp3', Song.all.first['filename']
   end
+
+  test 'find returns Song with a specific id' do
+    populate
+    song = Song.find(0)
+    assert_equal '1sec.mp3', song['filename']
+  end
+
+  test 'find raises ActiveRecord::RecordNotFound for non-existing song' do
+    populate
+    assert_raise ActiveRecord::RecordNotFound do
+      Song.find(1337)
+    end
+  end
 end
