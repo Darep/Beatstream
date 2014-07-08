@@ -92,13 +92,11 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.5)
-    rockstar (0.7.1)
-      activesupport (>= 1.4.2)
+    rockstar (0.8.0)
       activesupport (>= 1.4.2)
       hpricot (>= 0.4.86)
-      hpricot (>= 0.4.86)
-      i18n
-      rake
+      i18n (>= 0.5.0)
+      rake (>= 0.10.0)
     safe_yaml (1.0.3)
     sass (3.2.9)
     sass-rails (3.2.6)
@@ -151,7 +149,7 @@ DEPENDENCIES
   mp3info (= 0.6.18)
   quiet_assets
   rails (= 3.2.19)
-  rockstar (= 0.7.1)
+  rockstar (= 0.8.0)
   sass-rails (= 3.2.6)
   sqlite3 (= 1.3.7)
   therubyracer (= 0.11.4)

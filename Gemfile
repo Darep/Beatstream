@@ -6,7 +6,7 @@ gem 'rails', '3.2.19'
 gem 'mp3info', '0.6.18'
 
 # Last.fm
-gem 'rockstar', '0.7.1'
+gem 'rockstar', '0.8.0'
 
 platforms :jruby do
   gem 'activerecord-jdbcsqlite3-adapter', '1.2.9'
