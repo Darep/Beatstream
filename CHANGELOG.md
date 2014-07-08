@@ -1,6 +1,18 @@
 Changelog
 =========
 
+## 1.0.3 (WIP)
+
+### Major changes
+
+- None
+
+### Minor changes
+
+- Replaced mp3info gem with ruby-mp3info
+- Updated rockstar gem from 0.7.1 to 0.8.0
+
+
 ## 1.0.2
 
 This is a "refactor release". Version 1.0.2 does not bring anything new, or even
