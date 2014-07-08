@@ -31,4 +31,10 @@ class ApiV1::ScrobblesTest < ActionDispatch::IntegrationTest
     get '/songs/scrobble?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
     assert_requested scrobble_stub
   end
+
+  test 'should return RecordNotFound error if user is not found on scrobble' do
+    session[:user_id] = 78991423413
+    get '/songs/scrobble?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
+    assert_response :not_found
+  end
 end
