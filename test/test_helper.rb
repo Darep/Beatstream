@@ -16,8 +16,13 @@ class ActiveSupport::TestCase
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
   # -- they do not yet inherit this setting
   fixtures :all
+end
 
-  # Add more helper methods to be used by all tests here...
+class ActionDispatch::IntegrationTest
+  setup do
+    # Deactivate always by default
+    FakeFS.deactivate!
+  end
 end
 
 def mock_mp3s

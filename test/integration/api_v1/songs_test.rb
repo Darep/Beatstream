@@ -5,13 +5,10 @@ require 'iconv' if RUBY_VERSION.starts_with? '1.8'
 
 class ApiV1::SongsTest < ActionDispatch::IntegrationTest
   setup do
-    FakeFS.deactivate!
-
     @user = users(:jack)
 
-    fixtures_dir = Rails.root.join('test', 'fixtures')
-
     # Mock last.fm requests
+    fixtures_dir = Rails.root.join('test', 'fixtures')
     stub_request(:post, /https?:\/\/ws\.audioscrobbler\.com\/.*method=track\.updateNowPlaying.*/).
       to_return(:status => 200, :headers => {}, :body => File.new(File.join(fixtures_dir, 'xml/lfm_track_updateNowPlaying.xml')))
 
