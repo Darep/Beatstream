@@ -6,23 +6,17 @@ module ApiV1
   class SongsController < ApiController
 
     def index
-      songs_json = '';
+      songs_as_json = nil
 
       if params[:refresh]
         Rails.logger.info 'Forced song list refresh'
-        refresh(songs_json)
+        songs_as_json = refresh_and_get_all
       else
-        begin
-          f = File.open(Song.SONGS_JSON_FILE, 'r')
-          Rails.logger.info 'Songs JSON modified: ' + f.mtime.to_s
-          songs_json = f.read
-        rescue Errno::ENOENT
-          Rails.logger.info 'Songs JSON file not found --> refreshing songs list'
-          refresh(songs_json)
-        end
+        songs_as_json = Song.all_as_json
+        songs_as_json = refresh_and_get_all if songs_as_json == '[]'
       end
 
-      render :text => songs_json
+      render :text => songs_as_json
     end
 
     def play
@@ -76,9 +70,9 @@ module ApiV1
 
     private
 
-      def refresh(songs_as_json)
+      def refresh_and_get_all
         Song.refresh
-        songs_as_json = Song.all_as_json
+        Song.all_as_json
       end
 
   end
