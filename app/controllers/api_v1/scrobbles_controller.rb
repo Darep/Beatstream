@@ -9,7 +9,6 @@ module ApiV1
       if user != nil && user.lastfm_session_key != nil
         Rails.logger.info 'Update Now Playing to "' + artist + ' - ' + title + '" for user ' + user.username
 
-        track = Rockstar::Track.new(artist, title)
         track.updateNowPlaying(Time.now, user.lastfm_session_key)
       end
 
@@ -23,7 +22,6 @@ module ApiV1
       if user != nil && user.lastfm_session_key != nil
         Rails.logger.info 'Scrobbling track "' + artist + ' - ' + title + '" for user ' + user.username
 
-        track = Rockstar::Track.new(artist, title)
         track.scrobble(Time.now, user.lastfm_session_key)
       end
 
@@ -31,6 +29,10 @@ module ApiV1
     end
 
     private
+
+      def track
+        @track ||= Rockstar::Track.new(params[:artist], params[:title])
+      end
 
       def user
         @user ||= User.find(session[:user_id])
