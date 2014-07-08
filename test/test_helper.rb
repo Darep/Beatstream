@@ -4,11 +4,14 @@ require 'rails/test_help'
 
 if RUBY_VERSION.starts_with? '1.8'
   require 'webmock/test_unit'
+  require 'iconv'
 else
   require 'webmock/minitest'
 end
 
 WebMock.disable_net_connect! :allow_localhost => true
+
+# ----------------------------------------------------------------------------
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
@@ -20,8 +23,23 @@ end
 
 class ActionDispatch::IntegrationTest
   setup do
+    clean_fake_fs
+
     # Deactivate always by default
     FakeFS.deactivate!
+  end
+end
+
+def clean_fake_fs
+  # Create directories and files into the FakeFS
+  FakeFS do
+    # Clean the directories
+    File.delete(Song.SONGS_JSON_FILE) if File.exists?(Song.SONGS_JSON_FILE)
+    FileUtils.rm_rf(Song.MUSIC_PATH) if Dir.exists?(Song.MUSIC_PATH)
+
+    # Mock the directories required by song stuff
+    FileUtils.mkdir_p(Song.MUSIC_PATH)
+    FileUtils.mkdir_p(Rails.root.join('data'))
   end
 end
 
@@ -29,19 +47,13 @@ def mock_mp3s
   was_active = FakeFS.activated?
   FakeFS.deactivate! if was_active
 
-  # Sample MP3 files
+  # Read the sample MP3 files into memory
   @one = File.open(Rails.root.join('test', 'fixtures', 'files', '1sec.mp3').to_s).read
   @thirty = File.open(Rails.root.join('test', 'fixtures', 'files', '30sec.mp3').to_s).read
 
+  clean_fake_fs
+
   FakeFS do
-    # Clean the mocks
-    File.delete(Song.SONGS_JSON_FILE) if File.exists?(Song.SONGS_JSON_FILE)
-    FileUtils.rm_rf(Song.MUSIC_PATH) if Dir.exists?(Song.MUSIC_PATH)
-
-    # Mock the directories required by songs controller
-    FileUtils.mkdir_p(Song.MUSIC_PATH)
-    FileUtils.mkdir_p(Rails.root.join('data'))
-
     # Create a few mock MP3 files
     one_mock = File.open(File.join(Song.MUSIC_PATH, '1sec.mp3'), 'wb')
     one_mock.write(@one)

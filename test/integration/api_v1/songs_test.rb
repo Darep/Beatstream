@@ -1,8 +1,6 @@
 require 'test_helper'
 require 'api_test_helper'
 
-require 'iconv' if RUBY_VERSION.starts_with? '1.8'
-
 class ApiV1::SongsTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:jack)
