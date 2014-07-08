@@ -53,17 +53,17 @@ class Song
     songs = songs.sort_by { |song| song.to_natural_sort_string }
 
     songs_as_json = songs.to_json
-    File.open(SONGS_JSON_FILE, 'w') { |f| f.write(songs_as_json) }
+    songs_file('w').write(songs_as_json)
   end
 
-  def self.songs_file
+  def self.songs_file(mode = 'r')
     begin
-      file = File.open(SONGS_JSON_FILE, 'r')
+      file = File.open(SONGS_JSON_FILE, mode)
       Rails.logger.info "Songs JSON last modified on #{file.mtime.to_s}"
     rescue Errno::ENOENT => e
       # File not found
       FileUtils.touch(SONGS_JSON_FILE)
-      file = File.open(SONGS_JSON_FILE, 'r')
+      file = File.open(SONGS_JSON_FILE, mode)
       Rails.logger.info "Songs JSON last modified on #{file.mtime.to_s}"
     end
 
