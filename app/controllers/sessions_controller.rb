@@ -1,8 +1,8 @@
 class SessionsController < ApplicationController
   skip_before_filter :authorize
+  layout 'login'
 
   def new
-    render :layout => 'login'
   end
 
   def create
