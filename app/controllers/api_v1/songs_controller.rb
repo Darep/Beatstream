@@ -1,6 +1,5 @@
 # -*- encoding : utf-8 -*-
 require 'find'
-require 'logger'
 
 module ApiV1
   class SongsController < ApiController
