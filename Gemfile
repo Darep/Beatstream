@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.19'
 
 # ID3 info parser
-gem 'mp3info', '0.6.18'
+gem 'ruby-mp3info', '0.8.4', :require => 'mp3info'
 
 # Last.fm
 gem 'rockstar', '0.8.0'

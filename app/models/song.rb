@@ -1,3 +1,5 @@
+require 'iconv'
+
 class Song
   MUSIC_PATH = Rails.application.config.music_paths.to_s
   SONGS_JSON_FILE = Rails.root.join('data', 'songs.json').to_s
@@ -82,13 +84,14 @@ class Song
     @length = 0
 
     # ID3 tag info
-    info = Mp3Info.open(path)
-    tag = info.tag()
-    @title = tag['title'] if (!tag['title'].nil?)
-    @artist = tag['artist'] if (!tag['title'].nil?)
-    @album = tag['album']
-    @tracknum = tag['tracknum']
-    @length = info.length
+    Mp3Info.open(path) do |info|
+      tag = info.tag
+      @title = tag['title'] if (!tag['title'].nil?)
+      @artist = tag['artist'] if (!tag['title'].nil?)
+      @album = tag['album']
+      @tracknum = tag['tracknum']
+      @length = info.length
+    end
 
     @nice_title = ''
     @nice_title += (@artist.to_s + ' - ') if !@artist.nil?
