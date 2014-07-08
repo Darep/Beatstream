@@ -3,13 +3,23 @@ Changelog
 
 ## 1.0.2
 
+This is a "refactor release". Version 1.0.2 does not bring anything new, or even
+fix things, but instead contains major changes to the code, which might
+introduce new bugs. Because of this, I wanted to make it into a completely
+independent release. -ajk
+
 ### Major changes
 
-- None
+- Ruby 1.8.7 support maybe broken?
 
 ### Minor changes
 
-- Renamed app from BeatStream to Beatstream
+- None
+
+### Refactoring
+
+- Scrobbling related code moved into ScrobblesController
+- Renamed Rails app internal name to Beatstream (from BeatStream)
 
 
 ## 1.0.1
