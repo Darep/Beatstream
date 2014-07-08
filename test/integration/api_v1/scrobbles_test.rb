@@ -3,8 +3,10 @@ require 'api_test_helper'
 
 class ApiV1::ScrobblesTest < ActionDispatch::IntegrationTest
   setup do
-    # Perform a HTTP request so the "session" object is initialized
-    get_json '/songs'
+    FakeFS do
+      # Perform a HTTP request so the "session" object is initialized
+      get_json '/songs'
+    end
 
     # Set current user
     @user = users(:jack)
