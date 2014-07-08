@@ -39,4 +39,11 @@ class ApiV1::ScrobblesTest < ActionDispatch::IntegrationTest
     get '/songs/scrobble?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
     assert_response :not_found
   end
+
+  test 'should return "not connected to Last.fm" error if user has not linked to last.fm' do
+    claire = users(:claire)
+    session[:user_id] = claire.id
+    get '/songs/scrobble?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
+    assert_response 422
+  end
 end

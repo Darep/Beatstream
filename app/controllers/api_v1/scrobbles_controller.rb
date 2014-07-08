@@ -1,6 +1,7 @@
 module ApiV1
   class ScrobblesController < ApiController
     before_filter :expires_now
+    before_filter :check_lastfm_session_key
 
     def now_playing
       artist = params[:artist]
@@ -29,6 +30,10 @@ module ApiV1
     end
 
     private
+
+      def check_lastfm_session_key
+        render_error "User with id=#{params[:id]} is not connected to Last.fm" if user.lastfm_session_key.blank?
+      end
 
       def track
         @track ||= Rockstar::Track.new(params[:artist], params[:title])
