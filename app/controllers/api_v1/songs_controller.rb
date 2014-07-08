@@ -2,10 +2,6 @@
 require 'find'
 require 'logger'
 
-MUSIC_PATH = Rails.application.config.music_paths
-
-SONGS_JSON_FILE = Rails.root.join('data/songs.json').to_s
-
 module ApiV1
   class SongsController < ApiController
 
@@ -17,7 +13,7 @@ module ApiV1
         refresh(songs_json)
       else
         begin
-          f = File.open(SONGS_JSON_FILE, 'r')
+          f = File.open(Song.SONGS_JSON_FILE, 'r')
           Rails.logger.info 'Songs JSON modified: ' + f.mtime.to_s
           songs_json = f.read
         rescue Errno::ENOENT
@@ -30,7 +26,7 @@ module ApiV1
     end
 
     def play
-      filepath = MUSIC_PATH + params[:file]
+      filepath = Song.MUSIC_PATH + params[:file]
 
       response.content_type = Mime::Type.lookup_by_extension("mp3")
 
@@ -83,7 +79,7 @@ module ApiV1
       def refresh(songs_as_json)
         songs = []
 
-        Find.find(MUSIC_PATH) do |file|
+        Find.find(Song.MUSIC_PATH) do |file|
           if File.directory?(file) || file !~ /.*\.mp3$/i || file =~ /^\./
             #Rails.logger.info 'Skipping file: ' + file
             next
@@ -103,7 +99,7 @@ module ApiV1
         songs = songs.sort_by { |song| song.to_natural_sort_string }
 
         songs_as_json = songs.to_json
-        File.open(SONGS_JSON_FILE, 'w') { |f| f.write(songs_as_json) }
+        File.open(Song.SONGS_JSON_FILE, 'w') { |f| f.write(songs_as_json) }
       end
 
   end

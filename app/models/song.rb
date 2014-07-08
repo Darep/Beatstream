@@ -1,7 +1,16 @@
-MUSIC_PATH = Rails.application.config.music_paths unless defined?(MUSIC_PATH)
-
 class Song
+  MUSIC_PATH = Rails.application.config.music_paths.to_s
+  SONGS_JSON_FILE = Rails.root.join('data', 'songs.json').to_s
+
   attr_reader :id, :filename, :path, :artist, :title, :album, :tracknum, :length
+
+  def self.MUSIC_PATH
+    MUSIC_PATH
+  end
+
+  def self.SONGS_JSON_FILE
+    SONGS_JSON_FILE
+  end
 
   def initialize(path, id)
     # file = File.new(path)
