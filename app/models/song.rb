@@ -4,6 +4,23 @@ class Song
 
   attr_reader :id, :filename, :path, :artist, :title, :album, :tracknum, :length
 
+  def self.MUSIC_PATH
+    MUSIC_PATH
+  end
+
+  def self.SONGS_JSON_FILE
+    SONGS_JSON_FILE
+  end
+
+  def self.all
+    JSON.parse(all_as_json)
+  end
+
+  def self.all_as_json
+    json = songs_file.read
+    json.present? ? json : '[]'
+  end
+
   def self.refresh
     songs = []
 
@@ -30,12 +47,18 @@ class Song
     File.open(SONGS_JSON_FILE, 'w') { |f| f.write(songs_as_json) }
   end
 
-  def self.MUSIC_PATH
-    MUSIC_PATH
-  end
+  def self.songs_file
+    begin
+      file = File.open(SONGS_JSON_FILE, 'r')
+      Rails.logger.info "Songs JSON last modified on #{file.mtime.to_s}"
+    rescue Errno::ENOENT => e
+      # File not found
+      FileUtils.touch(SONGS_JSON_FILE)
+      file = File.open(SONGS_JSON_FILE, 'r')
+      Rails.logger.info "Songs JSON last modified on #{file.mtime.to_s}"
+    end
 
-  def self.SONGS_JSON_FILE
-    SONGS_JSON_FILE
+    return file
   end
 
   def initialize(path, id)
