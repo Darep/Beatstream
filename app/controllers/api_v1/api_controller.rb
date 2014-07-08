@@ -7,11 +7,11 @@ module ApiV1
     end
 
     def render_error(message, status = :unprocessable_entity)
-      render :status => status, :json => { :error => message }
+      render :code => 422, :status => status, :json => { :error => message }
     end
 
     def render_errors(errors, status = :unprocessable_entity)
-      render :status => status, :json => { :errors => errors }
+      render :code => 422, :status => status, :json => { :errors => errors }
     end
 
     def render_404(class_name = nil, message = nil)
