@@ -43,7 +43,7 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     # Populate the songs.json file... maybe should do this some other way? :)
     get_json '/songs'
 
-    @songs_json = "[{\"filename\":\"1sec.mp3\",\"path\":\"1sec.mp3\",\"id\":0,\"title\":\"1sec silence\",\"artist\":\"Sample\",\"album\":\"Silence is golden\",\"tracknum\":1,\"length\":1.071,\"nice_title\":\"Sample - 1sec silence\",\"nice_length\":\"00:01\"},{\"filename\":\"30sec.mp3\",\"path\":\"30sec.mp3\",\"id\":1,\"title\":\"30sec silence\",\"artist\":\"Sample\",\"album\":\"Silence is golden\",\"tracknum\":30,\"length\":30.066833333333335,\"nice_title\":\"Sample - 30sec silence\",\"nice_length\":\"00:30\"}]"
+    @songs_json = "[{\"id\":0,\"filename\":\"1sec.mp3\",\"path\":\"1sec.mp3\",\"title\":\"1sec silence\",\"artist\":\"Sample\",\"album\":\"Silence is golden\",\"tracknum\":1,\"length\":1.071,\"nice_title\":\"Sample - 1sec silence\",\"nice_length\":\"00:01\"},{\"id\":1,\"filename\":\"30sec.mp3\",\"path\":\"30sec.mp3\",\"title\":\"30sec silence\",\"artist\":\"Sample\",\"album\":\"Silence is golden\",\"tracknum\":30,\"length\":30.066833333333335,\"nice_title\":\"Sample - 30sec silence\",\"nice_length\":\"00:30\"}]"
   end
 
   def in_binary(string)

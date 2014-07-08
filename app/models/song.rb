@@ -13,12 +13,9 @@ class Song
   end
 
   def initialize(path, id)
-    # file = File.new(path)
-    # @size = file.stat.size()
-
+    @id = id
     @filename = File.basename(path)
     @path = path.gsub(MUSIC_PATH, '')
-    @id = id
 
     @title = @filename
     @artist = ''
