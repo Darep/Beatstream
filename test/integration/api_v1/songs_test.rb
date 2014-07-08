@@ -18,27 +18,8 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     stub_request(:post, /https?:\/\/ws\.audioscrobbler\.com\/.*method=track\.scrobble.*/).
       to_return(:status => 200, :headers => {}, :body => File.new(File.join(fixtures_dir, 'xml/lfm_track_scrobble.xml')))
 
-    # Sample MP3 files
-    @one = File.open(File.join(fixtures_dir, 'files', '1sec.mp3')).read
-    @thirty = File.open(File.join(fixtures_dir, 'files', '30sec.mp3')).read
-
-    # Mock the filesystem
+    mock_mp3s
     FakeFS.activate!
-
-    # Clean the mocks
-    File.delete(Rails.root.join('data/songs.json').to_s) if File.exists?(Rails.root.join('data/songs.json'))
-    FileUtils.rm_rf(Rails.application.config.music_paths) if Dir.exists?(Rails.application.config.music_paths)
-
-    # Mock the directories required by songs controller
-    FileUtils.mkdir_p(Rails.application.config.music_paths)
-    FileUtils.mkdir_p(Rails.root.join('data'))
-
-    # Create a few mock MP3 files
-    one_mock = File.open(File.join(Rails.application.config.music_paths, '1sec.mp3'), 'wb')
-    one_mock.write(@one)
-
-    thirty_mock = File.open(File.join(Rails.application.config.music_paths, '30sec.mp3'), 'wb')
-    thirty_mock.write(@thirty)
 
     # Populate the songs.json file... maybe should do this some other way? :)
     get_json '/songs'
