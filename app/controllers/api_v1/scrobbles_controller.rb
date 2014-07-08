@@ -6,13 +6,11 @@ module ApiV1
       artist = params[:artist]
       title = params[:title]
 
-      @user = User.find(session[:user_id])
-
-      if @user != nil && @user.lastfm_session_key != nil
-        Rails.logger.info 'Update Now Playing to "' + artist + ' - ' + title + '" for user ' + @user.username
+      if user != nil && user.lastfm_session_key != nil
+        Rails.logger.info 'Update Now Playing to "' + artist + ' - ' + title + '" for user ' + user.username
 
         track = Rockstar::Track.new(artist, title)
-        track.updateNowPlaying(Time.now, @user.lastfm_session_key)
+        track.updateNowPlaying(Time.now, user.lastfm_session_key)
       end
 
       render :nothing => true
@@ -22,17 +20,21 @@ module ApiV1
       artist = params[:artist]
       title = params[:title]
 
-      @user = User.find(session[:user_id])
-
-      if @user != nil && @user.lastfm_session_key != nil
-        Rails.logger.info 'Scrobbling track "' + artist + ' - ' + title + '" for user ' + @user.username
+      if user != nil && user.lastfm_session_key != nil
+        Rails.logger.info 'Scrobbling track "' + artist + ' - ' + title + '" for user ' + user.username
 
         track = Rockstar::Track.new(artist, title)
-        track.scrobble(Time.now, @user.lastfm_session_key)
+        track.scrobble(Time.now, user.lastfm_session_key)
       end
 
       render :nothing => true
     end
+
+    private
+
+      def user
+        @user ||= User.find(session[:user_id])
+      end
 
   end
 end
