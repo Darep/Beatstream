@@ -1,6 +1,8 @@
 require 'test_helper'
 require 'api_test_helper'
 
+require 'iconv' if RUBY_VERSION.starts_with? '1.8'
+
 class ApiV1::SongsTest < ActionDispatch::IntegrationTest
   setup do
     FakeFS.deactivate!
@@ -42,6 +44,14 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     get_json '/songs'
 
     @songs_json = "[{\"filename\":\"1sec.mp3\",\"path\":\"1sec.mp3\",\"id\":0,\"title\":\"1sec silence\",\"artist\":\"Sample\",\"album\":\"Silence is golden\",\"tracknum\":1,\"length\":1.071,\"nice_title\":\"Sample - 1sec silence\",\"nice_length\":\"00:01\"},{\"filename\":\"30sec.mp3\",\"path\":\"30sec.mp3\",\"id\":1,\"title\":\"30sec silence\",\"artist\":\"Sample\",\"album\":\"Silence is golden\",\"tracknum\":30,\"length\":30.066833333333335,\"nice_title\":\"Sample - 30sec silence\",\"nice_length\":\"00:30\"}]"
+  end
+
+  def in_binary(string)
+    if RUBY_VERSION.starts_with? '1.8'
+      ::Iconv.conv('UTF-8//IGNORE', 'ASCII-8BIT', string)
+    else
+      @one.force_encoding('ASCII-8BIT')
+    end
   end
 
 # /songs
@@ -95,7 +105,7 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
 
   test 'should play song from /songs/play?file=1sec.mp3' do
     get_json '/songs/play?file=1sec.mp3'
-    assert_equal @response.body, @one.force_encoding('ASCII-8BIT')
+    assert_equal @response.body, in_binary(@one)
   end
 
   test 'should play song from /songs/play?file=test_dir/1s.mp3' do
@@ -108,7 +118,7 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
 
     # assert
     get_json '/songs/play?file=test_dir/1s.mp3'
-    assert_equal @response.body, @one.force_encoding('ASCII-8BIT')
+    assert_equal @response.body, in_binary(@one)
   end
 
 # scrobbling
