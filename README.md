@@ -1,6 +1,6 @@
 # Beatstream
 
-**IMPORTANT:** I am currently re-writing the front-end and the rails back-end, so the _most_ up-to-date version is here: <https://github.com/Darep/Beatstream/tree/dev>
+**IMPORTANT:** I am currently re-writing the front-end and the rails back-end and slowly porting the changes from my [dev](https://github.com/Darep/Beatstream/tree/dev) branch into `master`. Stay tuned!
 
 Beatstream is an app for streaming music from your computer to anywhere with a modern Web browser!
 (Beatstream currently requires Ruby to be installed on your computer)
@@ -30,7 +30,7 @@ Check [http://www.beatstream.fi/#quirks](http://www.beatstream.fi/#quirks) for t
 
 ### License
 
-Copyright (c) 2012-2013 Antti-Jussi Kovalainen
+Copyright (c) 2012&ndash;2014 Antti-Jussi Kovalainen
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
