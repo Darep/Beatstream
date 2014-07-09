@@ -115,6 +115,10 @@ class Song
     Song.absolute_path(self.path)
   end
 
+  def as_binary_stream
+    File.open(self.absolute_path, 'rb').read
+  end
+
   def to_s
     @nice_title
   end

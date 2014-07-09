@@ -19,12 +19,9 @@ module ApiV1
     end
 
     def play
-      filepath = Song.MUSIC_PATH + params[:file]
-
+      song = Song.new(Song.absolute_path(params[:file]), -1)
       response.content_type = Mime::Type.lookup_by_extension("mp3")
-
-      render :text => File.open(filepath, 'rb') { |f| f.read }
-      #send_file filepath, :type => 'audio/mpeg'
+      render :text => song.as_binary_stream
     end
 
     private
