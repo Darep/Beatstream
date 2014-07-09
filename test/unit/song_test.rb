@@ -10,6 +10,11 @@ class SongTest < ActiveSupport::TestCase
     Song.refresh
   end
 
+  test 'absolute_path' do
+    song = Song.new(@one_path, -1)
+    assert_equal File.join(Song.MUSIC_PATH, '1sec.mp3'), song.absolute_path
+  end
+
   test 'all returns nil when Songs are not populated' do
     assert_empty Song.all
   end

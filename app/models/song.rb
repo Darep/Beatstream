@@ -14,6 +14,10 @@ class Song
     SONGS_JSON_FILE
   end
 
+  def self.absolute_path(path)
+    File.join(MUSIC_PATH, path)
+  end
+
   def self.all
     JSON.parse(all_as_json)
   end
@@ -105,6 +109,10 @@ class Song
     @artist = to_utf8(@artist) if !@artist.nil?
     @album = to_utf8(@album) if !@album.nil?
     @nice_title = to_utf8(@nice_title)
+  end
+
+  def absolute_path
+    Song.absolute_path(self.path)
   end
 
   def to_s
