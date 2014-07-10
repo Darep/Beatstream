@@ -1,5 +1,3 @@
-require 'iconv'
-
 class Song
   attr_reader :id, :filename, :path, :artist, :title, :album, :tracknum, :length
 
@@ -24,9 +22,9 @@ class Song
       :id       => id,
       :filename => File.basename(path),
       :path     => path.gsub(MediaReader.MUSIC_PATH, ''),
-      :title    => to_utf8(tag['title']),
-      :artist   => to_utf8(tag['artist']),
-      :album    => to_utf8(tag['album']),
+      :title    => tag['title'],
+      :artist   => tag['artist'],
+      :album    => tag['album'],
       :tracknum => tag['tracknum'],
       :length   => info.length
     )
@@ -43,18 +41,6 @@ class Song
 
   def self.refresh
     MediaReader.refresh
-  end
-
-  # Iconv UTF-8 helper
-  # Converts string into valid UTF-8
-  #
-  # @param [String] untrusted_string the string to convert to UTF-8
-  # @return [String] passed string in UTF-8
-  def self.to_utf8(untrusted_string)
-    return untrusted_string if untrusted_string.blank?
-
-    ic = Iconv.new('UTF-8//IGNORE', 'ISO-8859-15')
-    ic.iconv(untrusted_string + ' ')[0..-2]
   end
 
   def initialize(params)
