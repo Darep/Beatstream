@@ -1,6 +1,3 @@
-# -*- encoding : utf-8 -*-
-require 'find'
-
 module ApiV1
   class SongsController < ApiController
 
