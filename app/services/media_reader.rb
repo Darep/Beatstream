@@ -16,27 +16,25 @@ class MediaReader
     songs_file.read
   end
 
-  def self.refresh
-    songs = []
-
-    Find.find(MUSIC_PATH) do |file|
-      if File.directory?(file) || file !~ /.*\.mp3$/i || file =~ /^\./
-        next
-      end
-
-      begin
-        song = Song.create_from_mp3_file(file, (songs.length + 1))
-        songs.push(song)
-      rescue Exception => e
-        Rails.logger.info 'Failed to load MP3: ' + file
-        Rails.logger.info e
-      end
+  def self.create_song(path, index)
+    begin
+      Song.create_from_mp3_file(path, index + 1)
+    rescue Exception => e
+      Rails.logger.info "Failed to load media: #{path}"
+      Rails.logger.info e
     end
+  end
 
-    songs = songs.sort_by { |song| song.to_natural_sort_string }
+  def self.files(path)
+    Dir.chdir(path)
+    return Dir['**/*.{mp3,MP3}']
+  end
 
-    songs_as_json = songs.to_json
-    songs_file('w').write(songs_as_json)
+  def self.refresh
+    songs = files(MUSIC_PATH).each_with_index.map { |f,i| create_song(f, i) }.
+      sort_by &:to_natural_sort_string
+
+    songs_file('w').write(songs.to_json)
   end
 
   def self.songs_file(mode = 'r')
