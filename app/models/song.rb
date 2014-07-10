@@ -42,18 +42,15 @@ class Song
 
     Find.find(MUSIC_PATH) do |file|
       if File.directory?(file) || file !~ /.*\.mp3$/i || file =~ /^\./
-        #Rails.logger.info 'Skipping file: ' + file
         next
       end
 
       begin
-        mp3 = new(file, (songs.length + 1))
-        songs.push(mp3)
+        song = new(file, (songs.length + 1))
+        songs.push(song)
       rescue Exception => e
-        Rails.logger.info e
         Rails.logger.info 'Failed to load MP3: ' + file
-        # TODO: collect the broken mp3s into a separate array
-        # TODO: count the broken mp3s
+        Rails.logger.info e
       end
     end
 
