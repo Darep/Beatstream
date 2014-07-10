@@ -28,6 +28,22 @@ class Song
     json.present? ? json : '[]'
   end
 
+  def self.create_from_mp3_file(path, id)
+    info = Mp3Info.open(path)
+    tag = info.tag
+
+    song = Song.new(
+      :id       => id,
+      :filename => File.basename(path),
+      :path     => path.gsub(MUSIC_PATH, ''),
+      :title    => tag['title'],
+      :artist   => tag['artist'],
+      :album    => tag['album'],
+      :tracknum => tag['tracknum'],
+      :length   => info.length
+    )
+  end
+
   def self.find(param)
     song_hash = all.find { |s| s['id'].to_i == param }
     if song_hash.blank?
@@ -46,7 +62,7 @@ class Song
       end
 
       begin
-        song = new(file, (songs.length + 1))
+        song = create_from_mp3_file(file, (songs.length + 1))
         songs.push(song)
       rescue Exception => e
         Rails.logger.info 'Failed to load MP3: ' + file
@@ -74,35 +90,20 @@ class Song
     return file
   end
 
-  def initialize(path, id)
-    @id = id
-    @filename = File.basename(path)
-    @path = path.gsub(MUSIC_PATH, '')
+  def initialize(params)
+    @id = params[:id]
+    @filename = params[:filename] || File.basename(params[:path])
+    @path = params[:path]
 
-    @title = @filename
-    @artist = ''
-    @album = ''
-    @tracknum = nil
-    @length = 0
+    @title = params[:title] || @filename
+    @artist = params[:artist] || ''
+    @album = params[:album] || ''
+    @tracknum = params[:tracknum]
+    @length = params[:length] || 0
+    @nice_title = self.to_s
+    @nice_length = (Time.mktime(0) + @length).strftime("%M:%S")
 
-    # ID3 tag info
-    Mp3Info.open(path) do |info|
-      tag = info.tag
-      @title = tag['title'] if (!tag['title'].nil?)
-      @artist = tag['artist'] if (!tag['title'].nil?)
-      @album = tag['album']
-      @tracknum = tag['tracknum']
-      @length = info.length
-    end
-
-    @nice_title = ''
-    @nice_title += (@artist.to_s + ' - ') if !@artist.nil?
-    @nice_title += @title.to_s
-
-    @nice_length = (Time.mktime(0)+@length).strftime("%M:%S")
-
-    # convert outgoing strings into valid utf-8
-
+    # convert outgoing strings into "valid utf-8"
     @title = to_utf8(@title)
     @artist = to_utf8(@artist) if !@artist.nil?
     @album = to_utf8(@album) if !@album.nil?
@@ -118,7 +119,10 @@ class Song
   end
 
   def to_s
-    @nice_title
+    nice_title = []
+    nice_title << @artist if @artist.present?
+    nice_title << @title
+    nice_title.join ' - '
   end
 
   def to_natural_sort_string

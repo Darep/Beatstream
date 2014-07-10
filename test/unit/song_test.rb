@@ -11,7 +11,7 @@ class SongTest < ActiveSupport::TestCase
   end
 
   test 'absolute_path' do
-    song = Song.new(@one_path, -1)
+    song = Song.create_from_mp3_file(@one_path, -1)
     assert_equal File.join(Song.MUSIC_PATH, '1sec.mp3'), song.absolute_path
   end
 
@@ -33,6 +33,18 @@ class SongTest < ActiveSupport::TestCase
     assert_match /"filename": ?"1sec\.mp3"/, Song.all_as_json
   end
 
+  test 'create_from_mp3_file parses ID3 title' do
+    song = Song.create_from_mp3_file(@one_path, 1)
+    assert_equal '1sec silence', song.title
+  end
+
+  test 'create_from_mp3_file uses filename if ID3 does not contain title' do
+    FakeFS.deactivate!
+    id3less = File.join(@fixtures_files_dir, 'id3less.mp3')
+    song = Song.create_from_mp3_file(id3less, 1)
+    assert_equal 'id3less.mp3', song.title
+  end
+
   test 'find returns Song with a specific id' do
     populate
     song = Song.find(1)
@@ -44,18 +56,6 @@ class SongTest < ActiveSupport::TestCase
     assert_raise ActiveRecord::RecordNotFound do
       Song.find(1337)
     end
-  end
-
-  test 'initialize parses ID3 info' do
-    song = Song.new(@one_path, 1)
-    assert_equal '1sec silence', song.title
-  end
-
-  test 'initialize uses filename if ID3 does not contain title' do
-    FakeFS.deactivate!
-    id3less = File.join(@fixtures_files_dir, 'id3less.mp3')
-    song = Song.new(id3less, 1)
-    assert_equal 'id3less.mp3', song.title
   end
 
   test 'refresh populates the Songs' do
