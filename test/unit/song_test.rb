@@ -11,7 +11,7 @@ class SongTest < ActiveSupport::TestCase
   end
 
   test 'absolute_path' do
-    song = Song.create_from_mp3_file(@one_path, -1)
+    song = Song.new_from_mp3_file(@one_path, -1)
     assert_equal File.join(MediaReader.MUSIC_PATH, '1sec.mp3'), song.absolute_path
   end
 
@@ -33,15 +33,15 @@ class SongTest < ActiveSupport::TestCase
     assert_match /"filename": ?"1sec\.mp3"/, Song.all_as_json
   end
 
-  test 'create_from_mp3_file parses ID3 title' do
-    song = Song.create_from_mp3_file(@one_path, 1)
+  test 'new_from_mp3_file parses ID3 title' do
+    song = Song.new_from_mp3_file(@one_path, 1)
     assert_equal '1sec silence', song.title
   end
 
-  test 'create_from_mp3_file uses filename if ID3 does not contain title' do
+  test 'new_from_mp3_file uses filename if ID3 does not contain title' do
     FakeFS.deactivate!
     id3less = File.join(@fixtures_files_dir, 'id3less.mp3')
-    song = Song.create_from_mp3_file(id3less, 1)
+    song = Song.new_from_mp3_file(id3less, 1)
     assert_equal 'id3less.mp3', song.title
   end
 

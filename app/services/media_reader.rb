@@ -18,7 +18,7 @@ class MediaReader
 
   def self.create_song(path, index)
     begin
-      Song.create_from_mp3_file(path, index + 1)
+      Song.new_from_mp3_file(path, index + 1)
     rescue Exception => e
       Rails.logger.info "Failed to load media: #{path}"
       Rails.logger.info e

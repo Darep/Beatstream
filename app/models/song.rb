@@ -10,7 +10,7 @@ class Song
     json.present? ? json : '[]'
   end
 
-  def self.create_from_mp3_file(path, id)
+  def self.new_from_mp3_file(path, id)
     # Try to find a non-existing file by appending MUSIC_PATH
     path = File.join(MediaReader.MUSIC_PATH, path) unless File.exists?(path)
 
