@@ -36,9 +36,9 @@ class Song
       :id       => id,
       :filename => File.basename(path),
       :path     => path.gsub(MUSIC_PATH, ''),
-      :title    => tag['title'],
-      :artist   => tag['artist'],
-      :album    => tag['album'],
+      :title    => to_utf8(tag['title']),
+      :artist   => to_utf8(tag['artist']),
+      :album    => to_utf8(tag['album']),
       :tracknum => tag['tracknum'],
       :length   => info.length
     )
@@ -90,6 +90,18 @@ class Song
     return file
   end
 
+  # Iconv UTF-8 helper
+  # Converts string into valid UTF-8
+  #
+  # @param [String] untrusted_string the string to convert to UTF-8
+  # @return [String] passed string in UTF-8
+  def self.to_utf8(untrusted_string)
+    return untrusted_string if untrusted_string.blank?
+
+    ic = Iconv.new('UTF-8//IGNORE', 'ISO-8859-15')
+    ic.iconv(untrusted_string + ' ')[0..-2]
+  end
+
   def initialize(params)
     @id = params[:id]
     @filename = params[:filename] || File.basename(params[:path])
@@ -102,12 +114,6 @@ class Song
     @length = params[:length] || 0
     @nice_title = self.to_s
     @nice_length = (Time.mktime(0) + @length).strftime("%M:%S")
-
-    # convert outgoing strings into "valid utf-8"
-    @title = to_utf8(@title)
-    @artist = to_utf8(@artist) if !@artist.nil?
-    @album = to_utf8(@album) if !@album.nil?
-    @nice_title = to_utf8(@nice_title)
   end
 
   def absolute_path
@@ -138,18 +144,5 @@ class Song
       filename
     end
   end
-
-  private
-
-    # Iconv UTF-8 helper
-    # Converts string into valid UTF-8
-    #
-    # @param [String] untrusted_string the string to convert to UTF-8
-    # @return [String] passed string in UTF-8
-    def to_utf8 untrusted_string=""
-      ic = Iconv.new('UTF-8//IGNORE', 'ISO-8859-15')
-      ic.iconv(untrusted_string)
-      #ic.iconv(untrusted_string + ' ')[0..-2]
-    end
 
 end
