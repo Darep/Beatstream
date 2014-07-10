@@ -34,11 +34,11 @@ def clean_fake_fs
   # Create directories and files into the FakeFS
   FakeFS do
     # Clean the directories
-    File.delete(Song.SONGS_JSON_FILE) if File.exists?(Song.SONGS_JSON_FILE)
-    FileUtils.rm_rf(Song.MUSIC_PATH) if Dir.exists?(Song.MUSIC_PATH)
+    File.delete(MediaReader.SONGS_JSON_FILE) if File.exists?(MediaReader.SONGS_JSON_FILE)
+    FileUtils.rm_rf(MediaReader.MUSIC_PATH) if Dir.exists?(MediaReader.MUSIC_PATH)
 
     # Mock the directories required by song stuff
-    FileUtils.mkdir_p(Song.MUSIC_PATH)
+    FileUtils.mkdir_p(MediaReader.MUSIC_PATH)
     FileUtils.mkdir_p(Rails.root.join('data'))
   end
 end
@@ -56,11 +56,11 @@ def mock_mp3s
 
   FakeFS do
     # Create a few mock MP3 files
-    @one_path = File.join(Song.MUSIC_PATH, '1sec.mp3').to_s
+    @one_path = File.join(MediaReader.MUSIC_PATH, '1sec.mp3').to_s
     @one_mock = File.open(@one_path, 'wb')
     @one_mock.write(@one)
 
-    @thirty_path = File.join(Song.MUSIC_PATH, '30sec.mp3')
+    @thirty_path = File.join(MediaReader.MUSIC_PATH, '30sec.mp3')
     @thirty_mock = File.open(@thirty_path, 'wb')
     @thirty_mock.write(@thirty)
   end

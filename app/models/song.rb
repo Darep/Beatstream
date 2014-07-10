@@ -2,21 +2,10 @@ require 'find'
 require 'iconv'
 
 class Song
-  MUSIC_PATH = Rails.application.config.music_paths.to_s
-  SONGS_JSON_FILE = Rails.root.join('data', 'songs.json').to_s
-
   attr_reader :id, :filename, :path, :artist, :title, :album, :tracknum, :length
 
-  def self.MUSIC_PATH
-    MUSIC_PATH
-  end
-
-  def self.SONGS_JSON_FILE
-    SONGS_JSON_FILE
-  end
-
   def self.absolute_path(path)
-    File.join(MUSIC_PATH, path)
+    File.join(MediaReader.MUSIC_PATH, path)
   end
 
   def self.all
@@ -35,7 +24,7 @@ class Song
     song = Song.new(
       :id       => id,
       :filename => File.basename(path),
-      :path     => path.gsub(MUSIC_PATH, ''),
+      :path     => path.gsub(MediaReader.MUSIC_PATH, ''),
       :title    => to_utf8(tag['title']),
       :artist   => to_utf8(tag['artist']),
       :album    => to_utf8(tag['album']),
