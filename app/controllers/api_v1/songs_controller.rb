@@ -16,7 +16,7 @@ module ApiV1
     end
 
     def play
-      song = Song.create_from_mp3_file(Song.absolute_path(params[:file]), -1)
+      song = Song.create_from_mp3_file(params[:file], -1)
       response.content_type = Mime::Type.lookup_by_extension("mp3")
       render :text => song.as_binary_stream
     end

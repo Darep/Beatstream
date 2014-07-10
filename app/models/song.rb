@@ -1,10 +1,6 @@
 class Song
   attr_reader :id, :filename, :path, :artist, :title, :album, :tracknum, :length
 
-  def self.absolute_path(path)
-    File.join(MediaReader.MUSIC_PATH, path)
-  end
-
   def self.all
     JSON.parse(all_as_json)
   end
@@ -15,6 +11,9 @@ class Song
   end
 
   def self.create_from_mp3_file(path, id)
+    # Try to find a non-existing file by appending MUSIC_PATH
+    path = File.join(MediaReader.MUSIC_PATH, path) unless File.exists?(path)
+
     info = Mp3Info.open(path)
     tag = info.tag
 
@@ -58,11 +57,11 @@ class Song
   end
 
   def absolute_path
-    Song.absolute_path(self.path)
+    File.join(MediaReader.MUSIC_PATH, self.path)
   end
 
   def as_binary_stream
-    File.open(self.absolute_path, 'rb').read
+    File.open(absolute_path, 'rb').read
   end
 
   def to_s
