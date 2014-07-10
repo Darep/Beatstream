@@ -41,9 +41,5 @@ module ApiV1
         @track ||= Rockstar::Track.new(params[:artist], params[:title])
       end
 
-      def user
-        @user ||= User.find(session[:user_id])
-      end
-
   end
 end
