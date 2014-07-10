@@ -64,13 +64,6 @@ class Song
     File.open(absolute_path, 'rb').read
   end
 
-  def to_s
-    nice_title = []
-    nice_title << @artist if @artist.present?
-    nice_title << @title
-    nice_title.join ' - '
-  end
-
   def to_natural_sort_string
     sortables = []
 
@@ -83,6 +76,13 @@ class Song
     else
       filename
     end
+  end
+
+  def to_s
+    nice_title = []
+    nice_title << @artist if @artist.present?
+    nice_title << @title
+    nice_title.join ' - '
   end
 
 end
