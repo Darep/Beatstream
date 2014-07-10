@@ -47,7 +47,7 @@ class Song
       end
 
       begin
-        mp3 = new(file, songs.length)
+        mp3 = new(file, (songs.length + 1))
         songs.push(mp3)
       rescue Exception => e
         Rails.logger.info e

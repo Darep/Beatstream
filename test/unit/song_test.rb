@@ -35,7 +35,7 @@ class SongTest < ActiveSupport::TestCase
 
   test 'find returns Song with a specific id' do
     populate
-    song = Song.find(0)
+    song = Song.find(1)
     assert_equal '1sec.mp3', song['filename']
   end
 
