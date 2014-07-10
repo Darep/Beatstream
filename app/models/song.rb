@@ -125,29 +125,17 @@ class Song
   end
 
   def to_natural_sort_string
-    str = ""
-    str += artist if !artist.nil?
-    str += ' ' + album if !album.nil?
+    sortables = []
 
-    # dumb ass way to achieve natural sorting
-    if !tracknum.nil?
-      track = tracknum.to_s
+    sortables << artist if artist.present?
+    sortables << album if album.present?
+    sortables << ("%03d" % tracknum) if tracknum.present?
 
-      if tracknum < 100
-        track = "0" + track
-      end
-      if tracknum < 10
-        track = "0" + track
-      end
-
-      str += ' ' + track
+    if sortables.any?
+      sortables.join(' ')
+    else
+      filename
     end
-
-    if str.empty?
-      str = filename
-    end
-
-    str
   end
 
   private
