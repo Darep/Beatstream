@@ -5,10 +5,11 @@ Changelog
 
 ### Major changes
 
-- None
+- Removed automatic redirect to https
 
 ### Minor changes
 
+- Removed Cross-Site Request protection token
 - Replaced mp3info gem with ruby-mp3info
 - Updated rockstar gem from 0.7.1 to 0.8.0
 
