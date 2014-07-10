@@ -1,7 +1,7 @@
 Beatstream::Application.routes.draw do
 
   scope :module => :api_v1, :path => '' do
-    get 'songs/(index)' => 'songs#index'
+    get 'songs/(index)' => 'songs#index', :as => :songs
     get 'songs/play'
     get 'songs/now_playing' => 'scrobbles#now_playing'
     get 'songs/scrobble' => 'scrobbles#scrobble'
