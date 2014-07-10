@@ -1,3 +1,4 @@
+require 'find'
 require 'iconv'
 
 class Song
