@@ -5,6 +5,8 @@ Changelog
 
 ### Major changes
 
+- Added support for Ruby 2.x
+- Removed iconv
 - Removed automatic redirect to https
 
 ### Minor changes
