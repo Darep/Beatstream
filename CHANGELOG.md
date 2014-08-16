@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## 1.0.4
+
+### Bug fixes
+
+- Fixed a crash bug on initial login or after logging out
+
+
 ## 1.0.3
 
 ### Major changes
