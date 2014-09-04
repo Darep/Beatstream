@@ -28,6 +28,8 @@ Open Chrome and surf to http://0.0.0.0:3000 address. Log in and wait when indexi
 
 Check [http://www.beatstream.fi/#quirks](http://www.beatstream.fi/#quirks) for the most up-to-date list of issues and quirks.
 
+**HTTPS/SSL:** When running in production environment, the app forces SSL on. To disable this, change `config.force_ssl` in `config/environments/production.rb` to false and it shouldn't redirect to https.
+
 ### License
 
 Copyright (c) 2012&ndash;2014 Antti-Jussi Kovalainen
