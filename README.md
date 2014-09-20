@@ -32,9 +32,19 @@ Open Chrome and surf to http://0.0.0.0:3000 address. Log in and wait when indexi
 
 ### Known issues
 
-Check [http://www.beatstream.fi/#quirks](http://www.beatstream.fi/#quirks) for the most up-to-date list of issues and quirks.
-
 **HTTPS/SSL:** When running in production environment, the app forces SSL on. To disable this, change `config.force_ssl` in `config/environments/production.rb` to false and it shouldn't redirect to https.
+
+**Last.fm:** You need to manually go to https://<your_server>/settings and do the authentication there.
+
+**Media Library:** Opens a blank page after refresh is done. Just go back, and start listening :)
+
+**Flash/Firefox crash:** Beatstream's Flash plugin (SoundManager2) crashes sometimes. Restart browser / Flash.
+
+**UTF-8 problems:** Sometimes song info looks garbled. Sometimes Beastream can't play songs with funny characters in filenames or paths.
+
+**Endlessly spinning loader:** You prorably have a Flash block of some kind. Allow Beatstream to use Flash.
+
+These are also listed on [http://www.beatstream.fi/#quirks](http://www.beatstream.fi/#quirks).
 
 ### License
 
