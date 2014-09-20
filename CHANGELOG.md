@@ -3,20 +3,20 @@ Changelog
 
 ## 1.0.4
 
-### Bug fixes
+#### Bug fixes
 
 - Fixed a crash bug on initial login or after logging out
 
 
 ## 1.0.3
 
-### Major changes
+#### Major changes
 
 - Added support for Ruby 2.x
 - Removed iconv
 - Removed automatic redirect to https
 
-### Minor changes
+#### Minor changes
 
 - Removed Cross-Site Request protection token
 - Replaced mp3info gem with ruby-mp3info
@@ -30,15 +30,15 @@ fix things, but instead contains major changes to the code, which might
 introduce new bugs. Because of this, I wanted to make it into a completely
 independent release. -ajk
 
-### Major changes
+#### Major changes
 
 - Ruby 1.8.7 support maybe broken?
 
-### Minor changes
+#### Minor changes
 
 - None
 
-### Refactoring
+#### Refactoring
 
 - Scrobbling related code moved into ScrobblesController
 - Renamed Rails app internal name to Beatstream (from BeatStream)
@@ -46,14 +46,14 @@ independent release. -ajk
 
 ## 1.0.1
 
-### Major changes
+#### Major changes
 
 - Added force_ssl = false as default when running in development and test environments
 - Updated Rails from 3.2.12 to 3.2.19
 - Updated thin to 1.6.2
 - Updated trinidad (for jruby) to 1.4.6
 
-### Minor changes
+#### Minor changes
 
 - Added changelog
 - Refactored Song model
