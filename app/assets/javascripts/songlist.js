@@ -261,6 +261,10 @@
 
             if (shuffle) {
                 new_row = randomToN(number_of_rows);
+                while(new_row == current_row && number_of_rows > 1){
+                    //reshuffles if same as previous and more than one song
+                    new_row = randomToN(number_of_rows);
+                }  
             }
             else if ((current_row + 1) < number_of_rows) {
                 // normal operation, move to next song
