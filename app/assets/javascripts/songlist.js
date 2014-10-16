@@ -219,6 +219,14 @@
 
             grid.setSelectedRows([row]);
             grid.scrollRowIntoView(row);
+
+            var arr = JSON.parse($.cookie('history'));
+            if (arr==null){
+                arr = [];
+            }
+            arr.push(id);
+            $.cookie('history', JSON.stringify(arr));    
+            
         };
 
         grid.playSongAtRow = function (row) {
@@ -227,28 +235,25 @@
         };
 
         grid.prevSong = function () {
-            var number_of_rows = grid.getDataLength();
-            var new_row = number_of_rows - 1;
-            var current_row = dataView.getRowById(grid.playingSongId);
+            //extracts last song from history
+            var arr = JSON.parse($.cookie('history'));
+            var new_id = arr.pop()
+            //we need to pop twice because last song in history is current
+            new_id = arr.pop()
+            $.cookie('history', JSON.stringify(arr));    
 
-            if (current_row === undefined) {
-                // current song is not in the grid, stop playing
+            if (new_id == undefined){
                 stop();
                 return;
             }
-
-            if ((current_row - 1) >= 0) {
-                new_row = current_row - 1;
-            }
-
-            grid.playSongAtRow(new_row);
+            grid.playSong(new_id);
         };
 
         grid.nextSong = function (shuffle, repeat, manual) {
             var number_of_rows = grid.getDataLength();
             var new_row = 0;
             var current_row = -1;
-
+            
             if (grid.playingSongId !== null) {
                 current_row = dataView.getRowById(grid.playingSongId);
 
