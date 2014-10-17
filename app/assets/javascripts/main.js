@@ -33,7 +33,7 @@ $(document).ready(function () { soundManager.onready(function () {
         }
     }
 
-
+ 
     // ::: USER MENU :::
 
     $(window).hashchange(function () {
@@ -51,6 +51,7 @@ $(document).ready(function () { soundManager.onready(function () {
             lastfm.newSong(song);
         }
     });
+   ;
 
     var playerTrack = $('#player-song .track');
     var playPause = $('#play-pause');
@@ -70,13 +71,14 @@ $(document).ready(function () { soundManager.onready(function () {
         },
         onPaused: function () {
             playPause.removeClass('playing');
+            
         },
         onSongEnd: function () {
             songlist.nextSong(getShuffle(), getRepeat());
         },
         onTimeChange: function (elaps) {
             elapsedTimeChanged(elaps);
-
+            $.cookie('time', JSON.stringify(elaps));
             if (!user_is_seeking) {
                 seekbar.slider('option', 'value', elaps);
             }
@@ -158,14 +160,18 @@ $(document).ready(function () { soundManager.onready(function () {
     // playback buttons
     playPause.click(function (e) {
         e.preventDefault();
-
         // if not playing anything, start playing the first song on the playlist
         if (!songlist.isPlaying()) {
             songlist.nextSong(getShuffle(), getRepeat());
+            $.cookie('isPlaying', 'true');
             return;
         }
-
         BeatAudio.togglePause();
+        if ($.cookie('isPlaying') == 'false'){
+            $.cookie('isPlaying', 'true');
+        }else{
+            $.cookie('isPlaying', 'false');
+        }
     });
 
     nextButton.click(function (e) {
@@ -235,7 +241,6 @@ $(document).ready(function () { soundManager.onready(function () {
 
     songlist.loadPlaylist('/songs/index');
 
-
     // enable buttons
     $('#player-buttons button').removeAttr('disabled');
 
@@ -250,6 +255,7 @@ $(document).ready(function () { soundManager.onready(function () {
         seekbar.slider('value', 0);
         seekbar.slider('option', 'disabled', true);
         playerTrack.text('None');
+        $.cookie('isPlaying', 'false');
     }
 
     function durationChanged(dur) {
@@ -268,6 +274,7 @@ $(document).ready(function () { soundManager.onready(function () {
         elapsed.text((mins > 9 ? mins : '0' + mins) + ':' + (secs > 9 ? secs : '0' + secs));
 
         lastfm.scrobble(elaps);
+        $.cookie('time', elaps)
     }
 
 }); });

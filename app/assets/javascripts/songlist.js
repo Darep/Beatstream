@@ -27,6 +27,8 @@
             { id: 'path', name: '', field: 'path' }
         ];
 
+        var seekbar = $('#seekbar-slider');
+
         var options = {
             editable: false,
             forceFitColumns: true,
@@ -226,7 +228,7 @@
             }
             arr.push(id);
             $.cookie('history', JSON.stringify(arr));    
-            
+            $.cookie('isPlaying','true');
         };
 
         grid.playSongAtRow = function (row) {
@@ -235,13 +237,12 @@
         };
 
         grid.prevSong = function () {
-            //extracts last song from history
             var arr = JSON.parse($.cookie('history'));
             var new_id = arr.pop()
-            //we need to pop twice because last song in history is current
-            new_id = arr.pop()
+            if (grid.playingSongId !== null){
+                new_id = arr.pop()
+            }
             $.cookie('history', JSON.stringify(arr));    
-
             if (new_id == undefined){
                 stop();
                 return;
@@ -287,11 +288,13 @@
 
             grid.playSongAtRow(new_row);
         };
-
         // wire up model events to drive the grid
         dataView.onRowCountChanged.subscribe(function (e, args) {
             grid.updateRowCount();
             grid.render();
+            if ($.cookie('isPlaying') == 'true'){
+                grid.prevSong();
+            }
         });
 
         dataView.onRowsChanged.subscribe(function (e, args) {
@@ -434,5 +437,6 @@
     };
 
     window.Songlist = Songlist;
+
 
 })(jQuery, window, document);
