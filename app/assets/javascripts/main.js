@@ -10,7 +10,9 @@
 //= require audio-modules/soundmanager2
 
 var keyCode = {
-    ENTER: 13
+    ENTER: 13,
+    cntrlKey: 17,
+    aKey: 65
 };
 
 $(document).ready(function () { soundManager.onready(function () {
