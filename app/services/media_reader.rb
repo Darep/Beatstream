@@ -1,7 +1,7 @@
 require 'find'
 
 class MediaReader
-  MUSIC_PATH = Rails.application.config.music_paths.to_s
+  MUSIC_PATH = Rails.application.config.music_paths[0].to_s
   SONGS_JSON_FILE = Rails.root.join('data', 'songs.json').to_s
 
   def self.MUSIC_PATH
@@ -25,18 +25,20 @@ class MediaReader
     end
   end
 
-  def self.files(path)
-    Dir.chdir(path)
-    return Dir['**/*.{mp3,MP3}']
+  def self.files(paths)
+    res = Array.new
+    paths.each do |p|
+      Dir.chdir(p)
+      res.concat Dir['**/*.{mp3,MP3}']
+    end
+    res
   end
 
   def self.refresh
-    songs = files(MUSIC_PATH).each_with_index.map { |f,i| create_song(f, i) }.
-      sort_by &:to_natural_sort_string
-
+    songs = files(Rails.application.config.music_paths).each_with_index.map { |f,i| create_song(f, i) }.sort_by &:to_natural_sort_string
     songs_file('w').write(songs.to_json)
   end
-
+    
   def self.songs_file(mode = 'r')
     begin
       file = File.open(SONGS_JSON_FILE, mode)
