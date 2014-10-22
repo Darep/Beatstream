@@ -79,7 +79,24 @@
 
                 e.stopPropagation();
             }
+            if (e.keyCode == keyCode.aKey && e.ctrlKey ){
+                e.preventDefault();
+                var i = 1;
+                var rows = [];
+                while (dataView.getRowById(i) !== undefined){
+                    rows.push(dataView.getRowById(i));
+                    i++;   
+                }
+                grid.setSelectedRows(rows);
+                
+            }
         });
+
+        // grid.onKeyUp.subscribe(function (e) {
+        //     if (e.keyCode == keyCode.cntrlKey){
+        //         cntrlDown = false;
+        //     }
+        // });
 
         grid.onSelectedRowsChanged.subscribe(function (e) {
             //var row = grid.getSelectedRows()[0];
