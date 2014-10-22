@@ -24,7 +24,7 @@ end
 
 group :assets do
   gem 'jquery-rails', '2.0.2'
-
+  gem 'jquery-cookie-rails'
   # Use Sass
   gem 'sass-rails', '3.2.6'
 
