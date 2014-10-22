@@ -321,7 +321,7 @@
 
             // Start playing the last song that was playing on init
             if ($.cookie('isPlaying') == 'true' && !initDone) {
-                grid.prevSong();
+                grid.prevSong(true);  // FIXME: ugh, dirty hack
                 initDone = true;
             }
         });
