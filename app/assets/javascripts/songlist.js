@@ -63,14 +63,14 @@
 
         grid.onKeyDown.subscribe(function (e) {
             if (e.keyCode == keyCode.ENTER) {
-                
+
                 var rows = grid.getSelectedRows();
                 if (!rows || rows.length <= 0) {
                     return;
                 }
 
                 var dataItem = grid.getDataItem(rows[0]);
-                
+
                 grid.playSong(dataItem.id);
 
                 e.stopPropagation();
@@ -220,13 +220,11 @@
             grid.setSelectedRows([row]);
             grid.scrollRowIntoView(row);
 
-            var arr = JSON.parse($.cookie('history'));
-            if (arr==null){
-                arr = [];
-            }
+            var arr = JSON.parse($.cookie('history')) || [];
             arr.push(id);
-            $.cookie('history', JSON.stringify(arr));    
-            
+
+            // save song history in a cookie
+            $.cookie('history', JSON.stringify(arr));
         };
 
         grid.playSongAtRow = function (row) {
@@ -235,14 +233,13 @@
         };
 
         grid.prevSong = function () {
-            //extracts last song from history
+            // extract last song from history (pop twice because current song is there also)
             var arr = JSON.parse($.cookie('history'));
-            var new_id = arr.pop()
-            //we need to pop twice because last song in history is current
-            new_id = arr.pop()
-            $.cookie('history', JSON.stringify(arr));    
+            var new_id = arr.pop();
+            new_id = arr.pop();
+            $.cookie('history', JSON.stringify(arr));
 
-            if (new_id == undefined){
+            if (new_id == undefined) {
                 stop();
                 return;
             }
@@ -253,7 +250,7 @@
             var number_of_rows = grid.getDataLength();
             var new_row = 0;
             var current_row = -1;
-            
+
             if (grid.playingSongId !== null) {
                 current_row = dataView.getRowById(grid.playingSongId);
 
@@ -269,7 +266,7 @@
                 while(new_row == current_row && number_of_rows > 1){
                     //reshuffles if same as previous and more than one song
                     new_row = randomToN(number_of_rows);
-                }  
+                }
             }
             else if ((current_row + 1) < number_of_rows) {
                 // normal operation, move to next song

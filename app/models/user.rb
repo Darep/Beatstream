@@ -13,7 +13,6 @@ class User < ActiveRecord::Base
   attr_accessor :password_confirmation
   attr_reader   :password
 
-
   validates :username, :presence => true, :uniqueness => true, :length => { :minimum => 2 }
   validates :email, :presence => true, :uniqueness => true, :email => true
   validates :password, :confirmation => true
