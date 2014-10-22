@@ -39,7 +39,7 @@ $(document).ready(function () { soundManager.onready(function () {
     $(window).hashchange(function () {
         Routing.ResolveCurrent();
     });
-    
+
 
     // ::: INIT songlist / GRID OMG SO BIG SECTION :::
     var songlist = new Songlist({
@@ -175,12 +175,12 @@ $(document).ready(function () { soundManager.onready(function () {
 
     prevButton.click(function (e) {
         e.preventDefault();
-        songlist.prevSong();
+        songlist.prevSong(getShuffle());
     });
 
     playerTrack.dblclick(function (e) {
         e.preventDefault();
-        
+
         songlist.scrollNowPlayingIntoView();
     });
 
@@ -196,7 +196,7 @@ $(document).ready(function () { soundManager.onready(function () {
         if (store.get(key)) {
             value = store.get(key);
         }
-        
+
         if (value) {
             button.addClass('enabled');
         }
@@ -218,7 +218,7 @@ $(document).ready(function () { soundManager.onready(function () {
         if (key && store.get(key)) {
             return store.get(key);
         }
-        
+
         return false;
     }
 
@@ -242,7 +242,7 @@ $(document).ready(function () { soundManager.onready(function () {
     function stop() {
         BeatAudio.stop();
         songlist.resetPlaying();
-        
+
         // TODO: hide now playing icon from slickgrid
 
         elapsedTimeChanged(0);

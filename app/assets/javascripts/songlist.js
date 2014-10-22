@@ -224,7 +224,9 @@
             arr.push(id);
 
             // save song history in a cookie
-            $.cookie('history', JSON.stringify(arr));
+            if (shuffle) {
+                $.cookie('history', JSON.stringify(arr));
+            }
         };
 
         grid.playSongAtRow = function (row) {
@@ -232,18 +234,38 @@
             grid.playSong(song.id);
         };
 
-        grid.prevSong = function () {
-            // extract last song from history (pop twice because current song is there also)
-            var arr = JSON.parse($.cookie('history'));
-            var new_id = arr.pop();
-            new_id = arr.pop();
-            $.cookie('history', JSON.stringify(arr));
+        grid.prevSong = function (shuffle) {
+            if (shuffle) {
+                var arr = JSON.parse($.cookie('history'));
+                var new_id;
 
-            if (new_id == undefined) {
-                stop();
-                return;
+                // extract last song from history (pop twice because current song is there also)
+                arr.pop();
+                new_id = arr.pop();
+
+                if (!new_id) {
+                    return;
+                }
+
+                $.cookie('history', JSON.stringify(arr));
+                grid.playSong(new_id);
+            } else {
+                var number_of_rows = grid.getDataLength();
+                var new_row = number_of_rows - 1;
+                var current_row = dataView.getRowById(grid.playingSongId);
+
+                if (current_row === undefined) {
+                    // current song is not in the grid, stop playing
+                    stop();
+                    return;
+                }
+
+                if ((current_row - 1) >= 0) {
+                    new_row = current_row - 1;
+                }
+
+                grid.playSongAtRow(new_row);
             }
-            grid.playSong(new_id);
         };
 
         grid.nextSong = function (shuffle, repeat, manual) {
@@ -371,8 +393,8 @@
         this.grid.nextSong(shuffle, manual);
     };
 
-    Songlist.prototype.prevSong = function () {
-        this.grid.prevSong();
+    Songlist.prototype.prevSong = function (shuffle) {
+        this.grid.prevSong(shuffle);
     };
 
     Songlist.prototype.isPlaying = function () {
