@@ -27,6 +27,8 @@
             { id: 'path', name: '', field: 'path' }
         ];
 
+        var seekbar = $('#seekbar-slider');
+
         var options = {
             editable: false,
             forceFitColumns: true,
@@ -226,6 +228,7 @@
             // save song history in a cookie
             if (shuffle) {
                 $.cookie('history', JSON.stringify(arr));
+                $.cookie('isPlaying','true');
             }
         };
 
@@ -240,8 +243,10 @@
                 var new_id;
 
                 // extract last song from history (pop twice because current song is there also)
-                arr.pop();
                 new_id = arr.pop();
+                if (grid.playingSongId !== null){
+                    new_id = arr.pop();
+                }
 
                 if (!new_id) {
                     return;
@@ -311,6 +316,9 @@
         dataView.onRowCountChanged.subscribe(function (e, args) {
             grid.updateRowCount();
             grid.render();
+            if ($.cookie('isPlaying') == 'true') {
+                grid.prevSong();
+            }
         });
 
         dataView.onRowsChanged.subscribe(function (e, args) {
