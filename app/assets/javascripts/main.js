@@ -162,13 +162,13 @@ $(document).ready(function () { soundManager.onready(function () {
         // if not playing anything, start playing the first song on the playlist
         if (!songlist.isPlaying()) {
             songlist.nextSong(getShuffle(), getRepeat());
-            $.cookie('isPlaying', 'true');
+            $.cookie('isPlaying', true);
             return;
         }
 
         BeatAudio.togglePause();
 
-        $.cookie('isPlaying', !$.cookie('isPlaying'));
+        $.cookie('isPlaying', ($.cookie('isPlaying') == 'false'));
     });
 
     nextButton.click(function (e) {
