@@ -77,8 +77,6 @@ $(document).ready(function () { soundManager.onready(function () {
         onTimeChange: function (elaps) {
             elapsedTimeChanged(elaps);
 
-            $.cookie('time', JSON.stringify(elaps));
-
             if (!user_is_seeking) {
                 seekbar.slider('option', 'value', elaps);
             }
