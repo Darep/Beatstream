@@ -17,6 +17,8 @@
 
         // SlickGrid
 
+        var initDone = false;
+
         var columns = [
             { id: 'np', resizable: false, width: 22 },
             { id: 'artist', name: 'Artist', field: 'artist', sortable: true },
@@ -228,7 +230,7 @@
             // save song history in a cookie
             if (shuffle) {
                 $.cookie('history', JSON.stringify(arr));
-                $.cookie('isPlaying','true');
+                $.cookie('isPlaying', true);
             }
         };
 
@@ -316,8 +318,11 @@
         dataView.onRowCountChanged.subscribe(function (e, args) {
             grid.updateRowCount();
             grid.render();
-            if ($.cookie('isPlaying') == 'true') {
+
+            // Start playing the last song that was playing on init
+            if ($.cookie('isPlaying') == 'true' && !initDone) {
                 grid.prevSong();
+                initDone = true;
             }
         });
 

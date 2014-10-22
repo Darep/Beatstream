@@ -272,7 +272,7 @@ $(document).ready(function () { soundManager.onready(function () {
         elapsed.text((mins > 9 ? mins : '0' + mins) + ':' + (secs > 9 ? secs : '0' + secs));
 
         lastfm.scrobble(elaps);
-        $.cookie('time', elaps)
+        $.cookie('time', elaps);  // TODO: use this somewhere
     }
 
 }); });
