@@ -80,7 +80,7 @@
                 e.stopPropagation();
             }
 
-            if (e.keyCode == keyCode.A && e.ctrlKey) {
+            if (e.keyCode == keyCode.A && (e.ctrlKey || e.metaKey)) {
                 e.preventDefault();
                 var i = 1;
                 var rows = [];
