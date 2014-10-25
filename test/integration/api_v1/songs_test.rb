@@ -2,6 +2,8 @@ require 'test_helper'
 require 'api_test_helper'
 
 class ApiV1::SongsTest < ActionDispatch::IntegrationTest
+  TEST_MUSIC_PATH = Rails.application.config.music_paths[0].to_s
+
   setup do
     @user = users(:jack)
 
@@ -11,7 +13,7 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     # Populate the Songs
     Song.refresh
 
-    @songs_json = "[{\"id\":1,\"filename\":\"1sec.mp3\",\"path\":\"1sec.mp3\",\"title\":\"1sec silence\",\"artist\":\"Sample\",\"album\":\"Silence is golden\",\"tracknum\":1,\"length\":1.071,\"nice_title\":\"Sample - 1sec silence\",\"nice_length\":\"00:01\"},{\"id\":2,\"filename\":\"30sec.mp3\",\"path\":\"30sec.mp3\",\"title\":\"30sec silence\",\"artist\":\"Sample\",\"album\":\"Silence is golden\",\"tracknum\":30,\"length\":30.066833333333335,\"nice_title\":\"Sample - 30sec silence\",\"nice_length\":\"00:30\"}]"
+    @songs_json = "[{\"id\":1,\"filename\":\"1sec.mp3\",\"path\":\"/1sec.mp3\",\"title\":\"1sec silence\",\"artist\":\"Sample\",\"album\":\"Silence is golden\",\"tracknum\":1,\"length\":1.071,\"nice_title\":\"Sample - 1sec silence\",\"nice_length\":\"00:01\"},{\"id\":2,\"filename\":\"30sec.mp3\",\"path\":\"/30sec.mp3\",\"title\":\"30sec silence\",\"artist\":\"Sample\",\"album\":\"Silence is golden\",\"tracknum\":30,\"length\":30.066833333333335,\"nice_title\":\"Sample - 30sec silence\",\"nice_length\":\"00:30\"}]"
   end
 
   def in_binary(string)
@@ -37,7 +39,7 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
 # songs.json
 
   test 'should create all songs index if it\'s missing' do
-    new_song = File.open(File.join(Rails.application.config.music_paths, 'new_song.mp3'), 'wb')
+    new_song = File.open(File.join(TEST_MUSIC_PATH, 'new_song.mp3'), 'wb')
     new_song.write(@one)
 
     # Populate the songs.json file
@@ -48,13 +50,13 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     get_json '/songs'
 
     match = false
-    json_response.each { |i| match ||= (i['path'] == 'new_song.mp3') }
+    json_response.each { |song_info| match ||=  (song_info["path"].include? 'new_song.mp3') }
 
     assert match, 'new_song not found in JSON response'
   end
 
   test 'should refresh songs index when ?refresh is present' do
-    new_song = File.open(File.join(Rails.application.config.music_paths, 'new_song.mp3'), 'wb')
+    new_song = File.open(File.join(TEST_MUSIC_PATH, 'new_song.mp3'), 'wb')
     new_song.write(@one)
 
     # Trigger the refresh
@@ -64,7 +66,7 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     get_json '/songs'
 
     match = false
-    json_response.each { |i| match ||= (i['path'] == 'new_song.mp3') }
+    json_response.each { |song_info| match ||=  (song_info["path"].include? 'new_song.mp3') }
 
     assert match, 'new_song not found in JSON response'
   end
@@ -78,7 +80,7 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
 
   test 'should play song from /songs/play?file=test_dir/1s.mp3' do
     # setup
-    test_dir = File.join(Rails.application.config.music_paths, 'test_dir')
+    test_dir = File.join(TEST_MUSIC_PATH, 'test_dir')
     FileUtils.mkdir_p(test_dir)
 
     one_mock_in_dir = File.open(File.join(test_dir, '1s.mp3'), 'wb')

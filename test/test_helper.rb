@@ -38,7 +38,9 @@ def clean_fake_fs
     FileUtils.rm_rf(MediaReader.MUSIC_PATH) if Dir.exists?(MediaReader.MUSIC_PATH)
 
     # Mock the directories required by song stuff
-    FileUtils.mkdir_p(MediaReader.MUSIC_PATH)
+    Rails.application.config.music_paths.each do |path|
+      FileUtils.mkdir_p(path)
+    end
     FileUtils.mkdir_p(Rails.root.join('data'))
   end
 end
