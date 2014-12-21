@@ -1,6 +1,19 @@
 Changelog
 =========
 
+## 1.1.0
+
+#### New features
+
+- Continues playing where you left off when you open the app
+- Use Ctrl+A or Cmd+A to select all items
+
+#### Bug fixes
+
+- Don't play the same song in a row when shuffling
+- Previous button now actually plays the previous song when shuffling
+
+
 ## 1.0.4
 
 #### Bug fixes
