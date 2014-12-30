@@ -31,8 +31,9 @@ class MediaReader
   end
 
   def self.refresh
-    songs = files(MUSIC_PATH).each_with_index.map { |f,i| create_song(f, i) }.
-      sort_by &:to_natural_sort_string
+    songs = files(MUSIC_PATH).each_with_index.map {|f,i| create_song(f, i)}
+      .select {|s| s.is_a?(Song)}
+      .sort_by &:to_natural_sort_string
 
     songs_file('w').write(songs.to_json)
   end
