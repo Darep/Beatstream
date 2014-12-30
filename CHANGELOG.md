@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## 1.1.1
+
+#### Bug fixes
+
+- Fix crash on refresh if library contains a broken MP3 file
+
+
 ## 1.1.0
 
 #### New features
