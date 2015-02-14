@@ -1,3 +1,4 @@
+//= require jquery.cookie
 //= require helpers
 //= require dragtooltip
 /*!

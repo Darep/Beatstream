@@ -1,3 +1,4 @@
+//= require jquery.cookie
 //= require helpers
 //= require store.min
 //= require jquery.ba-hashchange.min
