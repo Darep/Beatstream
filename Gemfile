@@ -25,8 +25,12 @@ end
 group :assets do
   gem 'jquery-rails', '2.0.2'
   gem 'jquery-cookie-rails'
+
   # Use Sass
   gem 'sass-rails', '3.2.6'
+
+  # User react
+  gem 'react-rails', '~> 0.12.0'
 
   # Minify & compact JS
   gem 'uglifier', '2.1.1'

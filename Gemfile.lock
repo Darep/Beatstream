@@ -91,6 +91,11 @@ GEM
     rake (10.3.2)
     rdoc (3.12.2)
       json (~> 1.4)
+    react-rails (0.12.2.0)
+      execjs
+      rails (>= 3.1)
+      react-source (= 0.12.2)
+    react-source (0.12.2)
     ref (1.0.5)
     rockstar (0.8.0)
       activesupport (>= 1.4.2)
@@ -144,6 +149,7 @@ DEPENDENCIES
   jquery-rails (= 2.0.2)
   quiet_assets
   rails (= 3.2.19)
+  react-rails (~> 0.12.0)
   rockstar (= 0.8.0)
   ruby-mp3info (= 0.8.4)
   sass-rails (= 3.2.6)
