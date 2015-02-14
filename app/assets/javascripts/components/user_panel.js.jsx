@@ -7,17 +7,21 @@ App.UserPanel = React.createClass({
     return { open: false };
   },
 
-  toggleMenu: function (event) {
-    this.setState({ open: !this.state.open });
+  componentDidMount: function () {
+    document.addEventListener("click", this.pageClick, false);
+  },
+
+  componentWillUnmount: function() {
+    document.removeEventListener("click", this.pageClick);
   },
 
   render: function() {
     var user = this.props.user;
-    var linkClassName = '';
+    var linkClassName = 'user-menu__toggle';
     var menuClassName = '';
 
     if (this.state.open) {
-      linkClassName = 'act';
+      linkClassName += ' act';
       menuClassName = 'open';
     }
 
@@ -28,10 +32,34 @@ App.UserPanel = React.createClass({
            <span className="dropdown"></span>
         </a>
         <ul id="user-menu" className={menuClassName}>
-          <li><a href="#!/settings" onClick={this.toggleMenu}>Settings</a></li>
-          <li><a href="/logout" onClick={this.toggleMenu}>Log out</a></li>
+          <li><a href="#!/settings">Settings</a></li>
+          <li><a href="/logout">Log out</a></li>
         </ul>
       </div>
     );
+  },
+
+  toggleMenu: function (event) {
+    this.setState({ open: !this.state.open });
+  },
+
+  pageClick: function (e) {
+    var match = false;
+
+    if (!this.state.open) {
+      // Not open, do nothing
+      return;
+    }
+
+    for (var element = e.target; element; element = element.parentNode) {
+      if (element.className && element.className.indexOf('user-menu__toggle') >= 0) {
+        match = true;
+        return;
+      }
+    }
+
+    if (!match) {
+      this.setState({ open: false });
+    }
   }
 });
