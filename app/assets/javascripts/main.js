@@ -1,19 +1,12 @@
 //= require jquery.cookie
-//= require helpers
 //= require store.min
 //= require jquery.ba-hashchange.min
 //= require slick.grid
 //= require routing
 //= require lastfm
 //= require songlist
-//= require pretty-numbers
 //= require audio-modules/html5audio
 //= require audio-modules/soundmanager2
-
-var keyCode = {
-    ENTER: 13,
-    A: 65
-};
 
 $(document).ready(function () { soundManager.onready(function () {
 

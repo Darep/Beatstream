@@ -1,5 +1,6 @@
 //= require jquery.cookie
-//= require helpers
+//= require lib/utils
+//= require lib/key_codes
 //= require dragtooltip
 /*!
  * Abstracts SlickGrid away into oblivion!

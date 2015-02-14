@@ -1,4 +1,4 @@
-//= require helpers
+//= require lib/jquery_onenter
 //= require playlists
 //= require songlist
 /*!
@@ -27,7 +27,7 @@ $(document).ready(function () {
     $('#sidebar .new-list').click(function () {
         var list_item  = $('<li></li>');
         var rename_field = $('<input type="text" name="list-name" value="' + NEW_PLAYLIST_NAME + '" />');
-        
+
         rename_field.onEnter(function () {
             var $this = $(this),
                 value = $this.val() || '',
