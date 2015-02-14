@@ -8,7 +8,10 @@ App.Header = React.createClass({
     var user = this.props.user || {};
     return (
       <div>
-        <h1 id="logo"><a href="/">Beatstream</a> <small><small><small>alpha</small></small></small></h1>
+        <h1 id="logo">
+          <a href="/">Beatstream</a>
+          <small>alpha</small>
+        </h1>
         <App.UserPanel user={user}/>
       </div>
     );
