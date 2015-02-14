@@ -41,7 +41,7 @@ $(document).ready(function () { soundManager.onready(function () {
     // ::: INIT songlist / GRID OMG SO BIG SECTION :::
     var songlist = new Songlist({
         onPlay: function (song) {
-            var uri = '/songs/play/?file=' + encodeURIComponent(song.path);
+            var uri = App.API.getSongURI(song);
             BeatAudio.play(uri);
 
             playerTrack.text(song.nice_title);
