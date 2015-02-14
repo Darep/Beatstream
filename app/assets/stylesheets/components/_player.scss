@@ -19,6 +19,14 @@
     -moz-box-shadow: 0 -1px 0 #000;
     box-shadow: 0 -1px 0 #000;
 
+    // @extend %no-select;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
     button {
         background:transparent url('/assets/icons.png') no-repeat;
         border:0;
@@ -67,14 +75,14 @@
     }
     #repeat {
         background-position:3px -189px;
-        
+
         &.enabled {
             background-position:3px -164px
         }
     }
     #shuffle {
         background-position:-35px -189px;
-        
+
         &.enabled {
             background-position:-35px -164px
         }
