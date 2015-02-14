@@ -7,24 +7,26 @@
  */
 
 $(document).ready(function () {
+    'use strict';
 
+    var $sidebar = $('#sidebar');
     var NEW_PLAYLIST_NAME = 'New playlist';
 
     for (var i = 0; i < Playlists.count(); i++) {
         var playlist = Playlists.getAtIndex(i);
         var id = playlist.id;
         var name = playlist.name;
-        $('#sidebar .playlists').append('<li><a href="#" data-id="' + id + '">' + name + '</a></li>');
+        $sidebar.find('.playlists').append('<li><a href="#" data-id="' + id + '">' + name + '</a></li>');
     }
 
-    $('#sidebar .playlists a').click(function () {
+    $sidebar.find('.playlists a').click(function () {
         var id = $(this).attr('data-id');
         Songlist.loadPlaylist(id);
 
         return false;
     });
 
-    $('#sidebar .new-list').click(function () {
+    $sidebar.find('.new-list').click(function () {
         var list_item  = $('<li></li>');
         var rename_field = $('<input type="text" name="list-name" value="' + NEW_PLAYLIST_NAME + '" />');
 
@@ -50,7 +52,7 @@ $(document).ready(function () {
         });
 
         list_item.append(rename_field);
-        $('#sidebar .playlists').append(list_item);
+        $sidebar.find('.playlists').append(list_item);
         rename_field.focus();
 
         return false;
