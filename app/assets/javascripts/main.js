@@ -40,20 +40,21 @@ $(document).ready(function () { soundManager.onready(function () {
     });
 
 
-    // ::: HEADER :::
-    React.render(React.createElement(App.Header, {
-        user: window.App.user
-    }), $header[0]);
+    var reactRender = function () {
+        React.render(React.createElement(App.Header, {
+            user: App.user
+        }), $header[0]);
 
+        React.render(React.createElement(App.Sidebar, {
+            count: '-'
+        }), $sidebar[0]);
 
-    // ::: SIDEBAR :::
-    React.render(React.createElement(App.Sidebar, {
-        count: '-'
-    }), $sidebar[0]);
+        React.render(React.createElement(App.CurrentSong, {
+            song: App.currentSong
+        }), $currentSong[0]);
+    };
 
-    React.render(React.createElement(App.CurrentSong, {
-        song: App.currentSong
-    }), $currentSong[0]);
+    reactRender();
 
 
     // ::: INIT songlist / GRID OMG SO BIG SECTION :::
@@ -65,6 +66,7 @@ $(document).ready(function () { soundManager.onready(function () {
 
             App.lastfm.newSong(song);
             App.currentSong = song;
+            reactRender();
         }
     });
 
