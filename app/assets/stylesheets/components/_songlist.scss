@@ -2,9 +2,9 @@
     overflow: hidden;
     padding:15px 20px;
     position:relative;
-    
+
     .info {
-        float:left;    
+        float:left;
     }
         .meta {
             font-size:13px;
@@ -113,7 +113,7 @@
             padding-left:5px;
         }
         #slickgrid .selected {
-            background:#4c96e5;
+            background:$color-blue;
             color:#fff;
         }
         #slickgrid .playing {

@@ -1,10 +1,11 @@
 .btn {
-    background:#595959;
-    background: -webkit-linear-gradient(top, #707070, #424242);
-    background: -moz-linear-gradient(top, #707070, #424242);
-    background: -o-linear-gradient(top, #707070, #424242);
-    background: -ms-linear-gradient(top, #707070, #424242);
-    background: linear-gradient(top, #707070, #424242);
+    $gradient: top, lighten($color-gray, 10%), darken($color-gray, 10%);
+    background: $color-gray;
+    background: -webkit-linear-gradient($gradient);
+    background: -moz-linear-gradient($gradient);
+    background: -ms-linear-gradient($gradient);
+    background: -o-linear-gradient($gradient);
+    background: linear-gradient($gradient);
     color:#fff;
     display:inline-block;
     font-size:12px;
