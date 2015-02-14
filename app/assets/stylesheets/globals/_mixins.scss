@@ -1,0 +1,13 @@
+@mixin box-shadow($shadow) {
+  -webkit-box-shadow: $shadow;
+  -moz-box-shadow: $shadow;
+  box-shadow: $shadow;
+}
+
+@mixin linear-gradient($gradient) {
+    background: -webkit-linear-gradient($gradient);
+    background: -moz-linear-gradient($gradient);
+    background: -ms-linear-gradient($gradient);
+    background: -o-linear-gradient($gradient);
+    background: linear-gradient($gradient);
+}
