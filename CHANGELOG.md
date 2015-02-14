@@ -1,6 +1,17 @@
 Changelog
 =========
 
+## vNext
+
+#### Minor changes
+
+- Made text in the player component (the black bar at bottom) non-selectable
+
+#### Refactoring
+
+- Sass/CSS clean-up
+
+
 ## 1.1.1
 
 #### Bug fixes
