@@ -34,11 +34,15 @@ $(document).ready(function () { soundManager.onready(function () {
         }
     }
 
+
     // ::: ROUTING :::
     $(window).hashchange(function () {
         Routing.ResolveCurrent();
     });
 
+
+    // ::: REACT TRANSITION :::
+    App.songs = [];
 
     var reactRender = function () {
         React.render(React.createElement(App.Header, {
@@ -46,7 +50,7 @@ $(document).ready(function () { soundManager.onready(function () {
         }), $header[0]);
 
         React.render(React.createElement(App.Sidebar, {
-            count: '-'
+            count: App.songs.length
         }), $sidebar[0]);
 
         React.render(React.createElement(App.CurrentSong, {
@@ -231,12 +235,15 @@ $(document).ready(function () { soundManager.onready(function () {
 
     // ::: LOAD SONGS :::
     App.API.getAllMusic().then(function (data) {
+        App.songs = data;
+
         songlist.loadData(data);
+        reactRender();
+
         $('.preloader').remove();
 
         // update song counts
         var count = commify( parseInt( data.length, 10 ) );
-        $('.medialibrary.count').text(count);
         $('.page-header .count').text(count);
 
         // update count text
