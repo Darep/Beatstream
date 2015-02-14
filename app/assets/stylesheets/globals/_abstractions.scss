@@ -1,5 +1,14 @@
 %clearfix {
-    overflow:hidden;
-    text-indent:100%;
-    white-space:nowrap;
+  overflow:hidden;
+  text-indent:100%;
+  white-space:nowrap;
+}
+
+%no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

@@ -1,4 +1,5 @@
 .player {
+    @extend %no-select;
     $player-gradient: top, #383838, #383838 15%, #1f1f1f 90%, #1f1f1f;
     background: $color-black;
     background: -webkit-linear-gradient($player-gradient);
@@ -18,14 +19,6 @@
     -webkit-box-shadow: 0 -1px 0 #000;
     -moz-box-shadow: 0 -1px 0 #000;
     box-shadow: 0 -1px 0 #000;
-
-    // @extend %no-select;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 
     button {
         background:transparent url('/assets/icons.png') no-repeat;
