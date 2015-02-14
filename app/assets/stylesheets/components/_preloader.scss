@@ -19,8 +19,8 @@
 }
 
 .loading {
+    @extend %clearfix;
     background:url('/assets/preloader.gif') no-repeat;
     height:16px;
     width:16px;
-    @include clear_float;
 }
