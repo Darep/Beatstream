@@ -3,6 +3,8 @@
 //= require jquery.ba-hashchange.min
 //= require slick.grid
 //= require lib/audio
+//= require lib/mediator
+//= require lib/mediator_events
 //= require routing
 //= require lastfm
 //= require songlist
@@ -41,12 +43,22 @@ $(document).ready(function () { soundManager.onready(function () {
     var songlist = new Songlist({
         onPlay: function (song) {
             var uri = App.API.getSongURI(song);
+
             App.Audio.play(uri);
 
             playerTrack.text(song.nice_title);
             lastfm.newSong(song);
         }
     });
+
+    App.Mediator.subscribe(MediatorEvents.AUDIO_STOPPED, function () {
+      songlist.nextSong(getShuffle(), getRepeat());
+    });
+
+    App.Mediator.subscribe(MediatorEvents.AUDIO_ERROR, function () {
+      songlist.nextSong(getShuffle(), getRepeat());
+    });
+
 
     var playerTrack = $('#player-song .track');
     var playPause = $('#play-pause');
@@ -105,6 +117,18 @@ $(document).ready(function () { soundManager.onready(function () {
         }
     });
 
+    App.Mediator.subscribe(MediatorEvents.AUDIO_TIME, function (elapsed) {
+        if (!user_is_seeking) {
+            seekbar.slider('option', 'value', elapsed);
+        }
+    });
+
+    App.Mediator.subscribe(MediatorEvents.AUDIO_DURATION_PARSED, function (durationInSeconds) {
+        seekbar.slider('option', 'disabled', false);
+        seekbar.slider('option', 'max', durationInSeconds);
+    });
+
+
     // playback buttons
     playPause.click(function (e) {
         e.preventDefault();
@@ -119,6 +143,14 @@ $(document).ready(function () { soundManager.onready(function () {
         App.Audio.togglePause();
 
         $.cookie('isPlaying', ($.cookie('isPlaying') == 'false'));
+    });
+
+    App.Mediator.subscribe(MediatorEvents.AUDIO_PLAYING, function () {
+        playPause.addClass('playing');
+    });
+
+    App.Mediator.subscribe(MediatorEvents.AUDIO_PAUSED, function () {
+        playPause.removeClass('playing');
     });
 
     nextButton.click(function (e) {
@@ -211,8 +243,6 @@ $(document).ready(function () { soundManager.onready(function () {
             secs = dur - mins*60;
 
         duration.text((mins > 9 ? mins : '0' + mins) + ':' + (secs > 9 ? secs : '0' + secs));
-
-        seekbar.slider('option', 'max', dur);
     }
 
     function elapsedTimeChanged(elaps) {
@@ -224,5 +254,8 @@ $(document).ready(function () { soundManager.onready(function () {
         lastfm.scrobble(elaps);
         $.cookie('time', elaps);  // TODO: use this somewhere
     }
+
+    App.Mediator.subscribe(MediatorEvents.AUDIO_DURATION_PARSED, durationChanged);
+    App.Mediator.subscribe(MediatorEvents.AUDIO_TIME, elapsedTimeChanged);
 
 }); });
