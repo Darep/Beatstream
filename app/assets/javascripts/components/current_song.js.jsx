@@ -1,3 +1,4 @@
+//= require lib/mediator
 /** @jsx React.DOM */
 
 var App = window.App || {};
@@ -16,7 +17,7 @@ App.CurrentSong = React.createClass({
   },
 
   showActiveSong: function (e) {
-    console.log('TODO: scroll active song into view');
+    App.Mediator.publish(MediatorEvents.PLAYLIST_SHOW_CURRENT_SONG);
   },
 
   getFormattedSongTitle: function (song) {
