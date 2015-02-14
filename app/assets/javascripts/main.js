@@ -13,13 +13,14 @@
 $(document).ready(function () { soundManager.onready(function () {
 
     var $sidebar = $('#sidebar');
+    var $header = $('#header');
 
     // resize the main-area to correct height
     resizeMain();
     $(window).resize(function () { resizeMain(); });
 
     function resizeMain() {
-        var h = $(window).height() - $('#wrap > header').outerHeight() - $('#player').outerHeight();
+        var h = $(window).height() - $header.outerHeight() - $('#player').outerHeight();
         var w = $(window).width() - $sidebar.outerWidth();
         $('#main').css('height', h);
         $('#content-wrap').css('width', w);
@@ -32,12 +33,16 @@ $(document).ready(function () { soundManager.onready(function () {
         }
     }
 
-
-    // ::: USER MENU :::
-
+    // ::: ROUTING :::
     $(window).hashchange(function () {
         Routing.ResolveCurrent();
     });
+
+
+    // ::: HEADER :::
+    React.render(React.createElement(App.Header, {
+        user: window.App.user
+    }), $header[0]);
 
 
     // ::: SIDEBAR :::

@@ -16,23 +16,7 @@
 <body>
 
 <div id="wrap">
-    <header id="header">
-        <h1 id="logo">
-          <a href="/">Beatstream</a>
-          <small>alpha</small>
-        </h1>
-        <div id="user-panel">
-            <a>
-                <span class="name"><%= session[:username] ? session[:username] : 'You' %></span>
-                <span class="dropdown"></span>
-            </a>
-            <ul id="user-menu">
-                <li class="head"><span></span></li>
-                <li><a href="#!/settings" class="settings">Settings</a></li>
-                <li><%= link_to 'Logout', logout_path, :method => :delete %>
-            </ul>
-        </div>
-    </header>
+    <header id="header"></header>
 
     <div id="main">
         <div id="sidebar"></div>
@@ -72,6 +56,14 @@
     <div class="loading">Loading</div>
 </div>
 
+<script type="text/javascript">
+    window.App = window.App || {};
+
+    window.App.user = {
+        id: <%= raw session[:user_id].to_json %>,
+        name: <%= raw session[:username].to_json %>
+    };
+</script>
 <%= javascript_include_tag "application" %>
 
 </body>
