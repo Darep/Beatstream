@@ -12,13 +12,15 @@
 
 $(document).ready(function () { soundManager.onready(function () {
 
+    var $sidebar = $('#sidebar');
+
     // resize the main-area to correct height
     resizeMain();
     $(window).resize(function () { resizeMain(); });
 
     function resizeMain() {
         var h = $(window).height() - $('#wrap > header').outerHeight() - $('#player').outerHeight();
-        var w = $(window).width() - $('#sidebar').outerWidth();
+        var w = $(window).width() - $sidebar.outerWidth();
         $('#main').css('height', h);
         $('#content-wrap').css('width', w);
 
@@ -36,6 +38,12 @@ $(document).ready(function () { soundManager.onready(function () {
     $(window).hashchange(function () {
         Routing.ResolveCurrent();
     });
+
+
+    // ::: SIDEBAR :::
+    React.render(React.createElement(App.Sidebar, {
+        count: '-'
+    }), $sidebar[0]);
 
 
     // ::: INIT songlist / GRID OMG SO BIG SECTION :::
