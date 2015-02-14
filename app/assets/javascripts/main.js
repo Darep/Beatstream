@@ -14,6 +14,7 @@ $(document).ready(function () { soundManager.onready(function () {
 
     var $sidebar = $('#sidebar');
     var $header = $('#header');
+    var $currentSong = $('#player-song');
 
     // resize the main-area to correct height
     resizeMain();
@@ -50,6 +51,10 @@ $(document).ready(function () { soundManager.onready(function () {
         count: '-'
     }), $sidebar[0]);
 
+    React.render(React.createElement(App.CurrentSong, {
+        song: App.currentSong
+    }), $currentSong[0]);
+
 
     // ::: INIT songlist / GRID OMG SO BIG SECTION :::
     var songlist = new Songlist({
@@ -58,8 +63,8 @@ $(document).ready(function () { soundManager.onready(function () {
 
             App.Audio.play(uri);
 
-            playerTrack.text(song.nice_title);
             App.lastfm.newSong(song);
+            App.currentSong = song;
         }
     });
 
@@ -72,7 +77,7 @@ $(document).ready(function () { soundManager.onready(function () {
     });
 
 
-    var playerTrack = $('#player-song .track');
+    var playerTrack = $currentSong.find('.track');
     var playPause = $('#play-pause');
     var prevButton = $('#prev');
     var nextButton = $('#next');
@@ -173,12 +178,6 @@ $(document).ready(function () { soundManager.onready(function () {
     prevButton.click(function (e) {
         e.preventDefault();
         songlist.prevSong(getShuffle());
-    });
-
-    playerTrack.dblclick(function (e) {
-        e.preventDefault();
-
-        songlist.scrollNowPlayingIntoView();
     });
 
 
