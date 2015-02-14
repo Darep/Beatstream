@@ -1,0 +1,26 @@
+.preloader {
+    background:rgba(0,0,0, 0.75);
+    height:100%;
+    position:fixed;
+    text-align:center;
+    width:100%;
+    z-index:998;
+
+    * {
+        color:#fff;
+        top:50%;
+        left:50%;
+        position:absolute;
+        z-index:99999;
+    }
+    .loading {
+        margin:-8px 0 0 -8px;
+    }
+}
+
+.loading {
+    background:url('/assets/preloader.gif') no-repeat;
+    height:16px;
+    width:16px;
+    @include clear_float;
+}
