@@ -1,79 +1,58 @@
-/*!
- * Beatstream Scrobbling
- */
+//= require lib/api
 
-(function ($, window, document, undefined) {
-
-var lastfm = (function () {
+;(function ($, window, document, App, undefined) {
 
     var scrobble_time = 240,
         song_scrobbled = false,
-        song = null;
+        song_scrobbling = false;
 
-    function updateNowPlaying() {
-        var uri = '/songs/now_playing/?artist=' +
-                  encodeURIComponent(song.artist) +
-                  '&title=' + encodeURIComponent(song.title);
+    window.lastfm = {
+        song: undefined,
 
-        $.ajax({
-            url: uri,
-            success: function () {
-                //console.log('Updated now playing to: ' + song.artist + ' - ' + song.title);
-            },
-            error: function () {
-                //console.log('Now playing update failed!');
+        newSong: function (song) {
+            if (!song) {
+                return;
             }
-        });
-    }
 
-    return {
-        newSong: function (song_in) {
-            if (!song_in) return;
-
-            song = song_in;
+            this.song = song;
 
             scrobble_time = Math.floor(song.length/2, 10);
-            
-            if (scrobble_time > 240) {
-                scrobble_time = 240;
-            }
 
             // don't scrobble songs that are under 30 secs (last.fm rule)
             if (scrobble_time <= 15) {
                 song_scrobbled = true;
-            }
-            else {
-                song_scrobbled = false;
-                updateNowPlaying();
-            }
-        },
-
-        scrobble: function (elaps) {
-            if (song_scrobbled === true || elaps < scrobble_time || !song) {
                 return;
             }
 
-            var uri = '/songs/scrobble/?artist=' +
-                      encodeURIComponent(song.artist) +
-                      '&title=' + encodeURIComponent(song.title);
+            // Always scrobble at 4 min mark if song is e.g. 60 minutes long
+            if (scrobble_time > 240) {
+                scrobble_time = 240;
+            }
 
-            $.ajax({
-                url: uri,
-                success: function (data) {
-                    //console.log('Scrobbled song: ' + song.artist + ' - ' + song.title);
-                    //console.log(data);
-                },
-                error: function () {
-                    //console.log('Scrobbling failed!');
-                }
+            App.API.updateNowPlaying(song.artist, song.title).then(function () {
+                song_scrobbled = false;
+                song_scrobbling = false;
+            }, function () {
+                song_scrobbled = false;
+                song_scrobbling = false;
             });
+        },
 
-            song_scrobbled = true;
+        scrobble: function (elaps) {
+            if (song_scrobbling || song_scrobbled || elaps < scrobble_time || !this.song) {
+                return;
+            }
+
+            song_scrobbling = true;
+
+            App.API.scrobble(this.song.artist, this.song.title).then(function () {
+                song_scrobbled = true;
+                song_scrobbling = false;
+            }, function () {
+                song_scrobbled = true;
+                song_scrobbling = false;
+            });
         }
     };
 
-}());
-
-window.lastfm = lastfm;
-
-})(jQuery, window, document);
+})(jQuery, window, document, window.App);
