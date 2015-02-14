@@ -38,7 +38,7 @@ Open Chrome and surf to http://0.0.0.0:3000 address. Log in and wait when indexi
 
 **UTF-8 problems:** Sometimes song info looks garbled. Sometimes Beastream can't play songs with funny characters in filenames or paths.
 
-**Endlessly spinning loader:** You prorably have a Flash block of some kind. Allow Beatstream to use Flash.
+**Endlessly spinning loader:** You probably have a Flash block of some kind. Allow Beatstream to use Flash.
 
 These are also listed on [http://www.beatstream.fi/#quirks](http://www.beatstream.fi/#quirks).
 
