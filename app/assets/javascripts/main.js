@@ -15,6 +15,7 @@ $(document).ready(function () { soundManager.onready(function () {
     var $sidebar = $('#sidebar');
     var $header = $('#header');
     var $currentSong = $('#player-song');
+    var $playerTime = $('#player-time');
 
     // resize the main-area to correct height
     resizeMain();
@@ -56,6 +57,11 @@ $(document).ready(function () { soundManager.onready(function () {
         React.render(React.createElement(App.CurrentSong, {
             song: App.currentSong
         }), $currentSong[0]);
+
+        React.render(React.createElement(App.PlayerTime, {
+            elapsed: App.elapsed,
+            duration: App.duration
+        }), $playerTime[0]);
     };
 
     reactRender();
@@ -87,8 +93,8 @@ $(document).ready(function () { soundManager.onready(function () {
     var playPause = $('#play-pause');
     var prevButton = $('#prev');
     var nextButton = $('#next');
-    var elapsed = $('#player-time .elapsed');
-    var duration = $('#player-time .duration');
+    var elapsed = $playerTime.find('.elapsed');
+    var duration = $playerTime.find('.duration');
     var volume_label = $('#player-volume-label');
     var seekbar = $('#seekbar-slider');
 
@@ -257,20 +263,14 @@ $(document).ready(function () { soundManager.onready(function () {
     // enable buttons
     $('#player-buttons button').removeAttr('disabled');
 
-    function durationChanged(dur) {
-        var mins = Math.floor(dur/60, 10),
-            secs = dur - mins*60;
-
-        duration.text((mins > 9 ? mins : '0' + mins) + ':' + (secs > 9 ? secs : '0' + secs));
+    function durationChanged(duration) {
+        App.duration = duration;
+        reactRender();
     }
 
-    function elapsedTimeChanged(elaps) {
-        var mins = Math.floor(elaps/60, 10),
-            secs = elaps - mins*60;
-
-        elapsed.text((mins > 9 ? mins : '0' + mins) + ':' + (secs > 9 ? secs : '0' + secs));
-
-        $.cookie('time', elaps);  // TODO: use this somewhere
+    function elapsedTimeChanged(elapsed) {
+        App.elapsed = elapsed;
+        reactRender();
     }
 
     App.Mediator.subscribe(MediatorEvents.AUDIO_DURATION_PARSED, durationChanged);
