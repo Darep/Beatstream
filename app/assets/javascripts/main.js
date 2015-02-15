@@ -16,7 +16,7 @@ $(document).ready(function () { soundManager.onready(function () {
     var $sidebar = $('#sidebar');
     var $currentSong = $('#player-song');
     var $player = $('#player');
-    var $playlistHeader = $('.page-header .info')
+    var $playlistHeader = $('.page-header')
 
     App.songs = [];
 
@@ -59,7 +59,10 @@ $(document).ready(function () { soundManager.onready(function () {
         }), $sidebar[0]);
 
         React.render(React.createElement(App.PlaylistHeader, {
-            count: App.songs.length
+            count: App.songs.length,
+            filter: function (filter) {
+                songlist.setFilter(filter);
+            }
         }), $playlistHeader[0]);
 
         React.render(React.createElement(App.Player, {
