@@ -37,7 +37,9 @@ App.Seekbar = React.createClass({
 
   render: function() {
     return (
-      <div id="seekbar-slider"></div>
+      <div id="seekbar">
+        <div id="seekbar-slider"></div>
+      </div>
     );
   },
 

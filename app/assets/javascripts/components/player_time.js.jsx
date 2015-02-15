@@ -29,7 +29,7 @@ App.PlayerTime = React.createClass({
     var elapsed = this.formattedTime(this.state.elapsed);
 
     return (
-      <div>
+      <div id="player-time">
         <span className="elapsed">{elapsed}</span>
         <span className="separator"> / </span>
         <span className="duration">{duration}</span>

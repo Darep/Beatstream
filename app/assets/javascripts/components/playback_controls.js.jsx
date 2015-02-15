@@ -25,7 +25,7 @@ App.PlaybackControls = React.createClass({
     var playClassName = this.state.playing ? 'playing' : '';
 
     return (
-      <div>
+      <div id="player-buttons">
         <button id="prev" type="button" disabled={this.state.enabled ? "" : "disabled"} onClick={this.playPrevious}>Prev</button>
         <button id="play-pause" className={playClassName} type="button" disabled={this.state.enabled ? "" : "disabled"} onClick={this.playPause}>Play/pause</button>
         <button id="next" type="button" disabled={this.state.enabled ? "" : "disabled"} onClick={this.playNext}>Next</button>

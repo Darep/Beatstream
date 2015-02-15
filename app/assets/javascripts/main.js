@@ -9,17 +9,16 @@
 //= require lib/utils
 //= require routing
 //= require songlist
+//= require components/player
 
 $(document).ready(function () { soundManager.onready(function () {
 
-    var $sidebar = $('#sidebar');
     var $header = $('#header');
+    var $sidebar = $('#sidebar');
     var $currentSong = $('#player-song');
-    var $volume = $('#player-volume');
-    var $playerTime = $('#player-time');
-    var $seekbar = $('#seekbar');
-    var $playbackControls = $('#player-buttons');
-    var $playerOptions = $('#player-buttons-2');
+    var $player = $('#player-controls');
+
+    App.songs = [];
 
     // resize the main-area to correct height
     resizeMain();
@@ -46,58 +45,6 @@ $(document).ready(function () { soundManager.onready(function () {
     });
 
 
-    // ::: REACT TRANSITION :::
-    App.songs = [];
-
-    var reactRender = function () {
-        React.render(React.createElement(App.Header, {
-            user: App.user
-        }), $header[0]);
-
-        React.render(React.createElement(App.Sidebar, {
-            count: App.songs.length
-        }), $sidebar[0]);
-
-        React.render(React.createElement(App.CurrentSong, {
-            song: App.currentSong
-        }), $currentSong[0]);
-
-        React.render(React.createElement(App.PlaybackControls, {
-            playPause: function () {
-                if (!songlist.isPlaying()) {
-                    songlist.nextSong(getShuffle(), getRepeat());
-                    $.cookie('isPlaying', true);
-                } else {
-                    App.Audio.togglePause();
-                    $.cookie('isPlaying', ($.cookie('isPlaying') == 'false'));
-                }
-            }.bind(this),
-
-            next: function () {
-                songlist.nextSong(getShuffle(), getRepeat(), true);
-            }.bind(this),
-
-            previous: function () {
-                songlist.prevSong(getShuffle());
-            }.bind(this)
-        }), $playbackControls[0]);
-
-        React.render(React.createElement(App.Volume, {
-            updateVolume: App.Audio.setVolume.bind(App.Audio)
-        }), $volume[0]);
-
-        React.render(React.createElement(App.PlayerTime), $playerTime[0]);
-
-        React.render(React.createElement(App.Seekbar, {
-            seekTo: App.Audio.seekTo.bind(App.Audio)
-        }), $seekbar[0]);
-
-        React.render(React.createElement(App.PlayerOptions), $playerOptions[0]);
-    };
-
-    reactRender();
-
-
     // ::: INIT songlist / GRID OMG SO BIG SECTION :::
     var songlist = new Songlist({
         onPlay: function (song) {
@@ -118,6 +65,28 @@ $(document).ready(function () { soundManager.onready(function () {
     App.Mediator.subscribe(MediatorEvents.AUDIO_ERROR, function () {
       songlist.nextSong(getShuffle(), getRepeat());
     });
+
+
+    // ::: REACT TRANSITION :::
+    var reactRender = function () {
+        React.render(React.createElement(App.Header, {
+            user: App.user
+        }), $header[0]);
+
+        React.render(React.createElement(App.Sidebar, {
+            count: App.songs.length
+        }), $sidebar[0]);
+
+        React.render(React.createElement(App.CurrentSong, {
+            song: App.currentSong
+        }), $currentSong[0]);
+
+        React.render(React.createElement(App.Player, {
+            songlist: songlist
+        }), $player[0]);
+    };
+
+    reactRender();
 
 
     // repeat & shuffle

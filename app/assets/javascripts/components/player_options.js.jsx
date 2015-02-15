@@ -4,27 +4,20 @@
 var App = window.App || {};
 
 App.PlayerOptions = React.createClass({
-  getInitialState: function () {
-    return {
-      repeat: store.get('repeat') || false,
-      shuffle: store.get('shuffle') || false
-    };
-  },
-
   render: function() {
     var repeatClassName = '';
     var shuffleClassName = '';
 
-    if (this.state.shuffle) {
+    if (this.props.shuffle) {
       shuffleClassName += ' enabled';
     }
 
-    if (this.state.repeat) {
+    if (this.props.repeat) {
       repeatClassName += ' enabled';
     }
 
     return (
-      <div>
+      <div id="player-buttons-2">
         <button id="repeat" type="button" onClick={this.toggleRepeat} className={repeatClassName}>
           <span className="label">Repeat</span>
           <span className="status">{this.statusText('repeat')}</span>
@@ -38,7 +31,7 @@ App.PlayerOptions = React.createClass({
   },
 
   statusText: function (key) {
-    if (this.state[key]) {
+    if (this.props[key]) {
       return 'On';
     } else {
       return 'Off';
@@ -46,14 +39,10 @@ App.PlayerOptions = React.createClass({
   },
 
   toggleRepeat: function (e) {
-    var val = !this.state.repeat;
-    this.setState({ repeat: val });
-    store.set('repeat', val);
+    this.props.onChange(!this.props.repeat, this.props.shuffle)
   },
 
   toggleShuffle: function (e) {
-    var val = !this.state.shuffle;
-    this.setState({ shuffle: val });
-    store.set('shuffle', val);
+    this.props.onChange(this.props.repeat, !this.props.shuffle)
   }
 });
