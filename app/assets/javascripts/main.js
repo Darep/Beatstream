@@ -19,25 +19,6 @@ $(document).ready(function () { soundManager.onready(function () {
 
     App.songs = [];
 
-    // resize the main-area to correct height
-    resizeMain();
-    $(window).resize(function () { resizeMain(); });
-
-    function resizeMain() {
-        var h = $(window).height() - $header.outerHeight() - $('#player').outerHeight();
-        var w = $(window).width() - $sidebar.outerWidth();
-        $('#main').css('height', h);
-        $('#content-wrap').css('width', w);
-
-        var h2 = h - $('.page-header').innerHeight();
-        $('.grid-container').css('height', h2);
-
-        if (songlist) {
-            songlist.resizeCanvas();
-        }
-    }
-
-
     // ::: ROUTING :::
     $(window).hashchange(function () {
         Routing.ResolveCurrent();
@@ -126,5 +107,24 @@ $(document).ready(function () { soundManager.onready(function () {
         console.log('Failed to fetch songs');
         console.log(xhr, status, error);
     });
+
+
+    // resize the main-area to correct height
+    resizeMain();
+    $(window).resize(function () { resizeMain(); });
+
+    function resizeMain() {
+        var h = $(window).height() - $header.outerHeight() - $('#player').outerHeight();
+        var w = $(window).width() - $sidebar.outerWidth();
+        $('#main').css('height', h);
+        $('#content-wrap').css('width', w);
+
+        var h2 = h - $('.page-header').innerHeight();
+        $('.grid-container').css('height', h2);
+
+        if (songlist) {
+            songlist.resizeCanvas();
+        }
+    }
 
 }); });
