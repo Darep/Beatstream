@@ -1,11 +1,30 @@
+//= require lib/mediator
+//= require lib/mediator_events
 /** @jsx React.DOM */
 
 var App = window.App || {};
 
 App.PlayerTime = React.createClass({
+  getInitialState: function () {
+    return {
+      duration: 0,
+      elapsed: 0
+    }
+  },
+
+  componentDidMount: function () {
+    App.Mediator.subscribe(MediatorEvents.AUDIO_DURATION_PARSED, this.updateDuration);
+    App.Mediator.subscribe(MediatorEvents.AUDIO_TIME, this.updateElapsed);
+  },
+
+  componentWillUnmount: function() {
+    App.Mediator.unsubscribe(MediatorEvents.AUDIO_DURATION_PARSED, this.updateDuration);
+    App.Mediator.unsubscribe(MediatorEvents.AUDIO_TIME, this.updateElapsed);
+  },
+
   render: function() {
-    var duration = this.formattedTime(this.props.duration || 0);
-    var elapsed = this.formattedTime(this.props.elapsed || 0);
+    var duration = this.formattedTime(this.state.duration);
+    var elapsed = this.formattedTime(this.state.elapsed);
 
     return (
       <div>
@@ -21,5 +40,15 @@ App.PlayerTime = React.createClass({
         secs = milliseconds - mins*60;
 
     return (mins > 9 ? mins : '0' + mins) + ':' + (secs > 9 ? secs : '0' + secs);
+  },
+
+  updateDuration: function (duration) {
+    this.setState({ duration: parseInt(duration, 10) || 0 });
+    this.render();
+  },
+
+  updateElapsed: function (elapsed) {
+    this.setState({ elapsed: parseInt(elapsed, 10) || 0 });
+    this.render();
   }
 });

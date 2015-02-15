@@ -241,17 +241,4 @@ $(document).ready(function () { soundManager.onready(function () {
     // enable buttons
     $('#player-buttons button').removeAttr('disabled');
 
-    function durationChanged(duration) {
-        App.duration = duration;
-        reactRender();
-    }
-
-    function elapsedTimeChanged(elapsed) {
-        App.elapsed = elapsed;
-        reactRender();
-    }
-
-    App.Mediator.subscribe(MediatorEvents.AUDIO_DURATION_PARSED, durationChanged);
-    App.Mediator.subscribe(MediatorEvents.AUDIO_TIME, elapsedTimeChanged);
-
 }); });
