@@ -18,6 +18,7 @@ $(document).ready(function () { soundManager.onready(function () {
     var $volume = $('#player-volume');
     var $playerTime = $('#player-time');
     var $seekbar = $('#seekbar');
+    var $playbackControls = $('#player-buttons');
     var $playerOptions = $('#player-buttons-2');
 
     // resize the main-area to correct height
@@ -61,6 +62,26 @@ $(document).ready(function () { soundManager.onready(function () {
             song: App.currentSong
         }), $currentSong[0]);
 
+        React.render(React.createElement(App.PlaybackControls, {
+            playPause: function () {
+                if (!songlist.isPlaying()) {
+                    songlist.nextSong(getShuffle(), getRepeat());
+                    $.cookie('isPlaying', true);
+                } else {
+                    App.Audio.togglePause();
+                    $.cookie('isPlaying', ($.cookie('isPlaying') == 'false'));
+                }
+            }.bind(this),
+
+            next: function () {
+                songlist.nextSong(getShuffle(), getRepeat(), true);
+            }.bind(this),
+
+            previous: function () {
+                songlist.prevSong(getShuffle());
+            }.bind(this)
+        }), $playbackControls[0]);
+
         React.render(React.createElement(App.Volume, {
             updateVolume: App.Audio.setVolume.bind(App.Audio)
         }), $volume[0]);
@@ -99,50 +120,7 @@ $(document).ready(function () { soundManager.onready(function () {
     });
 
 
-    var playerTrack = $currentSong.find('.track');
-    var playPause = $('#play-pause');
-    var prevButton = $('#prev');
-    var nextButton = $('#next');
-    var elapsed = $playerTime.find('.elapsed');
-    var duration = $playerTime.find('.duration');
-
-
-    // playback buttons
-    playPause.click(function (e) {
-        e.preventDefault();
-
-        // if not playing anything, start playing the first song on the playlist
-        if (!songlist.isPlaying()) {
-            songlist.nextSong(getShuffle(), getRepeat());
-            $.cookie('isPlaying', true);
-            return;
-        }
-
-        App.Audio.togglePause();
-
-        $.cookie('isPlaying', ($.cookie('isPlaying') == 'false'));
-    });
-
-    App.Mediator.subscribe(MediatorEvents.AUDIO_PLAYING, function () {
-        playPause.addClass('playing');
-    });
-
-    App.Mediator.subscribe(MediatorEvents.AUDIO_PAUSED, function () {
-        playPause.removeClass('playing');
-    });
-
-    nextButton.click(function (e) {
-        e.preventDefault();
-        songlist.nextSong(getShuffle(), getRepeat(), true);
-    });
-
-    prevButton.click(function (e) {
-        e.preventDefault();
-        songlist.prevSong(getShuffle());
-    });
-
-
-    // repeat & shuffle buttons
+    // repeat & shuffle
 
     function storeGet(key) {
         if (key && store.get(key)) {
@@ -180,9 +158,5 @@ $(document).ready(function () { soundManager.onready(function () {
         console.log('Failed to fetch songs');
         console.log(xhr, status, error);
     });
-
-
-    // enable buttons
-    $('#player-buttons button').removeAttr('disabled');
 
 }); });
