@@ -15,6 +15,7 @@ $(document).ready(function () { soundManager.onready(function () {
     var $sidebar = $('#sidebar');
     var $header = $('#header');
     var $currentSong = $('#player-song');
+    var $volume = $('#player-volume');
     var $playerTime = $('#player-time');
     var $playerOptions = $('#player-buttons-2');
 
@@ -59,14 +60,16 @@ $(document).ready(function () { soundManager.onready(function () {
             song: App.currentSong
         }), $currentSong[0]);
 
+        React.render(React.createElement(App.Volume, {
+            updateVolume: App.Audio.setVolume.bind(App.Audio)
+        }), $volume[0]);
+
         React.render(React.createElement(App.PlayerTime, {
             elapsed: App.elapsed,
             duration: App.duration
         }), $playerTime[0]);
 
-        React.render(React.createElement(App.PlayerOptions, {
-
-        }), $playerOptions[0]);
+        React.render(React.createElement(App.PlayerOptions), $playerOptions[0]);
     };
 
     reactRender();
@@ -100,35 +103,8 @@ $(document).ready(function () { soundManager.onready(function () {
     var nextButton = $('#next');
     var elapsed = $playerTime.find('.elapsed');
     var duration = $playerTime.find('.duration');
-    var volume_label = $('#player-volume-label');
     var seekbar = $('#seekbar-slider');
 
-    // volume slider
-    var volume = 20;
-
-    if (store.get('volume')) {
-        volume = parseFloat(store.get('volume'));
-    }
-
-    if (volume >= 0 && volume <= 100) {
-        App.Audio.setVolume(volume);
-        volume_label.attr('title', volume);
-    }
-
-    $('#player-volume-slider').slider({
-        orientation: 'horizontal',
-        value: volume,
-        max: 100,
-        min: 0,
-        range: 'min',
-        slide: function (event, ui) {
-            App.Audio.setVolume(ui.value);
-            volume_label.attr('title', ui.value);
-        },
-        stop: function (event, ui) {
-            store.set('volume', ui.value);
-        }
-    });
 
     // seekbar
     var user_is_seeking = false;

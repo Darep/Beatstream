@@ -97,7 +97,7 @@
     display:inline-block;
     float:left;
     height:16px;
-    margin:17px 0 0 20px;
+    margin:16px 0 0 20px;
     width:16px;
 
     overflow: hidden;
@@ -105,8 +105,9 @@
     white-space: nowrap;
 }
 
-#player-volume {
-    margin:20px 15px 0 5px;
+#player-volume-slider-wrapper {
+    display: inline-block;
+    margin:19px 15px 0 5px;
     text-align:center;
     width:100px;
 }
