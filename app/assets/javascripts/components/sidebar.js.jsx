@@ -4,7 +4,9 @@ var App = window.App || {};
 
 App.Sidebar = React.createClass({
   render: function() {
-    var count = typeof this.props.count !== 'undefined' ? this.props.count : '-';
+    var count = this.props.count;
+    count = typeof count !== 'undefined' ? this.formattedCount(count) : '-';
+
     return (
       <div id="sidebar-wrap">
         <ul className="common">
@@ -17,5 +19,9 @@ App.Sidebar = React.createClass({
         </p>
       </div>
     );
+  },
+
+  formattedCount: function (count) {
+    return commify( parseInt(count, 10) );
   }
 });
