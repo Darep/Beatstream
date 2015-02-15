@@ -16,6 +16,7 @@ $(document).ready(function () { soundManager.onready(function () {
     var $header = $('#header');
     var $currentSong = $('#player-song');
     var $playerTime = $('#player-time');
+    var $playerOptions = $('#player-buttons-2');
 
     // resize the main-area to correct height
     resizeMain();
@@ -62,6 +63,10 @@ $(document).ready(function () { soundManager.onready(function () {
             elapsed: App.elapsed,
             duration: App.duration
         }), $playerTime[0]);
+
+        React.render(React.createElement(App.PlayerOptions, {
+
+        }), $playerOptions[0]);
     };
 
     reactRender();
@@ -194,33 +199,6 @@ $(document).ready(function () { soundManager.onready(function () {
 
 
     // repeat & shuffle buttons
-
-    var repeatButton = $('#repeat');
-    var shuffleButton = $('#shuffle');
-    var shuffle = false;
-    var repeat = false;
-
-    function newToggleButton(button, key, value) {
-        if (store.get(key)) {
-            value = store.get(key);
-        }
-
-        if (value) {
-            button.addClass('enabled');
-        }
-
-        button.click(function (e) {
-            e.preventDefault();
-
-            value = !value;
-            store.set(key, value);
-
-            $(this).toggleClass('enabled');
-        });
-    }
-
-    newToggleButton(repeatButton, 'repeat', repeat);
-    newToggleButton(shuffleButton, 'shuffle', shuffle);
 
     function storeGet(key) {
         if (key && store.get(key)) {
