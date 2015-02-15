@@ -1,4 +1,5 @@
 //= require lib/mediator
+//= require lib/mediator_events
 /** @jsx React.DOM */
 
 var App = window.App || {};
