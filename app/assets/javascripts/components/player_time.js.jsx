@@ -15,11 +15,13 @@ App.PlayerTime = React.createClass({
   componentDidMount: function () {
     App.Mediator.subscribe(MediatorEvents.AUDIO_DURATION_PARSED, this.updateDuration);
     App.Mediator.subscribe(MediatorEvents.AUDIO_TIME, this.updateElapsed);
+    App.Mediator.subscribe(MediatorEvents.AUDIO_STOPPED, this.updateElapsed);
   },
 
   componentWillUnmount: function() {
     App.Mediator.unsubscribe(MediatorEvents.AUDIO_DURATION_PARSED, this.updateDuration);
     App.Mediator.unsubscribe(MediatorEvents.AUDIO_TIME, this.updateElapsed);
+    App.Mediator.unsubscribe(MediatorEvents.AUDIO_STOPPED, this.updateElapsed);
   },
 
   render: function() {
