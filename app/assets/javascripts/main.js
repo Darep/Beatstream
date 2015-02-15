@@ -17,6 +17,7 @@ $(document).ready(function () { soundManager.onready(function () {
     var $currentSong = $('#player-song');
     var $volume = $('#player-volume');
     var $playerTime = $('#player-time');
+    var $seekbar = $('#seekbar');
     var $playerOptions = $('#player-buttons-2');
 
     // resize the main-area to correct height
@@ -69,6 +70,10 @@ $(document).ready(function () { soundManager.onready(function () {
             duration: App.duration
         }), $playerTime[0]);
 
+        React.render(React.createElement(App.Seekbar, {
+            seekTo: App.Audio.seekTo.bind(App.Audio)
+        }), $seekbar[0]);
+
         React.render(React.createElement(App.PlayerOptions), $playerOptions[0]);
     };
 
@@ -103,40 +108,6 @@ $(document).ready(function () { soundManager.onready(function () {
     var nextButton = $('#next');
     var elapsed = $playerTime.find('.elapsed');
     var duration = $playerTime.find('.duration');
-    var seekbar = $('#seekbar-slider');
-
-
-    // seekbar
-    var user_is_seeking = false;
-    seekbar.slider({
-        orientation: 'horizontal',
-        disabled: true,
-        value: 0,
-        max: 100,
-        min: 0,
-        range: 'min',
-        slide: function (event, ui) {
-
-        },
-        start: function(event, ui) {
-            user_is_seeking = true;
-        },
-        stop: function(event, ui) {
-            App.Audio.seekTo(ui.value);
-            user_is_seeking = false;
-        }
-    });
-
-    App.Mediator.subscribe(MediatorEvents.AUDIO_TIME, function (elapsed) {
-        if (!user_is_seeking) {
-            seekbar.slider('option', 'value', elapsed);
-        }
-    });
-
-    App.Mediator.subscribe(MediatorEvents.AUDIO_DURATION_PARSED, function (durationInSeconds) {
-        seekbar.slider('option', 'disabled', false);
-        seekbar.slider('option', 'max', durationInSeconds);
-    });
 
 
     // playback buttons
