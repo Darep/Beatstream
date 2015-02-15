@@ -65,10 +65,7 @@ $(document).ready(function () { soundManager.onready(function () {
             updateVolume: App.Audio.setVolume.bind(App.Audio)
         }), $volume[0]);
 
-        React.render(React.createElement(App.PlayerTime, {
-            elapsed: App.elapsed,
-            duration: App.duration
-        }), $playerTime[0]);
+        React.render(React.createElement(App.PlayerTime), $playerTime[0]);
 
         React.render(React.createElement(App.Seekbar, {
             seekTo: App.Audio.seekTo.bind(App.Audio)
