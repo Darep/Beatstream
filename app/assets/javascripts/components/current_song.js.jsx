@@ -10,10 +10,10 @@ App.CurrentSong = React.createClass({
     var track = song ? this.getFormattedSongTitle(song) : 'None';
 
     return (
-      <div>
+      <h5 id="player-song">
         <span className="label">Current song:</span>
         <span className="track" onDoubleClick={this.showActiveSong}>{track}</span>
-      </div>
+      </h5>
     );
   },
 

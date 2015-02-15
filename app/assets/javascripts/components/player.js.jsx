@@ -1,6 +1,7 @@
 //= require jquery.cookie
 //= require store.min
 //= require lib/audio
+//= require ./current_song
 //= require ./playback_controls
 //= require ./volume
 //= require ./player_time
@@ -44,11 +45,14 @@ App.Player = React.createClass({
 
     return (
       <div>
-        <App.PlaybackControls previous={previous} playPause={playPause} next={next} />
-        <App.Volume updateVolume={updateVolume} />
-        <App.PlayerTime />
-        <App.Seekbar seekTo={seekTo} />
-        <App.PlayerOptions repeat={this.state.repeat} shuffle={this.state.shuffle} onChange={this.onOptionsChange} />
+        <App.CurrentSong song={App.currentSong} />
+        <div id="player-controls">
+          <App.PlaybackControls previous={previous} playPause={playPause} next={next} />
+          <App.Volume updateVolume={updateVolume} />
+          <App.PlayerTime />
+          <App.Seekbar seekTo={seekTo} />
+          <App.PlayerOptions repeat={this.state.repeat} shuffle={this.state.shuffle} onChange={this.onOptionsChange} />
+        </div>
       </div>
     );
   },
