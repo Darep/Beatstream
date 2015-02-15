@@ -1,4 +1,3 @@
-//= require jquery.cookie
 //= require store.min
 //= require jquery.ba-hashchange.min
 //= require slick.grid
