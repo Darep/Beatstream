@@ -5,7 +5,6 @@ var App = window.App || {};
 
 App.PlayerOptions = React.createClass({
   getInitialState: function () {
-    console.log(store.get('repeat'));
     return {
       repeat: store.get('repeat') || false,
       shuffle: store.get('shuffle') || false
