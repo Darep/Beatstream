@@ -48,7 +48,7 @@ These are also listed on [http://www.beatstream.fi/#quirks](http://www.beatstrea
 
 ### License
 
-Copyright (c) 2012&ndash;2014 Antti-Jussi Kovalainen
+Copyright (c) 2012&ndash;2015 Antti-Jussi Kovalainen
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
