@@ -13,8 +13,9 @@ Changelog
 - Sass/CSS cleanup
 - JS cleanup
 - Added a pub-sub system called Mediator
-- Added JavaScript module for the API
+- Added API JavaScript module
 - Added App.Audio singleton for audio playback stuff
+- lastfm now uses Mediator and the API module
 
 
 ## 1.1.1
