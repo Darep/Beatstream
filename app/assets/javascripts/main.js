@@ -1,6 +1,7 @@
 //= require store.min
 //= require jquery.ba-hashchange.min
 //= require slick.grid
+//= require lib/api
 //= require lib/audio
 //= require lib/lastfm
 //= require lib/mediator
@@ -8,7 +9,10 @@
 //= require lib/utils
 //= require routing
 //= require songlist
+//= require components/header
 //= require components/player
+//= require components/playlist_header
+//= require components/sidebar
 
 $(document).ready(function () { soundManager.onready(function () {
 
