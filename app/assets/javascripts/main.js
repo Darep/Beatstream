@@ -222,20 +222,6 @@ $(document).ready(function () { soundManager.onready(function () {
     // enable buttons
     $('#player-buttons button').removeAttr('disabled');
 
-    function stop() {
-        App.Audio.stop();
-        songlist.resetPlaying();
-
-        // TODO: hide now playing icon from slickgrid
-
-        elapsedTimeChanged(0);
-        durationChanged(0);
-        seekbar.slider('value', 0);
-        seekbar.slider('option', 'disabled', true);
-        playerTrack.text('None');
-        $.cookie('isPlaying', 'false');
-    }
-
     function durationChanged(dur) {
         var mins = Math.floor(dur/60, 10),
             secs = dur - mins*60;
