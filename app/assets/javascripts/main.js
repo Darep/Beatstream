@@ -8,6 +8,8 @@
 //= require audio-modules/html5audio
 //= require audio-modules/soundmanager2
 
+var App = window.App || {};
+
 $(document).ready(function () { soundManager.onready(function () {
 
     // resize the main-area to correct height
