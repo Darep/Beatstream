@@ -5,11 +5,16 @@ Changelog
 
 #### Minor changes
 
-- Made text in the player component (the black bar at bottom) non-selectable
+- Made text in the player component non-selectable
+- JavaScript is now initialized just before `</body>` instead of in the `<head>`
 
 #### Refactoring
 
-- Sass/CSS clean-up
+- Sass/CSS cleanup
+- JS cleanup
+- Added a pub-sub system called Mediator
+- Added JavaScript module for the API
+- Added App.Audio singleton for audio playback stuff
 
 
 ## 1.1.1
