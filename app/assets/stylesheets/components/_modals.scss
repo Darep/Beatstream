@@ -1,7 +1,29 @@
+.modal-overlay {
+    background: rgba(#000, 0.85);
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+
+    &.show {
+        display: block;
+    }
+}
+
 .modal {
-    font-size:13px;
-    padding:20px 30px;
-    width:340px;
+    font-size: 13px;
+    margin: 0 auto;
+    padding: 20px 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 340px;
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    -moz-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
 
     h2 {
         margin:0 0 2px;

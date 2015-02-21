@@ -1,3 +1,4 @@
+//= require ./settings_modal
 /** @jsx React.DOM */
 
 var App = window.App || {};
@@ -32,11 +33,28 @@ App.UserPanel = React.createClass({
            <span className="dropdown"></span>
         </a>
         <ul id="user-menu" className={menuClassName}>
-          <li><a href="#!/settings">Settings</a></li>
+          <li><a href="#" onClick={this.openSettings}>Settings</a></li>
           <li><a href="/logout">Log out</a></li>
         </ul>
       </div>
     );
+  },
+
+  openSettings: function (event) {
+    var settingsModal = document.getElementById('settings-modal');
+
+    if (settingsModal) {
+      var modal = document.getElementById('modal');
+
+      if (modal.className.indexOf('show') <= -1) {
+        modal.className += ' show';
+      }
+    } else {
+      React.render(
+        <App.SettingsModal />,
+        document.getElementById('modal')
+      );
+    }
   },
 
   toggleMenu: function (event) {
