@@ -3,10 +3,10 @@
 //= require jquery.ba-hashchange.min
 //= require slick.grid
 //= require lib/audio
+//= require lib/lastfm
 //= require lib/mediator
 //= require lib/mediator_events
 //= require routing
-//= require lastfm
 //= require songlist
 
 $(document).ready(function () { soundManager.onready(function () {
@@ -45,7 +45,7 @@ $(document).ready(function () { soundManager.onready(function () {
             App.Audio.play(uri);
 
             playerTrack.text(song.nice_title);
-            lastfm.newSong(song);
+            App.lastfm.newSong(song);
         }
     });
 
@@ -249,7 +249,6 @@ $(document).ready(function () { soundManager.onready(function () {
 
         elapsed.text((mins > 9 ? mins : '0' + mins) + ':' + (secs > 9 ? secs : '0' + secs));
 
-        lastfm.scrobble(elaps);
         $.cookie('time', elaps);  // TODO: use this somewhere
     }
 

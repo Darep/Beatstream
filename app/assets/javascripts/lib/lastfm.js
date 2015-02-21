@@ -1,12 +1,16 @@
 //= require lib/api
+//= require lib/mediator
+//= require lib/mediator_events
 
-;(function ($, window, document, App, undefined) {
+var App = window.App || {};
+
+(function (undefined) {
 
     var scrobble_time = 240,
         song_scrobbled = false,
         song_scrobbling = false;
 
-    window.lastfm = {
+    var lastfm = {
         song: undefined,
 
         newSong: function (song) {
@@ -32,14 +36,23 @@
             App.API.updateNowPlaying(song.artist, song.title).then(function () {
                 song_scrobbled = false;
                 song_scrobbling = false;
+                App.Mediator.subscribe(MediatorEvents.AUDIO_TIME, lastfm.checkScrobble);
             }, function () {
                 song_scrobbled = false;
                 song_scrobbling = false;
             });
         },
 
-        scrobble: function (elaps) {
-            if (song_scrobbling || song_scrobbled || elaps < scrobble_time || !this.song) {
+        checkScrobble: function (elaps) {
+            if (song_scrobbling || song_scrobbled || elaps < scrobble_time || !lastfm.song) {
+                return;
+            }
+
+            lastfm.scrobble().bind(lastfm);
+        },
+
+        scrobble: function () {
+            if (song_scrobbling) {
                 return;
             }
 
@@ -48,11 +61,15 @@
             App.API.scrobble(this.song.artist, this.song.title).then(function () {
                 song_scrobbled = true;
                 song_scrobbling = false;
+                App.Mediator.unsubscribe(MediatorEvents.AUDIO_TIME, lastfm.checkScrobble);
             }, function () {
                 song_scrobbled = true;
                 song_scrobbling = false;
+                App.Mediator.unsubscribe(MediatorEvents.AUDIO_TIME, lastfm.checkScrobble);
             });
         }
     };
 
-})(jQuery, window, document, window.App);
+    App.lastfm = lastfm;
+
+})();
