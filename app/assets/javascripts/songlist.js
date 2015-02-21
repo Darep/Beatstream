@@ -1,6 +1,7 @@
 //= require jquery.cookie
 //= require lib/utils
 //= require lib/key_codes
+//= require lib/mediator
 //= require dragtooltip
 /*!
  * Abstracts SlickGrid away into oblivion!
@@ -16,9 +17,15 @@
         }, events_in);
 
         this.events = events;
+        this.initializeSlickGrid(this.events);
 
-        // SlickGrid
+        App.Mediator.subscribe(MediatorEvents.PLAYLIST_SHOW_CURRENT_SONG, function () {
+            var row = this.dataView.getRowById(this.grid.playingSongId);
+            this.grid.scrollRowIntoView(row);
+        }.bind(this));
+    }
 
+    Songlist.prototype.initializeSlickGrid = function (events) {
         var initDone = false;
 
         var columns = [
@@ -408,11 +415,6 @@
 
     Songlist.prototype.resizeCanvas = function () {
         this.grid.resizeCanvas();
-    };
-
-    Songlist.prototype.scrollNowPlayingIntoView = function () {
-        var row = this.dataView.getRowById(this.grid.playingSongId);
-        this.grid.scrollRowIntoView(row);
     };
 
     Songlist.prototype.nextSong = function (shuffle, manual) {
