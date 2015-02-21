@@ -1,0 +1,44 @@
+.form-row {
+  label {
+    display: block;
+    font-weight: 700;
+  }
+
+  label + input {
+    margin-top: 5px;
+  }
+
+  input {
+    border: 1px solid #ccc;
+    font: inherit;
+    line-height: 1.2;
+    min-width: 240px;
+    padding: 8px 8px 6px;
+
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+  }
+}
+
+.form-row--inline {
+  label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 140px;
+  }
+
+  > {
+    label, input, a, div, button {
+      display: inline-block;
+      margin-top: 0;
+      vertical-align: middle;
+    }
+  }
+}
+
+fieldset + fieldset {
+  border-top: 2px solid #f1f1f1;
+  padding-top: 1.5em;
+}

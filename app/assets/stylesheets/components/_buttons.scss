@@ -1,21 +1,53 @@
 .btn {
-    $gradient: top, lighten($color-gray, 10%), darken($color-gray, 10%);
-    background: $color-gray;
-    background: -webkit-linear-gradient($gradient);
-    background: -moz-linear-gradient($gradient);
-    background: -ms-linear-gradient($gradient);
-    background: -o-linear-gradient($gradient);
-    background: linear-gradient($gradient);
-    color:#fff;
-    display:inline-block;
-    font-size:12px;
-    font-weight:700;
-    height:28px;
-    line-height:28px;
-    padding:0 8px;
-    text-align:center;
-    text-shadow:0 1px 0 #000;
-    -webkit-border-radius:3px;
-    -moz-border-radius:3px;
-    border-radius:3px;
+    background: #fff;
+    border: 1px solid;
+    border-color: lighten($color-gray-light, 20%);
+    color: $color-gray-light;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.4;
+    padding: 6px 16px;
+    text-align: center;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-appearance: none;
+    transition-duration: 180ms;
+    transition-property: background, border-color, color;
+
+    & + & {
+        margin-left: 10px;
+    }
+
+    &:hover {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+}
+
+.btn--big {
+    letter-spacing: 0.05em;
+    padding: 12px 28px;
+    text-transform: uppercase;
+}
+
+.btn--primary {
+    background: $color-orange;
+    border-color: darken($color-orange, 5%);
+    color: #fff;
+
+    &:hover {
+        background: darken($color-orange, 5%);
+    }
+}
+
+.plain-btn {
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+    -webkit-appearance: none;
 }
