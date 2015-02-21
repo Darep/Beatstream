@@ -9,8 +9,6 @@
 //= require lastfm
 //= require songlist
 
-var App = window.App || {};
-
 $(document).ready(function () { soundManager.onready(function () {
 
     // resize the main-area to correct height
