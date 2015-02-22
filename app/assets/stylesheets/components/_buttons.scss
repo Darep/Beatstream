@@ -34,11 +34,29 @@
 
 .btn--primary {
     background: $color-orange;
+    $gradient: top, #FFA621, #F27C20;
+    @include linear-gradient($gradient);
     border-color: darken($color-orange, 5%);
     color: #fff;
 
     &:hover {
         background: darken($color-orange, 5%);
+        $gradient: top, darken(#FFA621, 10%), darken(#F27C20, 10%);
+        @include linear-gradient($gradient);
+    }
+}
+
+.btn--dangerous {
+    background: $color-red;
+    $gradient: top, lighten($color-red, 10%), darken($color-red, 5%);
+    @include linear-gradient($gradient);
+    border-color: darken($color-red, 5%);
+    color: #fff;
+
+    &:hover {
+        background: darken($color-red, 5%);
+        $gradient: top, $color-red, darken($color-red, 15%);
+        @include linear-gradient($gradient);
     }
 }
 
