@@ -2,14 +2,11 @@ module ApiV1
   class SongsController < ApiController
     # GET /api/v1/songs
     def index
-      songs_as_json = nil
+      songs_as_json = Song.all_as_json
 
-      if params[:refresh]
-        Rails.logger.info 'Forced song list refresh'
-        songs_as_json = refresh_and_get_all
-      else
+      if songs_as_json == '[]'
+        Song.refresh
         songs_as_json = Song.all_as_json
-        songs_as_json = refresh_and_get_all if songs_as_json == '[]'
       end
 
       render :text => songs_as_json
