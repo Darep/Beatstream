@@ -3,6 +3,11 @@ Changelog
 
 ## vNext
 
+#### Major changes
+
+- Refresh endpoint is now at /api/v1/songs/refresh, instead of the old /songs?refresh=1
+- Redirects back to player after refresh
+
 #### Minor changes
 
 - Made text in the player component non-selectable
@@ -16,6 +21,9 @@ Changelog
 - Added API JavaScript module
 - Added App.Audio singleton for audio playback stuff
 - lastfm now uses Mediator and the API module
+- Moved initial song list fetching, and song count updation from songlist.js to main.js
+- Prefixed API HTTP request with "/api/v1/"
+- Scrobbling now uses proper HTTP methods instead of GET
 
 
 ## 1.1.1
