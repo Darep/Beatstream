@@ -12,6 +12,7 @@ module ApiV1
       render :text => songs_as_json
     end
 
+    # GET /api/v1/songs/play?file=song.mp3
     def play
       song = Song.new_from_mp3_file(params[:file], -1)
       response.content_type = Mime::Type.lookup_by_extension("mp3")
