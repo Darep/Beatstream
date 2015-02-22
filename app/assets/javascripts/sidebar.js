@@ -21,7 +21,6 @@ $(document).ready(function () {
 
     $sidebar.find('.playlists a').click(function () {
         var id = $(this).attr('data-id');
-        Songlist.loadPlaylist(id);
 
         return false;
     });

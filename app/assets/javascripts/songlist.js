@@ -433,26 +433,6 @@
         this.grid.playingSongId = null;
     };
 
-    Songlist.prototype.loadPlaylist = function (url) {
-        var self = this;
-
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            error: function (xhr, status, error) {
-                /*
-                console.log(xhr);
-                console.log(status);
-                console.log(error);
-                */
-            },
-            success: function(data) {
-                $('.preloader').remove();
-                self.loadData(data);
-            }
-        });
-    };
-
     Songlist.prototype.loadData = function (data) {
         // initialize data view model
         this.dataView.beginUpdate();
