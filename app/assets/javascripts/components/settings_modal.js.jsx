@@ -73,7 +73,7 @@ App.SettingsModal = React.createClass({
           </main>
           <footer className="modal__footer">
             <button className="btn btn--big" onClick={this.close}>Close</button>
-            <button className="btn btn--big btn--primary">Save changes</button>
+            <button className="btn btn--big btn--primary" onClick={this.save}>Save changes</button>
           </footer>
         </div>
       </div>
@@ -84,16 +84,31 @@ App.SettingsModal = React.createClass({
 
   },
 
-  connectLastfm: function () {
-    alert('TODO: connect last fm');
+  connectLastfm: function (e) {
+    e.preventDefault();
+
+    var w = 800;
+    var h = 650;
+    var left = (window.screen.width/2) - (w/2);
+    var top = (window.screen.height/2) - (h/2);
+
+    window.open('/settings/lastfm_connect',
+      'LastFmConnect_Window',
+      'width=' + w + ',height=' + h + ',top=' + top + ',left=' + left +
+      ',toolbar=0,menubar=0,location=0,status=0');
   },
 
-  disconnectLastfm: function () {
+  disconnectLastfm: function (e) {
+    e.preventDefault();
     alert('TODO: disconnect last fm');
   },
 
   close: function (e) {
     var modal = document.getElementById('modal');
     modal.className = modal.className.replace('show', '');
+  },
+
+  save: function (e) {
+    alert('TODO: save');
   }
 });
