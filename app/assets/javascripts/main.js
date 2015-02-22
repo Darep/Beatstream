@@ -214,9 +214,14 @@ $(document).ready(function () { soundManager.onready(function () {
     }
 
 
-    // sidebar drag & drop
-
-    songlist.loadPlaylist('/songs/index');
+    // ::: LOAD SONGS :::
+    App.API.getAllMusic().then(function (data) {
+        songlist.loadData(data);
+        $('.preloader').remove();
+    }, function fail(xhr, status, error) {
+        console.log('Failed to fetch songs');
+        console.log(xhr, status, error);
+    });
 
 
     // enable buttons
