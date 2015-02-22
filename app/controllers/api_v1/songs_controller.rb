@@ -22,7 +22,7 @@ module ApiV1
     # POST /api/v1/songs/refresh
     def refresh
       Song.refresh
-      render :nothing => true
+      redirect_to :root
     end
 
     private
