@@ -6,6 +6,7 @@
 //= require lib/lastfm
 //= require lib/mediator
 //= require lib/mediator_events
+//= require lib/utils
 //= require routing
 //= require songlist
 
@@ -218,6 +219,14 @@ $(document).ready(function () { soundManager.onready(function () {
     App.API.getAllMusic().then(function (data) {
         songlist.loadData(data);
         $('.preloader').remove();
+
+        // update song counts
+        var count = commify( parseInt( data.length, 10 ) );
+        $('.medialibrary.count').text(count);
+        $('.page-header .count').text(count);
+
+        // update count text
+        $('.page-header .text').html(data.length == 1 ? 'song' : 'songs');
     }, function fail(xhr, status, error) {
         console.log('Failed to fetch songs');
         console.log(xhr, status, error);

@@ -445,19 +445,6 @@
 
         this.dataView.syncGridSelection(this.grid, false);
         this.dataView.syncGridCellCssStyles(this.grid, 'currentSong_playing');
-
-        // update song count on sidebar
-        var count = commify( parseInt( data.length, 10 ) );
-        $('.medialibrary.count').text(count);
-        $('.page-header .count').text(count);
-
-        // update count text
-        if (data.length == 1) {
-            $('.page-header .text').html('song');
-        }
-        else {
-            $('.page-header .text').html('songs');
-        }
     };
 
     window.Songlist = Songlist;
