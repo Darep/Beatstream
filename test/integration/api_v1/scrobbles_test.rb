@@ -5,7 +5,7 @@ class ApiV1::ScrobblesTest < ActionDispatch::IntegrationTest
   setup do
     FakeFS do
       # Perform a HTTP request so the "session" object is initialized
-      get_json '/songs'
+      get_json '/api/v1/songs'
     end
 
     # Set current user
@@ -22,7 +22,7 @@ class ApiV1::ScrobblesTest < ActionDispatch::IntegrationTest
     now_playing_stub = stub_request(:post, /https?:\/\/ws\.audioscrobbler\.com\/.*method=track\.updateNowPlaying.*/).
       to_return(:status => 200, :headers => {}, :body => xml_file('lfm_track_updateNowPlaying.xml'))
 
-    get '/songs/now_playing?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
+    get '/api/v1/songs/now_playing?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
     assert_requested now_playing_stub
   end
 
@@ -30,30 +30,30 @@ class ApiV1::ScrobblesTest < ActionDispatch::IntegrationTest
     scrobble_stub = stub_request(:post, /https?:\/\/ws\.audioscrobbler\.com\/.*method=track\.scrobble.*/).
       to_return(:status => 200, :headers => {}, :body => xml_file('lfm_track_scrobble.xml'))
 
-    get '/songs/scrobble?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
+    get '/api/v1/songs/scrobble?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
     assert_requested scrobble_stub
   end
 
   test 'should return RecordNotFound error if user is not found on scrobble' do
     session[:user_id] = 78991423413
-    get '/songs/scrobble?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
+    get '/api/v1/songs/scrobble?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
     assert_response :not_found
   end
 
   test 'should return "not connected to Last.fm" error if user has not linked to last.fm' do
     claire = users(:claire)
     session[:user_id] = claire.id
-    get '/songs/scrobble?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
+    get '/api/v1/songs/scrobble?artist=Silence&title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
     assert_response 422
   end
 
   test 'should return error if artist is missing' do
-    get '/songs/scrobble?title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
+    get '/api/v1/songs/scrobble?title=30%20second%20silence', { :format => 'json' }, 'rack.session' => session
     assert_response 422
   end
 
   test 'should return error if title is missing' do
-    get '/songs/scrobble?artist=Silence', { :format => 'json' }, 'rack.session' => session
+    get '/api/v1/songs/scrobble?artist=Silence', { :format => 'json' }, 'rack.session' => session
     assert_response 422
   end
 end

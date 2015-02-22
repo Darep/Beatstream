@@ -25,12 +25,12 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
 # /songs
 
   test 'should return all songs from /songs' do
-    get_json '/songs'
+    get_json '/api/v1/songs'
     assert_equal @songs_json, @response.body
   end
 
   test 'should return all songs from /songs/index' do
-    get_json '/songs/index'
+    get_json '/api/v1/songs/index'
     assert_equal @songs_json, @response.body
   end
 
@@ -42,10 +42,10 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
 
     # Populate the songs.json file
     File.delete Rails.root.join('data/songs.json')
-    get_json '/songs'
+    get_json '/api/v1/songs'
 
     # Get the new list of songs
-    get_json '/songs'
+    get_json '/api/v1/songs'
 
     match = false
     json_response.each { |i| match ||= (i['path'] == 'new_song.mp3') }
@@ -58,10 +58,10 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     new_song.write(@one)
 
     # Trigger the refresh
-    get_json '/songs?refresh=true'
+    get_json '/api/v1/songs?refresh=true'
 
     # Ask for the index again
-    get_json '/songs'
+    get_json '/api/v1/songs'
 
     match = false
     json_response.each { |i| match ||= (i['path'] == 'new_song.mp3') }
@@ -72,7 +72,7 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
 # /songs/play
 
   test 'should play song from /songs/play?file=1sec.mp3' do
-    get_json '/songs/play?file=1sec.mp3'
+    get_json '/api/v1/songs/play?file=1sec.mp3'
     assert_equal @response.body, in_binary(@one)
   end
 
@@ -85,7 +85,7 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     one_mock_in_dir.write(@one)
 
     # assert
-    get_json '/songs/play?file=test_dir/1s.mp3'
+    get_json '/api/v1/songs/play?file=test_dir/1s.mp3'
     assert_equal @response.body, in_binary(@one)
   end
 end
