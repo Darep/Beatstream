@@ -88,7 +88,7 @@ var api = {
         var data = 'artist=' + encodeURIComponent(artist) + '&title=' + encodeURIComponent(title);
 
         return this.ajax('/songs/now_playing', {
-            type: 'GET',  // FIXME: This should be PUT
+            type: 'PUT',
             dataType: 'text',
             data: data
         });
@@ -98,7 +98,7 @@ var api = {
         var data = 'artist=' + encodeURIComponent(artist) + '&title=' + encodeURIComponent(title);
 
         return this.ajax('/songs/scrobble', {
-            type: 'GET',  // FIXME: this should be POST
+            type: 'POST',
             dataType: 'text',
             data: data
         });
