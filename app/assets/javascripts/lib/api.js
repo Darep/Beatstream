@@ -2,7 +2,7 @@ var App = window.App || {};
 
 var api = {
     cache: {},
-    baseUrl: '',
+    baseUrl: '/api/v1',
 
     ajax: function () {
         var url, args;
@@ -39,10 +39,10 @@ var api = {
             args.errorHandler = this.errorHandler;
         }
 
-        return $.ajax(url, args);
+        return $.ajax(this.buildURL(url), args);
     },
 
-    getURL: function(url) {
+    buildURL: function(url) {
         // If it's an absolute URL, return it
         if (url.indexOf('http') === 0) {
             return url;
@@ -70,7 +70,7 @@ var api = {
     },
 
     getSongURI: function(song) {
-        return this.baseUrl + '/songs/play/?file=' + encodeURIComponent(song.path);
+        return this.buildURL('/songs/play/?file=' + encodeURIComponent(song.path));
     },
 
     refreshMediaLibrary: function() {
