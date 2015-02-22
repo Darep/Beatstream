@@ -48,14 +48,30 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     assert match, 'new_song not found in JSON response'
   end
 
-  test 'should refresh songs index when ?refresh is present' do
+# /songs/refresh
+
+  test 'should refresh songs on GET' do
     new_song = File.open(File.join(Rails.application.config.music_paths, 'new_song.mp3'), 'wb')
     new_song.write(@one)
 
     # Trigger the refresh
-    get_json '/api/v1/songs?refresh=true'
+    get_json '/api/v1/songs/refresh'
 
-    # Ask for the index again
+    get_json '/api/v1/songs'
+
+    match = false
+    json_response.each { |i| match ||= (i['path'] == 'new_song.mp3') }
+
+    assert match, 'new_song not found in JSON response'
+  end
+
+  test 'should refresh songs on POST' do
+    new_song = File.open(File.join(Rails.application.config.music_paths, 'new_song.mp3'), 'wb')
+    new_song.write(@one)
+
+    # Trigger the refresh
+    post_json '/api/v1/songs/refresh', {}
+
     get_json '/api/v1/songs'
 
     match = false

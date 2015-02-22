@@ -21,6 +21,12 @@ module ApiV1
       render :text => song.as_binary_stream
     end
 
+    # POST /api/v1/songs/refresh
+    def refresh
+      Song.refresh
+      render :nothing => true
+    end
+
     private
 
       def refresh_and_get_all
