@@ -12,6 +12,11 @@ App.SettingsModal = React.createClass({
   },
 
   render: function () {
+    var user = this.props.user;
+    var username = user.username;
+    var email = user.email || '';
+    var lastfmConnected = (user.lastfm_session_key && user.lastfm_username);
+
     return (
       <div id="settings-modal" className="modal">
         <div className="modal__content">
@@ -26,30 +31,30 @@ App.SettingsModal = React.createClass({
 
             <form>
               <fieldset>
-                <div className="form-row">
+                <div className="form-row form-row--inline">
                   <label>Username</label>
-                  <input value="darep" />
+                  <input type="text" value={username} onChange={this.handleChange} />
                 </div>
 
-                <div className="form-row">
+                <div className="form-row form-row--inline">
                   <label>Email</label>
-                  <input value="dareppi@gmail.com" />
+                  <input type="text" value={email} onChange={this.handleChange} />
                 </div>
               </fieldset>
 
               <fieldset>
                 <div className="form-row form-row--inline">
                   <label>Last.fm</label>
-                  {true &&
-                    <a href="/settings/lastfm_connect" target="_blank" className="btn btn--primary">
+                  {!lastfmConnected &&
+                    <a href="/settings/lastfm_connect" target="_blank" className="btn btn--primary" onClick={this.connectLastfm}>
                       Connect Last.fm
                     </a>
                   }
 
-                  {false &&
-                    <div>
-                      <p className="lastfm-logged-in">Logged in</p>
-                      <a href="/settings/lastfm_disconnect" className="btn btn--dangerous">
+                  {lastfmConnected &&
+                    <div className="margins-off">
+                      <span>Logged in as <strong>{user.lastfm_username}</strong></span>
+                      <a href="/settings/lastfm_disconnect" className="btn btn--dangerous btn--inline" onClick={this.disconnectLastfm}>
                         Disconnect Last.fm
                       </a>
                     </div>
@@ -73,6 +78,18 @@ App.SettingsModal = React.createClass({
         </div>
       </div>
     );
+  },
+
+  handleChange: function () {
+
+  },
+
+  connectLastfm: function () {
+    alert('TODO: connect last fm');
+  },
+
+  disconnectLastfm: function () {
+    alert('TODO: disconnect last fm');
   },
 
   close: function (e) {

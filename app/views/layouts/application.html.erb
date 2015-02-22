@@ -42,11 +42,7 @@
 
 <script type="text/javascript">
     window.App = window.App || {};
-
-    window.App.user = {
-        id: <%= raw session[:user_id].to_json %>,
-        name: <%= raw session[:username].to_json %>
-    };
+    window.App.user = <%= raw @user.to_json %>;
 </script>
 <%= javascript_include_tag "application" %>
 

@@ -29,7 +29,7 @@ App.UserPanel = React.createClass({
     return (
       <div id="user-panel">
         <a href="#" onClick={this.toggleMenu} className={linkClassName}>
-           <span className="name">{user.name}</span>
+           <span className="name">{user.username}</span>
            <span className="dropdown"></span>
         </a>
         <ul id="user-menu" className={menuClassName}>
@@ -51,7 +51,7 @@ App.UserPanel = React.createClass({
       }
     } else {
       React.render(
-        <App.SettingsModal />,
+        <App.SettingsModal user={this.props.user} />,
         document.getElementById('modal')
       );
     }
