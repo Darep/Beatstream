@@ -29,11 +29,6 @@ class ApiV1::SongsTest < ActionDispatch::IntegrationTest
     assert_equal @songs_json, @response.body
   end
 
-  test 'should return all songs from /songs/index' do
-    get_json '/api/v1/songs/index'
-    assert_equal @songs_json, @response.body
-  end
-
 # songs.json
 
   test 'should create all songs index if it\'s missing' do

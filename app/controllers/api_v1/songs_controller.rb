@@ -1,5 +1,6 @@
 module ApiV1
   class SongsController < ApiController
+    # GET /api/v1/songs
     def index
       songs_as_json = nil
 
