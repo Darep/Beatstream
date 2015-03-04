@@ -9,6 +9,7 @@ var App = window.App || {};
 App.Main = React.createClass({
   render: function() {
     var user = this.props.user;
+    var songs = this.props.songs;
     var count = this.props.songs.length;
     var songlist = this.props.songlist;
 
@@ -24,13 +25,8 @@ App.Main = React.createClass({
           <App.Sidebar count={count} />
 
           <div id="content">
-              <div id="content-wrap">
-                  <App.PlaylistHeader count={count} filter={filter} />
-
-                  <div className="grid-container">
-                      <div id="slickgrid"></div>
-                  </div>
-              </div>
+            <App.PlaylistHeader count={count} filter={filter} />
+            <App.Songlist songs={songs} />
           </div>
         </div>
 
