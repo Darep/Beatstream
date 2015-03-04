@@ -9,18 +9,12 @@
 //= require lib/utils
 //= require routing
 //= require songlist
-//= require components/header
-//= require components/player
-//= require components/playlist_header
-//= require components/sidebar
+//= require components/main
 
 $(document).ready(function () { soundManager.onready(function () {
 
-    var $header = $('#header');
-    var $sidebar = $('#sidebar');
-    var $currentSong = $('#player-song');
-    var $player = $('#player');
-    var $playlistHeader = $('.page-header')
+    var songlist,
+        reactRender;
 
     App.songs = [];
 
@@ -30,8 +24,19 @@ $(document).ready(function () { soundManager.onready(function () {
     });
 
 
-    // ::: INIT songlist / GRID OMG SO BIG SECTION :::
-    var songlist = new Songlist({
+    // ::: REACT ::::
+    reactRender = function () {
+        React.render(React.createElement(App.Main, {
+            user: App.user,
+            songs: App.songs,
+            songlist: songlist
+        }), document.getElementById('app'));
+    };
+    reactRender();
+
+
+    // ::: SONG LIST :::
+    songlist = new Songlist({
         onPlay: function (song) {
             var uri = App.API.getSongURI(song);
 
@@ -50,50 +55,6 @@ $(document).ready(function () { soundManager.onready(function () {
     App.Mediator.subscribe(MediatorEvents.AUDIO_ERROR, function () {
       songlist.nextSong(getShuffle(), getRepeat());
     });
-
-
-    // ::: REACT TRANSITION :::
-    var reactRender = function () {
-        React.render(React.createElement(App.Header, {
-            user: App.user
-        }), $header[0]);
-
-        React.render(React.createElement(App.Sidebar, {
-            count: App.songs.length
-        }), $sidebar[0]);
-
-        React.render(React.createElement(App.PlaylistHeader, {
-            count: App.songs.length,
-            filter: function (filter) {
-                songlist.setFilter(filter);
-            }
-        }), $playlistHeader[0]);
-
-        React.render(React.createElement(App.Player, {
-            songlist: songlist
-        }), $player[0]);
-    };
-
-    reactRender();
-
-
-    // repeat & shuffle
-
-    function storeGet(key) {
-        if (key && store.get(key)) {
-            return store.get(key);
-        }
-
-        return false;
-    }
-
-    function getShuffle() {
-        return storeGet('shuffle');
-    }
-
-    function getRepeat() {
-        return storeGet('repeat');
-    }
 
 
     // ::: LOAD SONGS :::
@@ -122,8 +83,8 @@ $(document).ready(function () { soundManager.onready(function () {
     $(window).resize(function () { resizeMain(); });
 
     function resizeMain() {
-        var h = $(window).height() - $header.outerHeight() - $('#player').outerHeight();
-        var w = $(window).width() - $sidebar.outerWidth();
+        var h = $(window).height() - $('#header').outerHeight() - $('#player').outerHeight();
+        var w = $(window).width() - $('#sidebar').outerWidth();
         $('#main').css('height', h);
         $('#content-wrap').css('width', w);
 
@@ -133,6 +94,25 @@ $(document).ready(function () { soundManager.onready(function () {
         if (songlist) {
             songlist.resizeCanvas();
         }
+    }
+
+
+    // ::: HELPERS :::
+
+    function storeGet(key) {
+        if (key && store.get(key)) {
+            return store.get(key);
+        }
+
+        return false;
+    }
+
+    function getShuffle() {
+        return storeGet('shuffle');
+    }
+
+    function getRepeat() {
+        return storeGet('repeat');
     }
 
 }); });

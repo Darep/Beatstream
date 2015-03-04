@@ -15,7 +15,7 @@ App.PlaylistHeader = React.createClass({
     count = typeof count !== 'undefined' ? this.formattedCount(count) : '-';
 
     return (
-      <div>
+      <div className="page-header">
         <div className="info">
           <h2>All music</h2>
           <p className="meta">

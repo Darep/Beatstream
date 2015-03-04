@@ -44,7 +44,7 @@ App.Player = React.createClass({
     var seekTo = App.Audio.seekTo.bind(App.Audio);
 
     return (
-      <div>
+      <div id="player" className="player">
         <App.CurrentSong song={App.currentSong} />
         <div id="player-controls">
           <App.PlaybackControls previous={previous} playPause={playPause} next={next} />

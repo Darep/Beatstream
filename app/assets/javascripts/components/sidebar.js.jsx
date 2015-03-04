@@ -8,15 +8,17 @@ App.Sidebar = React.createClass({
     count = typeof count !== 'undefined' ? this.formattedCount(count) : '-';
 
     return (
-      <div id="sidebar-wrap">
-        <ul className="common">
-          <li className="all-music act">
-            <a href="#">All music <span className="count">{count}</span></a>
-          </li>
-        </ul>
-        <p className="none">
-          Playlists haven't been implemented yet! Stay tuned.
-        </p>
+      <div id="sidebar">
+        <div id="sidebar-wrap">
+          <ul className="common">
+            <li className="all-music act">
+              <a href="#">All music <span className="count">{count}</span></a>
+            </li>
+          </ul>
+          <p className="none">
+            Playlists haven't been implemented yet! Stay tuned.
+          </p>
+        </div>
       </div>
     );
   },

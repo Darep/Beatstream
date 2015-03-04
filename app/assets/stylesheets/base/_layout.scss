@@ -1,16 +1,9 @@
-#wrap {
-    float:left;
+#app, #wrap, #main {
     height:100%;
     overflow:hidden;
     position: relative;
     width:100%;
 }
-    #main {
-        height:100%;
-        overflow:hidden;
-        position:relative;
-        width:100%;
-    }
         #sidebar {
             float:left;
             overflow:hidden;
