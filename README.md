@@ -1,14 +1,6 @@
-# Beatstream
+# Beatstream [![Code Climate](https://codeclimate.com/github/Darep/Beatstream/badges/gpa.svg)](https://codeclimate.com/github/Darep/Beatstream) [![Build Status](https://travis-ci.org/Darep/Beatstream.svg?branch=master)](https://travis-ci.org/Darep/Beatstream)
 
 > **IMPORTANT:** I have been experimenting with some re-writes and I'm now slowly porting these changes from my [dev](https://github.com/Darep/Beatstream/tree/dev) branch into `master`. Stay tuned!
-
----
-
-"Code quality"  
-[![Code Climate](https://codeclimate.com/github/Darep/Beatstream/badges/gpa.svg)](https://codeclimate.com/github/Darep/Beatstream)
-
-Tests  
-[![Build Status](https://travis-ci.org/Darep/Beatstream.svg?branch=master)](https://travis-ci.org/Darep/Beatstream)
 
 ---
 
