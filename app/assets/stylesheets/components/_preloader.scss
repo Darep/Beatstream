@@ -1,27 +1,64 @@
 .preloader {
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 14px;
   height: 100%;
   position: fixed;
+  top: 0;
+  left: 0;
   text-align: center;
   width: 100%;
-  z-index: 998;
+  z-index: 1000;
 
-  * {
-    color: #fff;
-    top: 50%;
-    left: 50%;
-    position: absolute;
-    z-index: 99999;
-  }
+  a {
+    text-decoration: underline;
 
-  .loading {
-    margin: -8px 0 0 -8px;
+    &:hover {
+      color: #ddd;
+    }
   }
 }
 
-.loading {
-  @extend %clearfix;
-  background: url('/assets/preloader.gif') no-repeat;
-  height: 16px;
+.preloader__body {
+  color: #fff;
+  line-height: 18px;
+  margin: -100px 0 0 -150px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  z-index: 99999;
+}
+
+.preloader__spinner {
+  background: url('/assets/preloader.gif') no-repeat center center;
+  display: inline-block;
+  height: 18px;
+  margin-right: 8px;
+  vertical-align: top;
   width: 16px;
+}
+
+.preloader__notification {
+  @include animation(bounceIn .7s);
+  @include animation-fill-mode(both);
+  margin-top: 24px;
+  text-align: left;
+
+  .icon {
+    display: inline-block;
+    float: left;
+    height: 24px;
+    margin-right: 5px;
+    width: 24px;
+  }
+}
+
+.preloader__notification__title,
+.preloader__notification__subtitle {
+  display: inline-block;
+}
+
+.preloader__notification__title {
+  font-weight: 700;
 }

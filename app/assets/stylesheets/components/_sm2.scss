@@ -5,20 +5,66 @@
   width: 0;
 
   &.swf_timedout {
+    // Didn't load before time-out, show to user.
+    // Maybe highlight on-screen, red border, etc..?
     background: rgba(0, 0, 0, 0.8);
-    height: 300px;
-    padding: 3em;
+    height: 100px;
+    margin: 60px 0 0 -100px;
     position: absolute;
-    left: 40%;
-    top: 40%;
+    left: 50%;
+    top: 50%;
     text-align: center;
     visibility: visible;
-    width: 400px;
+    width: 200px;
     z-index: 999;
+  }
+
+  div {
+    height: 100%;
+    min-height: 32px;
+    position: relative;
+  }
+
+  &.swf_unblocked {
+    // Applied if movie loads successfully after
+    // an unblock (flash started, so move off-screen etc.)
+  }
+
+  &.swf_loaded {
+    // Applied if movie loads, regardless of whether
+    // it was initially blocked
+    top: -100px;
+    left: -100px;
+    height: 0;
+    visibility: hidden;
+    width: 0;
+    z-index: 0;
+  }
+
+  &.swf_error {
+    // "Fatal" error case: SWF loaded,
+    // but SM2 was unable to start for some reason.
+    // (Flash security or other error case.)
+  }
+
+  &.high_performance {
+    // Additional modifier for "high performance" mode
+    // should apply position:fixed and left/bottom 0 to stay on-screen
+    // at all times (better flash performance)
+  }
+
+  &.flash_debug {
+    // Additional modifier for flash debug output mode
+    // should use width/height 100% so you can read debug messages
   }
 }
 
 #sm2movie {
   height: 0;
   width: 0;
+
+  .swf_timedout & {
+    height: 100%;
+    width: 100%;
+  }
 }

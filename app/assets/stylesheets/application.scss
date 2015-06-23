@@ -3,6 +3,7 @@
 @import "globals/vars";
 @import "globals/mixins";
 @import "globals/abstractions";
+@import "globals/animations";
 
 @import "base/reset";
 @import "base/base";
@@ -15,6 +16,7 @@
 @import "components/preloader";
 @import "components/sm2";
 @import "components/header";
+@import "components/icons";
 @import "components/search";
 @import "components/sidebar";
 @import "components/songlist";

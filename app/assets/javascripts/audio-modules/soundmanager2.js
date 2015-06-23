@@ -1,9 +1,8 @@
 //= require soundmanager2/soundmanager2-nodebug
-/*!
- * Beatstream SoundManager2 module
- */
+//= require lib/mediator
+//= require lib/mediator_events
 
-(function ($, window, document, undefined) {
+;(function ($, window, document, undefined) {
 
     // SoundManager 2 options
     soundManager.url = '/swf/';
@@ -15,10 +14,11 @@
 
     soundManager.onready(function() {
         soundManagerIsReady = true;
+        App.Mediator.publish(MediatorEvents.SM2_READY);
     });
 
     soundManager.ontimeout(function (status) {
-        console.log(status);
+        App.Mediator.publish(MediatorEvents.SM2_TIMED_OUT);
     });
 
 

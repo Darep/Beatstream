@@ -1,0 +1,15 @@
+.icon, [class|="icon"] {
+  background: url('/assets/icons.png') no-repeat;
+}
+
+.icon-notify {
+  background-position: -117px -192px;
+}
+
+.icon-sync {
+  @include image-replacement;
+  background: url('/img/sync.gif') no-repeat;
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+}

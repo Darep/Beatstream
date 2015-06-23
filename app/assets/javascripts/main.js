@@ -10,11 +10,13 @@
 //= require songlist
 //= require components/main
 
-$(document).ready(function () { soundManager.onready(function () {
+$(document).ready(function () {
     App.songs = [];
 
     var reactRender = function () {
         React.render(React.createElement(App.Main, {
+            loading: !App.songsLoaded || !App.sm2Ready || App.sm2TimedOut,
+            sm2TimedOut: App.sm2TimedOut,
             user: App.user,
             songs: App.songs,
             songlist: songlist
@@ -42,14 +44,25 @@ $(document).ready(function () { soundManager.onready(function () {
       songlist.nextSong(getShuffle(), getRepeat());
     });
 
+    App.Mediator.subscribe(MediatorEvents.SM2_READY, function () {
+      App.sm2Ready = true;
+      App.sm2TimedOut = false;
+      reactRender();
+    });
+
+    App.Mediator.subscribe(MediatorEvents.SM2_TIMED_OUT, function () {
+      App.sm2Ready = false;
+      App.sm2TimedOut = true;
+      reactRender();
+    });
+
     // Load songs
     App.API.getAllMusic().then(function (data) {
+        App.songsLoaded = true;
         App.songs = data;
-
         songlist.loadData(data);
-        reactRender();
 
-        $('.preloader').remove();
+        reactRender();
 
         // update song counts
         var count = commify( parseInt( data.length, 10 ) );
@@ -99,5 +112,4 @@ $(document).ready(function () { soundManager.onready(function () {
     function getRepeat() {
         return storeGet('repeat');
     }
-
-}); });
+});

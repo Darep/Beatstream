@@ -1,3 +1,17 @@
+@mixin animation($value) {
+  -webkit-animation: $value;
+  -moz-animation: $value;
+  -o-animation: $value;
+  animation: $value;
+}
+
+@mixin animation-fill-mode($value) {
+  -webkit-animation-fill-mode: $value;
+  -moz-animation-fill-mode: $value;
+  -o-animation-fill-mode: $value;
+  animation-fill-mode: $value;
+}
+
 @mixin border-radius($rad) {
   -webkit-border-radius: $rad;
   -moz-border-radius: $rad;
@@ -8,6 +22,12 @@
   -webkit-box-shadow: $shadow;
   -moz-box-shadow: $shadow;
   box-shadow: $shadow;
+}
+
+@mixin image-replacement {
+    text-indent:100%;
+    overflow:hidden;
+    white-space:nowrap;
 }
 
 @mixin linear-gradient($gradient) {

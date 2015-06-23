@@ -1,6 +1,7 @@
 //= require components/header
 //= require components/player
 //= require components/playlist_header
+//= require components/preloader
 //= require components/sidebar
 /** @jsx React.DOM */
 
@@ -12,6 +13,8 @@ App.Main = React.createClass({
     var songs = this.props.songs;
     var count = this.props.songs.length;
     var songlist = this.props.songlist;
+    var loading = this.props.loading;
+    var sm2TimedOut = this.props.sm2TimedOut;
 
     var filter = function (filter) {
       songlist.setFilter(filter);
@@ -36,6 +39,10 @@ App.Main = React.createClass({
         </div>
 
         <App.Player songlist={songlist} />
+
+        {loading &&
+          <App.Preloader sm2TimedOut={sm2TimedOut} />
+        }
       </div>
     );
   }
