@@ -1,7 +1,13 @@
 #sm2-container {
     height:0;
-    width:0;
+    position: absolute;
     visibility:hidden;
+    width:0;
+}
+
+#sm2movie {
+    height: 0;
+    width: 0;
 }
 
 #sm2-container.swf_timedout {
