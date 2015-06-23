@@ -5,14 +5,15 @@ Changelog
 
 #### Major changes
 
+- Added (or re-added?) preloader with a notice if Flash doesn't work
 
 #### Minor changes
-
 
 #### Refactoring
 
 - Frontend now uses React!
 - CSS now loaded with BEMs!
+- Removed the no-long-functioning code to re-open Settings when refreshing with the Settings open
 
 
 ## 1.1.2
