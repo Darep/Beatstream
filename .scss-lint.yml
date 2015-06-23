@@ -1,0 +1,286 @@
+scss_files: "**/*.scss"
+linters:
+  BangFormat:
+    enabled: true
+    space_before_bang: true
+    space_after_bang: false
+  BemDepth:
+    max_elements: 4
+  BorderZero:
+    enabled: false
+    convention: zero
+  ColorKeyword:
+    enabled: false
+    severity: warning
+  ColorVariable:
+    enabled: false
+  Comment:
+    enabled: false
+  DebugStatement:
+    enabled: true
+  DeclarationOrder:
+    enabled: true
+  DuplicateProperty:
+    enabled: true
+  ElsePlacement:
+    enabled: true
+    style: same_line
+  EmptyLineBetweenBlocks:
+    enabled: true
+    ignore_single_line_blocks: true
+  EmptyRule:
+    enabled: true
+  FinalNewline:
+    enabled: true
+    present: true
+  HexLength:
+    enabled: false
+    style: short
+  HexNotation:
+    enabled: true
+    style: lowercase
+  HexValidation:
+    enabled: true
+  IdSelector:
+    enabled: true
+  ImportantRule:
+    enabled: true
+  ImportPath:
+    enabled: true
+    leading_underscore: false
+    filename_extension: false
+  Indentation:
+    enabled: true
+    allow_non_nested_indentation: false
+    character: space
+    width: 2
+  LeadingZero:
+    enabled: false
+  MergeableSelector:
+    enabled: true
+    force_nesting: true
+  NameFormat:
+    enabled: true
+    convention: "^([.%]?[A-z0-9]+[_-]*)+$"
+  NestingDepth:
+    enabled: true
+    max_depth: 4
+    severity: warning
+  PlaceholderInExtend:
+    enabled: false
+  PropertyCount:
+    enabled: true
+    include_nested: false
+    max_properties: 15
+  PropertySortOrder:
+    enabled: true
+    ignore_unspecified: true
+    severity: warning
+    separate_groups: false
+    order:
+      - animation
+      - animation-delay
+      - animation-duration
+      - animation-fill-mode
+      - animation-iteration-count
+      - animation-name
+      - animation-play-state
+      - animation-timing-function
+      - appearance
+      - backface-visibility
+      - background
+      - background-attachment
+      - background-clip
+      - background-color
+      - background-image
+      - background-position
+      - background-repeat
+      - background-size
+      - border
+      - border-bottom
+      - border-bottom-color
+      - border-bottom-left-radius
+      - border-bottom-right-radius
+      - border-bottom-style
+      - border-bottom-width
+      - border-collapse
+      - border-color
+      - border-image
+      - border-left
+      - border-left-color
+      - border-left-style
+      - border-left-width
+      - border-radius
+      - border-radius-bottomleft
+      - border-radius-bottomright
+      - border-radius-topleft
+      - border-radius-topright
+      - border-right
+      - border-right-color
+      - border-right-style
+      - border-right-width
+      - border-spacing
+      - border-style
+      - border-top
+      - border-top-color
+      - border-top-left-radius
+      - border-top-right-radius
+      - border-top-style
+      - border-top-width
+      - border-width
+      - box-align
+      - box-flex
+      - box-orient
+      - box-pack
+      - box-shadow
+      - box-sizing
+      - clear
+      - clip
+      - color
+      - content
+      - cursor
+      - direction
+      - display
+      - filter
+      - float
+      - font
+      - font-family
+      - font-size
+      - font-smoothing
+      - font-style
+      - font-weight
+      - height
+      - hyphens
+      - interpolation-mode
+      - letter-spacing
+      - line-height
+      - list-style
+      - list-style-image
+      - list-style-position
+      - list-style-type
+      - margin
+      - margin-bottom
+      - margin-bottom-collapse
+      - margin-collapse
+      - margin-left
+      - margin-left-collapse
+      - margin-right
+      - margin-right-collapse
+      - margin-top
+      - margin-top-collapse
+      - marks
+      - max-height
+      - max-width
+      - min-height
+      - min-width
+      - opacity
+      - osx-font-smoothing
+      - outline
+      - outline-offset
+      - overflow
+      - overflow-x
+      - overflow-y
+      - padding
+      - padding-bottom
+      - padding-left
+      - padding-right
+      - padding-top
+      - page
+      - pointer-events
+      - position
+      - quotes
+      - resize
+      - set-link-source
+      - size
+      - speak
+      - src
+      - table-layout
+      - text-align
+      - text-decoration
+      - text-indent
+      - text-overflow
+      - text-rendering
+      - text-shadow
+      - text-size-adjust
+      - text-transform
+      - transform
+      - transition
+      - transition-delay
+      - transition-duration
+      - transition-property
+      - transition-timing-function
+      - unicode-bidi
+      - user-select
+      - vertical-align
+      - visibility
+      - white-space
+      - width
+      - word-break
+      - word-spacing
+      - word-wrap
+      - z-index
+      - zoom
+  PropertySpelling:
+    enabled: true
+    extra_properties: ["*display", "*zoom"]
+  QualifyingElement:
+    enabled: true
+    allow_element_with_attribute: true
+    allow_element_with_class: true
+    allow_element_with_id: false
+    severity: warning
+  SelectorDepth:
+    enabled: true
+    max_depth: 4
+    severity: warning
+  SelectorFormat:
+    enabled: true
+    convention: hyphenated_BEM
+  Shorthand:
+    enabled: true
+    severity: warning
+  SingleLinePerProperty:
+    enabled: true
+    allow_single_line_rule_sets: true
+  SingleLinePerSelector:
+    enabled: false
+  SpaceAfterComma:
+    enabled: true
+  SpaceAfterPropertyColon:
+    enabled: true
+    style: one_space
+  SpaceAfterPropertyName:
+    enabled: true
+  SpaceBeforeBrace:
+    enabled: true
+    style: space
+    allow_single_line_padding: true
+  SpaceBetweenParens:
+    enabled: true
+    spaces: 0
+  StringQuotes:
+    enabled: false
+  TrailingSemicolon:
+    enabled: true
+  TrailingWhitespace:
+    enabled: true
+  TrailingZero:
+    enabled: false
+  UnnecessaryMantissa:
+    enabled: true
+  UnnecessaryParentReference:
+    enabled: true
+  UrlFormat:
+    enabled: false
+  UrlQuotes:
+    enabled: true
+  VariableForProperty:
+    enabled: false
+    properties: []
+  VendorPrefix:
+    enabled: false
+  VendorPrefixes:
+    enabled: false
+  ZeroUnit:
+    enabled: true
+    severity: warning
