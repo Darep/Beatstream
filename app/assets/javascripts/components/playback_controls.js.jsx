@@ -7,7 +7,7 @@ App.PlaybackControls = React.createClass({
     return {
       enabled: false,
       playing: false
-    }
+    };
   },
 
   componentDidMount: function () {

@@ -39,10 +39,10 @@ App.PlayerOptions = React.createClass({
   },
 
   toggleRepeat: function (e) {
-    this.props.onChange(!this.props.repeat, this.props.shuffle)
+    this.props.onChange(!this.props.repeat, this.props.shuffle);
   },
 
   toggleShuffle: function (e) {
-    this.props.onChange(this.props.repeat, !this.props.shuffle)
+    this.props.onChange(this.props.repeat, !this.props.shuffle);
   }
 });

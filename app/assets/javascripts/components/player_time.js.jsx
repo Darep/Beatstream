@@ -9,7 +9,7 @@ App.PlayerTime = React.createClass({
     return {
       duration: 0,
       elapsed: 0
-    }
+    };
   },
 
   componentDidMount: function () {
