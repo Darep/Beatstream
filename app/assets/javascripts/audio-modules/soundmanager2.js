@@ -47,7 +47,6 @@
 
     AudioModule.prototype.play = function (uri) {
         if (!soundManagerIsReady) {
-            alert('SoundManager 2 is not ready to play music yet!');
             return;
         }
 
