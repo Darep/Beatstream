@@ -91,7 +91,6 @@ GEM
     rake (10.3.2)
     rdoc (3.12.2)
       json (~> 1.4)
-    ref (1.0.5)
     rockstar (0.8.0)
       activesupport (>= 1.4.2)
       hpricot (>= 0.4.86)
@@ -139,7 +138,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-jdbcsqlite3-adapter (= 1.2.9)
-  fakefs
+  fakefs (= 0.5.2)
   jquery-cookie-rails
   jquery-rails (= 2.0.2)
   quiet_assets
@@ -151,4 +150,4 @@ DEPENDENCIES
   thin (= 1.6.2)
   trinidad (= 1.4.6)
   uglifier (= 2.1.1)
-  webmock
+  webmock (= 1.18.0)

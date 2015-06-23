@@ -38,8 +38,8 @@ end
 
 group :test do
   # Mock the filesystem
-  gem 'fakefs', :require => 'fakefs/safe'
+  gem 'fakefs', '0.5.2', :require => 'fakefs/safe'
 
   # Mock web requests
-  gem 'webmock'
+  gem 'webmock', '1.18.0'
 end
