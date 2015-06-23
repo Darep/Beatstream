@@ -11,14 +11,9 @@
 //= require components/main
 
 $(document).ready(function () { soundManager.onready(function () {
-
-    var songlist,
-        reactRender;
-
     App.songs = [];
 
-    // ::: REACT ::::
-    reactRender = function () {
+    var reactRender = function () {
         React.render(React.createElement(App.Main, {
             user: App.user,
             songs: App.songs,
@@ -27,9 +22,7 @@ $(document).ready(function () { soundManager.onready(function () {
     };
     reactRender();
 
-
-    // ::: SONG LIST :::
-    songlist = new Songlist({
+    var songlist = new Songlist({
         onPlay: function (song) {
             var uri = App.API.getSongURI(song);
 
@@ -49,8 +42,7 @@ $(document).ready(function () { soundManager.onready(function () {
       songlist.nextSong(getShuffle(), getRepeat());
     });
 
-
-    // ::: LOAD SONGS :::
+    // Load songs
     App.API.getAllMusic().then(function (data) {
         App.songs = data;
 
