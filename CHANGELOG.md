@@ -1,6 +1,20 @@
 Changelog
 =========
 
+## vNext
+
+#### Major changes
+
+
+#### Minor changes
+
+
+#### Refactoring
+
+- Frontend now uses React!
+- CSS now loaded with BEMs!
+
+
 ## 1.1.2
 
 #### Major changes
