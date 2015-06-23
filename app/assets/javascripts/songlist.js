@@ -248,10 +248,8 @@
             arr.push(id);
 
             // save song history in a cookie
-            if (shuffle) {
-                $.cookie('history', JSON.stringify(arr));
-                $.cookie('isPlaying', true);
-            }
+            $.cookie('history', JSON.stringify(arr));
+            $.cookie('isPlaying', true);
         };
 
         grid.playSongAtRow = function (row) {
