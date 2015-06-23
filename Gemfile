@@ -30,10 +30,6 @@ group :assets do
 
   # Minify & compact JS
   gem 'uglifier', '2.1.1'
-
-  # Execute JS in Ruby
-  gem 'therubyrhino', '2.0.2', :platform => :jruby
-  gem 'therubyracer', '0.11.4', :platform => :ruby
 end
 
 group :development do
