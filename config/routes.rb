@@ -13,6 +13,7 @@ Beatstream::Application.routes.draw do
   match 'settings' => 'settings#index'
   match 'settings/save' => 'settings#save'
   match 'settings/lastfm_callback' => 'settings#lastfm_callback'
+  match 'settings/lastfm_connect' => 'settings#lastfm_connect'
   match 'settings/lastfm_disconnect' => 'settings#lastfm_disconnect'
 
   match 'playlists' => 'playlists#index'
