@@ -96,7 +96,6 @@ GEM
       rails (>= 3.1)
       react-source (= 0.12.2)
     react-source (0.12.2)
-    ref (1.0.5)
     rockstar (0.8.0)
       activesupport (>= 1.4.2)
       hpricot (>= 0.4.86)
