@@ -17,5 +17,7 @@ module Beatstream
     config.assets.version = '1.0'
     config.cache_store = :memory_store
     config.force_ssl = false
+
+    config.react.variant = :production
   end
 end

@@ -15,77 +15,18 @@
 </head>
 <body>
 
-<div id="wrap">
-    <header id="header">
-        <h1 id="logo">
-          <a href="/">Beatstream</a>
-          <small>alpha</small>
-        </h1>
-        <div id="user-panel">
-            <a>
-                <span class="name"><%= session[:username] ? session[:username] : 'You' %></span>
-                <span class="dropdown"></span>
-            </a>
-            <ul id="user-menu">
-                <li class="head"><span></span></li>
-                <li><a href="#!/settings" class="settings">Settings</a></li>
-                <li><%= link_to 'Logout', logout_path, :method => :delete %>
-            </ul>
-        </div>
-    </header>
+<div id="app"></div>
 
-    <div id="main">
-        <div id="sidebar">
-            <div id="sidebar-wrap">
-
-                <ul class="common">
-                    <li class="act all-music">
-                        <a>All music <span class="medialibrary count">-</span></a>
-                    </li>
-                </ul>
-
-                <p class="none">
-                    Playlists haven't been implemented, yet! Stay tuned.
-                </p>
-
-            </div>
-        </div>
-        <div id="content">
-            <div id="content-wrap">
-                <%= yield %>
-            </div>
-        </div>
-    </div>
-
-    <div class="player" id="player">
-        <h5 id="player-song"><span class="label">Current song:</span> <span class="track">None</span></h5>
-        <div id="player-controls">
-            <div id="player-buttons">
-                <button id="prev" type="button" disabled="disabled">Prev</button>
-                <button id="play-pause" type="button" disabled="disabled">Play/pause</button>
-                <button id="next" type="button" disabled="disabled">Next</button>
-            </div>
-            <label id="player-volume-label">Volume</label>
-            <div id="player-volume">
-                <div id="player-volume-slider"></div>
-            </div>
-            <p id="player-time">
-                <span class="elapsed">00:00</span> / <span class="duration">00:00</span>
-            </p>
-            <div id="player-buttons-2">
-                <button id="repeat" type="button">Repeat <span class="status">Off</span></button>
-                <button id="shuffle" type="button">Shuffle <span class="status">Off</span></button>
-            </div>
-            <div id="seekbar">
-                <div id="seekbar-slider"></div>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="preloader">
     <div class="loading">Loading</div>
 </div>
 
+<div id="modal" class="modal-overlay"></div>
+
+<script type="text/javascript">
+    window.App = window.App || {};
+    window.App.user = <%= raw @user.to_json %>;
+</script>
 <%= javascript_include_tag "application" %>
 
 </body>

@@ -351,8 +351,6 @@
             grid.render();
         });
 
-        var searchString = '';
-
         function myFilter(item, args) {
             if (args.searchString === "") {
                 return true;
@@ -381,36 +379,8 @@
         }
         this.myFilter = myFilter;
 
-        // wire up the search textbox to apply the filter to the model
-        $('#search').keyup(function (e) {
-            // clear on Esc
-            if (e.which == 27) {
-                this.value = "";
-            }
-
-            searchString = this.value;
-            updateFilter();
-        });
-
-        $('.search .clear').click(function (e) {
-            $('#search').val('');
-            searchString = '';
-            updateFilter();
-
-            e.preventDefault();
-            e.stopPropagation();
-        });
-
-        function updateFilter() {
-            dataView.setFilterArgs({
-                searchString: searchString
-            });
-            dataView.refresh();
-        }
-
         this.grid = grid;
         this.dataView = dataView;
-        this.searchString = searchString;
     }
 
     Songlist.prototype.resizeCanvas = function () {
@@ -438,13 +408,20 @@
         this.dataView.beginUpdate();
         this.dataView.setItems(data);
         this.dataView.setFilterArgs({
-            searchString: this.searchString
+            searchString: ''
         });
         this.dataView.setFilter(this.myFilter);
         this.dataView.endUpdate();
 
         this.dataView.syncGridSelection(this.grid, false);
         this.dataView.syncGridCellCssStyles(this.grid, 'currentSong_playing');
+    };
+
+    Songlist.prototype.setFilter = function (filter) {
+        this.dataView.setFilterArgs({
+            searchString: filter
+        });
+        this.dataView.refresh();
     };
 
     window.Songlist = Songlist;
