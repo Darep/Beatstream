@@ -7,7 +7,6 @@
 //= require lib/mediator
 //= require lib/mediator_events
 //= require lib/utils
-//= require routing
 //= require songlist
 //= require components/main
 
@@ -17,12 +16,6 @@ $(document).ready(function () { soundManager.onready(function () {
         reactRender;
 
     App.songs = [];
-
-    // ::: ROUTING :::
-    $(window).hashchange(function () {
-        Routing.ResolveCurrent();
-    });
-
 
     // ::: REACT ::::
     reactRender = function () {
