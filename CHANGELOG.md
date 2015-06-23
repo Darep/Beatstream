@@ -1,11 +1,11 @@
 Changelog
 =========
 
-## vNext
+## 1.1.2
 
 #### Major changes
 
-- Refresh endpoint is now at /api/v1/songs/refresh, instead of the old /songs?refresh=1
+- Refresh endpoint is now POST /api/v1/songs/refresh, instead of the old GET /songs?refresh=1
 - Redirects back to player after refresh
 
 #### Minor changes
