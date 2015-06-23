@@ -1,88 +1,76 @@
 #sidebar {
-    background:#eaeaea;
-    border-right:1px solid #d4d4d4;
-    font-size:11px;
-    height:100%;
-    width:189px;
-}
-    #sidebar-wrap {
-        padding:10px 20px;
-        min-width:100px;
-    }
-        #sidebar ul {
-            border-bottom:1px solid #c7c7c7;
-            list-style:none;
-            margin:0 -20px 15px;
-            padding:0 0 10px;
-            -webkit-box-shadow: 0 1px 0 #fff;
-            -moz-box-shadow: 0 1px 0 #fff;
-            box-shadow: 0 1px 0 #fff;
-        }
-            #sidebar li {
-                display:block;
-                height:28px;
-                line-height:28px;
-                position: relative;
-                z-index:0;
-            }
-                #sidebar li a {
-                    color:#777;
-                    display:block;
-                    padding:0 20px;
-                    text-decoration:none;
-                }
-                    #sidebar .count {
-                        font-weight:400;
-                        float:right;
-                    }
-                #sidebar a:hover {
-                    color:#222;
-                }
-                #sidebar li.hover a {
-                    color:#222;
-                }
-                #sidebar li a:after {
-                    background:#aaa;
-                    content:'';
-                    display:block;
-                    height:28px;
-                    position: absolute;
-                    left:0;
-                    top:0;
-                    width:5px;
-                }
-            #sidebar li.act {
-            }
-        .common {
-            font-size:13px;
-            font-weight:700;
-        }
-            #sidebar .common a {
-                color:#222;
-            }
-        #sidebar .none {
-            border:2px dashed #bbb;
-            color:#666;
-            margin:15px 0;
-            padding:10px 12px;
-            -webkit-border-radius: 8px;
-            -moz-border-radius: 8px;
-            border-radius: 8px;
-        }
-        #btn-new-list {
-            display:block;
-            margin:0 auto;
-            width:82px;
-        }
+  background: #eaeaea;
+  border-right: 1px solid #d4d4d4;
+  font-size: 11px;
+  height: 100%;
+  width: 189px;
 
-/* draginfo */
-#draginfo {
-    background:#fff;
-    background:rgba(255,255,255, 0.8);
-    border:1px solid #e5e5e5;
-    font-size:11px;
-    padding:.5em .8em;
-    border-radius:4px;
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
+  ul {
+    @include box-shadow(0 1px 0 #fff);
+    border-bottom: 1px solid #c7c7c7;
+    list-style: none;
+    margin: 0 -20px 15px;
+    padding: 0 0 10px;
+  }
+
+  li {
+    display: block;
+    height: 28px;
+    line-height: 28px;
+    position: relative;
+    z-index: 0;
+
+    &.hover a {
+      color: #222;
+    }
+
+    a {
+      color: #777;
+      display: block;
+      padding: 0 20px;
+      text-decoration: none;
+
+      &:after {
+        background: #aaa;
+        content: '';
+        display: block;
+        height: 28px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 5px;
+      }
+    }
+  }
+
+  .count {
+    float: right;
+    font-weight: 400;
+  }
+
+  a:hover {
+    color: #222;
+  }
+
+  .common {
+    font-size: 13px;
+    font-weight: 700;
+
+    a {
+      color: #222;
+    }
+  }
+
+  .none {
+    @include border-radius(8px);
+    border: 2px dashed #bbb;
+    color: #666;
+    margin: 15px 0;
+    padding: 10px 12px;
+  }
+}
+
+#sidebar-wrap {
+  min-width: 100px;
+  padding: 10px 20px;
 }

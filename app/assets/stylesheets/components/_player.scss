@@ -1,159 +1,196 @@
 .player {
-    @extend %no-select;
-    $player-gradient: top, #383838, #383838 15%, #1f1f1f 90%, #1f1f1f;
-    background: $color-black;
-    background: -webkit-linear-gradient($player-gradient);
-    background: -moz-linear-gradient($player-gradient);
-    background: -ms-linear-gradient($player-gradient);
-    background: -o-linear-gradient($player-gradient);
-    background: linear-gradient($player-gradient);
-    border-top:1px solid #505050;
-    bottom:0;
-    color:#fff;
-    cursor:default;
-    font-size:11px;
-    font-weight:700;
-    padding:0 0 10px;
-    position:relative;
-    z-index:10;
-    -webkit-box-shadow: 0 -1px 0 #000;
-    -moz-box-shadow: 0 -1px 0 #000;
-    box-shadow: 0 -1px 0 #000;
+  @extend %no-select;
+  @include linear-gradient($player-gradient);
+  border-top: 1px solid #505050;
+  bottom: 0;
+  -webkit-box-shadow: 0 -1px 0 #000;
+  -moz-box-shadow: 0 -1px 0 #000;
+  box-shadow: 0 -1px 0 #000;
+  color: #fff;
+  cursor: default;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 0 10px;
+  position: relative;
+  z-index: 10;
 
-    button {
-        background:transparent url('/assets/icons.png') no-repeat;
-        border:0;
-        height:40px;
-        width:40px;
-        text-indent:-9999em;
-    }
+  > * {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 
-#player-buttons, #player-volume, #player-time {
-    float:left;
+.player__song {
+  border-bottom: 1px solid #000;
+  -webkit-box-shadow: 0 1px 0 #434343;
+  -moz-box-shadow: 0 1px 0 #434343;
+  box-shadow: 0 1px 0 #434343;
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
-#play-pause {
-    background-position:-68px -1px;
-    height:48px;
-    width:48px;
-
-    &:active {
-        background-position:-68px -88px;
-    }
-    &.playing {
-        background-position:-213px -1px;
-    }
-    &.playing:active {
-        background-position:-213px -88px;
-    }
+.player__song__label {
+  color: #999;
+  margin-right: .4em;
 }
 
-#prev {
-    background-position:0 -5px;
-    margin-right:-2px;
+.player__controls {
+  height: 48px;
+  vertical-align: middle;
 
-    &:active {
-        background-position:0 -92px;
-    }
-}
-
-#next {
-    background-position:-148px -5px;
-    margin-left:-2px;
-
-    &:active {
-        background-position:-148px -92px;
-    }
-}
-
-#repeat, #shuffle {
-    background:transparent url('/assets/icons.png') no-repeat;
-    display:inline-block;
-    height:24px;
-    margin:0 0 0 5px;
-    padding:0;
-    width:24px;
-}
-
-#repeat {
-    background-position:3px -189px;
-
-    &.enabled {
-        background-position:3px -164px
-    }
-}
-
-#shuffle {
-    background-position:-35px -189px;
-
-    &.enabled {
-        background-position:-35px -164px
-    }
-}
-
-#player-volume-label {
-    background:url('/assets/icons.png') no-repeat -160px -197px;
-    display:inline-block;
-    float:left;
-    height:16px;
-    margin:16px 0 0 20px;
-    width:16px;
-
-    overflow: hidden;
-    text-indent:100%;
-    white-space: nowrap;
-}
-
-#player-volume-slider-wrapper {
+  > * {
     display: inline-block;
-    margin:19px 15px 0 5px;
-    text-align:center;
-    width:100px;
+    float: left;
+  }
 }
 
-#player-time {
-    margin-top:18px;
-    text-align:center;
-    width:80px;
+//
+// Volume
+//
+.player__volume {
+  // intentionally left blank
 }
 
+.player__volume__label {
+  @include overflow-ellipsis;
+  background: url('/assets/icons.png') no-repeat -160px -197px;
+  display: inline-block;
+  float: left;
+  height: 16px;
+  margin: 16px 0 0 20px;
+  width: 16px;
+}
+
+.player__volume__slider-wrapper {
+  display: inline-block;
+  margin: 19px 15px 0 5px;
+  text-align: center;
+  width: 100px;
+}
+
+//
+// Time
+//
+.player__time {
+  margin-top: 18px;
+  text-align: center;
+  width: 80px;
+}
+
+//
+// Seekbar
+//
 #seekbar {
-    margin:0 75px 0 365px;
-    padding:0 15px;
-    position: relative;
-    text-align:center;
-    top:19px;
+  display: block;
+  float: none;
+  margin: 0 75px 0 365px;
+  padding: 0 15px;
+  position: relative;
+  text-align: center;
+  top: 19px;
 }
 
-#player-buttons-2 {
-    float:right;
-    margin:2px 10px 0 0;
+//
+// Button containers
+//
+.player__buttons {
+  // intentionally left empty
 }
 
-#player-song, #player-controls {
-    padding-left:10px;
-    padding-right:10px;
+.player__buttons--right {
+  float: right;
+  margin: 2px 10px 0 0;
 }
 
-#player-song {
-    border-bottom:1px solid #000;
-    margin-bottom:8px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    text-shadow:0 2px 0 rgba(0,0,0, 0.5);
-    -webkit-box-shadow:0 1px 0 #434343;
-    -moz-box-shadow:0 1px 0 #434343;
-    box-shadow:0 1px 0 #434343;
+//
+// Button
+//
+.player__button {
+  background: transparent url('/assets/icons.png') no-repeat;
+  border: 0;
+  height: 40px;
+  text-indent: -9999em;
+  width: 40px;
+}
 
-    .label {
-        color:#999;
-        margin-right: .4em;
+.player__button--big {
+  height: 48px;
+  margin-left: -2px;
+  margin-right: -2px;
+  width: 48px;
+}
+
+.player__button--prev {
+  background-position: 0 -5px;
+  margin-right: -2px;
+
+  &:active {
+    background-position: 0 -92px;
+  }
+}
+
+.player__button--playpause {
+  background-position: -68px -1px;
+
+  &:active {
+    background-position: -68px -88px;
+  }
+
+  &.playing {
+    background-position: -213px -1px;
+
+    &:active {
+      background-position: -213px -88px;
     }
+  }
 }
 
-#player-controls {
-    height:48px;
-    vertical-align: middle;
+.player__button--next {
+  background-position: -148px -5px;
+  margin-left: -2px;
+
+  &:active {
+    background-position: -148px -92px;
+  }
 }
 
+//
+// Toggle button
+//
+.player__toggle-button {
+  background: transparent url('/assets/icons.png') no-repeat;
+  border: 0;
+  display: inline-block;
+  height: 24px;
+  margin: 0 0 0 5px;
+  padding: 0;
+  text-indent: -9999em;
+  width: 24px;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.player__toggle-button--repeat {
+  background-position: 3px -189px;
+
+  &.enabled {
+    background-position: 3px -164px;
+  }
+}
+
+.player__toggle-button--shuffle {
+  background-position: -35px -189px;
+
+  &.enabled {
+    background-position: -35px -164px;
+  }
+}
+
+.player__toggle-button__label,
+.player__toggle-button__status {
+  display: none;
+}

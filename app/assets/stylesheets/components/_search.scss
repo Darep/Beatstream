@@ -1,0 +1,43 @@
+.search {
+  float: right;
+  margin-top: 5px;
+  position: relative;
+
+  .clear {
+    background: url('/assets/close.png') no-repeat 0 -14px;
+    display: inline-block;
+    height: 14px;
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    text-indent: -9999em;
+    width: 14px;
+
+    &:hover {
+      background-position: 0 0;
+    }
+  }
+}
+
+#search {
+  @include border-radius(12px);
+  @include box-shadow(inset 0 2px 1px rgba(0, 0, 0, 0.08));
+  @include transition(all 100ms ease-in);
+  border: 1px solid #bbb;
+  height: 16px;
+  outline: 0;
+  padding: 1px 10px 3px;
+  width: 150px;
+
+  &::-webkit-input-placeholder {
+    font-style: italic;
+  }
+
+  &:-moz-input-placeholder {
+    font-style: italic;
+  }
+
+  &:focus {
+    border-color: #999;
+  }
+}

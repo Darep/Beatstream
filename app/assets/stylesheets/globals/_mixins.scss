@@ -11,9 +11,30 @@
 }
 
 @mixin linear-gradient($gradient) {
-  background: -webkit-linear-gradient($gradient);
-  background: -moz-linear-gradient($gradient);
-  background: -ms-linear-gradient($gradient);
-  background: -o-linear-gradient($gradient);
-  background: linear-gradient($gradient);
+  // scss-lint:disable NameFormat
+  background-image: -webkit-linear-gradient($gradient);
+  background-image: -moz-linear-gradient($gradient);
+  background-image: -ms-linear-gradient($gradient);
+  background-image: -o-linear-gradient($gradient);
+  background-image: linear-gradient($gradient);
+}
+
+@mixin overflow-ellipsis {
+  overflow: hidden;
+  text-indent: 100%;
+  white-space: nowrap;
+}
+
+@mixin transform($value) {
+  -webkit-transform: $value;
+  -moz-transform: $value;
+  transform: $value;
+}
+
+@mixin transition($value) {
+  -webkit-transition: $value;
+  -moz-transition: $value;
+  -o-transition: $value;
+  -ms-transition: $value;
+  transition: $value;
 }

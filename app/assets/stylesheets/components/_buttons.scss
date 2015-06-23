@@ -1,77 +1,75 @@
 .btn {
-    background: #fff;
-    border: 1px solid;
-    border-color: lighten($color-gray-light, 20%);
-    color: $color-gray-light;
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1.4;
-    padding: 8px 16px 6px;
-    text-align: center;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    -webkit-appearance: none;
-    transition-duration: 180ms;
-    transition-property: background, border-color, color;
+  @include border-radius(3px);
+  background: #fff;
+  border: 1px solid;
+  border-color: lighten($color-gray-light, 20%);
+  color: $color-gray-light;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  padding: 8px 16px 6px;
+  text-align: center;
+  transition-duration: 180ms;
+  transition-property: background, border-color, color;
+  -webkit-appearance: none;
 
-    & + & {
-        margin-left: 10px;
-    }
+  & + & {
+    margin-left: 10px;
+  }
 
-    &:hover {
-        background: #f1f1f1;
-        cursor: pointer;
-    }
+  &:hover {
+    background: #f1f1f1;
+    cursor: pointer;
+  }
 }
 
 .btn--big {
-    letter-spacing: 0.05em;
-    padding: 12px 28px;
-    text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 12px 28px;
+  text-transform: uppercase;
 }
 
 .btn--primary {
-    background: $color-orange;
-    $gradient: top, #FFA621, #F27C20;
-    @include linear-gradient($gradient);
-    border-color: darken($color-orange, 5%);
-    color: #fff;
+  $gradient: top, #ffa621, #f27c20;
+  @include linear-gradient($gradient);
+  background: $color-orange;
+  border-color: darken($color-orange, 5%);
+  color: #fff;
 
-    &:hover {
-        background: darken($color-orange, 5%);
-        $gradient: top, darken(#FFA621, 10%), darken(#F27C20, 10%);
-        @include linear-gradient($gradient);
-    }
+  &:hover {
+    $gradient: top, darken(#ffa621, 10%), darken(#f27c20, 10%);
+    @include linear-gradient($gradient);
+    background: darken($color-orange, 5%);
+  }
 }
 
 .btn--dangerous {
-    background: $color-red;
-    $gradient: top, lighten($color-red, 10%), darken($color-red, 5%);
-    @include linear-gradient($gradient);
-    border-color: darken($color-red, 5%);
-    color: #fff;
+  $gradient: top, lighten($color-red, 10%), darken($color-red, 5%);
+  @include linear-gradient($gradient);
+  background: $color-red;
+  border-color: darken($color-red, 5%);
+  color: #fff;
 
-    &:hover {
-        background: darken($color-red, 5%);
-        $gradient: top, $color-red, darken($color-red, 15%);
-        @include linear-gradient($gradient);
-    }
+  &:hover {
+    $gradient: top, $color-red, darken($color-red, 15%);
+    @include linear-gradient($gradient);
+    background: darken($color-red, 5%);
+  }
 }
 
 .btn--inline {
-    * + & {
-        margin-left: 10px;
-    }
+  * + & {
+    margin-left: 10px;
+  }
 }
 
 .plain-btn {
-    background: transparent;
-    border: 0;
-    color: inherit;
-    cursor: pointer;
-    font: inherit;
-    padding: 0;
-    -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  -webkit-appearance: none;
 }

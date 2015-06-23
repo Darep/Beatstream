@@ -26,10 +26,12 @@ App.Volume = React.createClass({
 
   render: function() {
     return (
-      <div id="player-volume">
-        <label id="player-volume-label" title={this.state.volume}>Volume</label>
-        <div id="player-volume-slider-wrapper">
-          <div id="player-volume-slider"></div>
+      <div className="player__volume">
+        <label className="player__volume__label" title={this.state.volume}>
+          Volume
+        </label>
+        <div className="player__volume__slider-wrapper">
+          <div className="player__volume__slider" id="player-volume-slider"></div>
         </div>
       </div>
     );

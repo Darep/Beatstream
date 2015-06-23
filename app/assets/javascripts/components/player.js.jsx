@@ -46,7 +46,7 @@ App.Player = React.createClass({
     return (
       <div id="player" className="player">
         <App.CurrentSong song={App.currentSong} />
-        <div id="player-controls">
+        <div className="player__controls">
           <App.PlaybackControls previous={previous} playPause={playPause} next={next} />
           <App.Volume updateVolume={updateVolume} />
           <App.PlayerTime />

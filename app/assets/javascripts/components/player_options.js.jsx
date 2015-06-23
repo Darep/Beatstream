@@ -5,8 +5,8 @@ var App = window.App || {};
 
 App.PlayerOptions = React.createClass({
   render: function() {
-    var repeatClassName = '';
-    var shuffleClassName = '';
+    var repeatClassName = 'player__toggle-button player__toggle-button--repeat';
+    var shuffleClassName = 'player__toggle-button player__toggle-button--shuffle';
 
     if (this.props.shuffle) {
       shuffleClassName += ' enabled';
@@ -17,14 +17,14 @@ App.PlayerOptions = React.createClass({
     }
 
     return (
-      <div id="player-buttons-2">
-        <button id="repeat" type="button" onClick={this.toggleRepeat} className={repeatClassName}>
-          <span className="label">Repeat</span>
-          <span className="status">{this.statusText('repeat')}</span>
+      <div className="player__buttons player__buttons--right">
+        <button type="button" onClick={this.toggleRepeat} className={repeatClassName}>
+          <span className="player__toggle-button__label">Repeat</span>
+          <span className="player__toggle-button__status">{this.statusText('repeat')}</span>
         </button>
-        <button id="shuffle" type="button" onClick={this.toggleShuffle} className={shuffleClassName}>
-          <span className="label">Shuffle</span>
-          <span className="status">{this.statusText('shuffle')}</span>
+        <button type="button" onClick={this.toggleShuffle} className={shuffleClassName}>
+          <span className="player__toggle-button__label">Shuffle</span>
+          <span className="player__toggle-button__status">{this.statusText('shuffle')}</span>
         </button>
       </div>
     );

@@ -1,14 +1,16 @@
 #app, #wrap, #main {
-    height:100%;
-    overflow:hidden;
-    position: relative;
-    width:100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
 }
-        #sidebar {
-            float:left;
-            overflow:hidden;
-        }
-        #content {
-            height:100%;
-            overflow: hidden;
-        }
+
+#sidebar {
+  float: left;
+  overflow: hidden;
+}
+
+#content {
+  height: 100%;
+  overflow: hidden;
+}
