@@ -13,7 +13,7 @@ Changelog
 
 - Frontend now uses React!
 - CSS now loaded with BEMs!
-- Removed the no-long-functioning code to re-open Settings when refreshing with the Settings open
+- Removed the non-functioning code to re-open Settings when refreshing with the Settings open
 
 
 ## 1.1.2
