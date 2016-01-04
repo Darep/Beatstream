@@ -29,7 +29,7 @@ group :assets do
   # Use Sass
   gem 'sass-rails', '3.2.6'
 
-  # User react
+  # Use react
   gem 'react-rails', '0.12.2'
 
   # Minify & compact JS
