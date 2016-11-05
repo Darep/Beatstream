@@ -29,11 +29,11 @@ App.Main = React.createClass({
 
           <div id="content">
             <div id="content-wrap">
-                <App.PlaylistHeader count={count} filter={filter} />
+              <App.PlaylistHeader count={count} filter={filter} />
 
-                <div className="grid-container">
-                    <div id="slickgrid"></div>
-                </div>
+              <div className="grid-container">
+                <div id="slickgrid"></div>
+              </div>
             </div>
           </div>
         </div>
