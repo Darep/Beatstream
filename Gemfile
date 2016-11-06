@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.19'
+ruby '2.2.5'
+
+gem 'rails', '3.2.22.4'
 
 # ID3 info parser
 gem 'ruby-mp3info', '0.8.4', :require => 'mp3info'
@@ -16,10 +18,7 @@ platforms :jruby do
 end
 
 platforms :ruby, :mingw, :mswin do
-  gem 'sqlite3', '1.3.7'
-
-  # Event-machine -based server
-  gem 'thin', '1.6.2'
+  gem 'sqlite3', '1.3.12'
 end
 
 group :assets do
