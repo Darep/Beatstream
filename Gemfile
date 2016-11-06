@@ -5,7 +5,7 @@ ruby '2.2.5'
 gem 'rails', '3.2.22.4'
 
 # ID3 info parser
-gem 'ruby-mp3info', '0.8.4', :require => 'mp3info'
+gem 'ruby-mp3info', '0.8.10', :require => 'mp3info'
 
 # Last.fm
 gem 'rockstar', '0.8.0'
