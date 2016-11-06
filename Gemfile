@@ -45,4 +45,6 @@ group :test do
 
   # Mock web requests
   gem 'webmock', '1.18.0'
+
+  gem 'test-unit', '~> 3.0'
 end
