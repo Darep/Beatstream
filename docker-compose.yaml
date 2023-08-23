@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      context: .
+    command: bundle exec rails server --bind 0.0.0.0
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/var/app
+      - ~/Music:/var/music
+      - bundle_cache:/bundle
+
+volumes:
+  bundle_cache:
