@@ -32,14 +32,16 @@ GEM
     activesupport (3.2.22.4)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
-    addressable (2.3.6)
+    addressable (2.8.5)
+      public_suffix (>= 2.0.2, < 6.0)
     arel (3.0.3)
     builder (3.0.4)
-    crack (0.4.2)
-      safe_yaml (~> 1.0.0)
+    crack (0.4.5)
+      rexml
     erubis (2.7.0)
     execjs (2.5.2)
     fakefs (0.5.2)
+    hashdiff (1.0.1)
     hike (1.2.3)
     hpricot (0.8.6)
     hpricot (0.8.6-java)
@@ -58,9 +60,11 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.25.1)
+    minitest (5.15.0)
     multi_json (1.12.1)
     polyglot (0.3.5)
     power_assert (0.3.1)
+    public_suffix (3.1.1)
     quiet_assets (1.0.2)
       railties (>= 3.1, < 5.0)
     rack (1.4.7)
@@ -93,13 +97,13 @@ GEM
       rails (>= 3.1)
       react-source (= 0.12.2)
     react-source (0.12.2)
+    rexml (3.2.5)
     rockstar (0.8.0)
       activesupport (>= 1.4.2)
       hpricot (>= 0.4.86)
       i18n (>= 0.5.0)
       rake (>= 0.10.0)
     ruby-mp3info (0.8.10)
-    safe_yaml (1.0.3)
     sass (3.2.9)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -127,9 +131,10 @@ GEM
     uglifier (2.1.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
-    webmock (1.18.0)
+    webmock (1.24.6)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
+      hashdiff
 
 PLATFORMS
   java
@@ -141,6 +146,7 @@ DEPENDENCIES
   fakefs (= 0.5.2)
   jquery-cookie-rails
   jquery-rails (= 2.0.2)
+  minitest (~> 5.9, >= 5.9.1)
   quiet_assets
   rails (= 3.2.22.4)
   react-rails (= 0.12.2)
@@ -151,7 +157,7 @@ DEPENDENCIES
   test-unit (~> 3.0)
   trinidad (= 1.4.6)
   uglifier (= 2.1.1)
-  webmock (= 1.18.0)
+  webmock (~> 1.24, >= 1.24.6)
 
 RUBY VERSION
    ruby 2.2.5p319

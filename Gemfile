@@ -44,7 +44,8 @@ group :test do
   gem 'fakefs', '0.5.2', :require => 'fakefs/safe'
 
   # Mock web requests
-  gem 'webmock', '1.18.0'
+  gem 'webmock', '~> 1.24', '>= 1.24.6'
 
   gem 'test-unit', '~> 3.0'
+  gem 'minitest', '~> 5.9', '>= 5.9.1'
 end
