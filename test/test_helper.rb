@@ -7,6 +7,7 @@ if RUBY_VERSION.starts_with? '1.8'
   require 'iconv'
 else
   require 'webmock/minitest'
+  include WebMock::API
 end
 
 WebMock.disable_net_connect! :allow_localhost => true
