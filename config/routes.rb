@@ -10,13 +10,13 @@ Beatstream::Application.routes.draw do
     post 'songs/scrobble' => 'scrobbles#scrobble'
   end
 
-  match 'settings' => 'settings#index'
-  match 'settings/save' => 'settings#save'
-  match 'settings/lastfm_callback' => 'settings#lastfm_callback'
-  match 'settings/lastfm_connect' => 'settings#lastfm_connect'
-  match 'settings/lastfm_disconnect' => 'settings#lastfm_disconnect'
+  match 'settings' => 'settings#index', via: :get
+  match 'settings/save' => 'settings#save', via: :get
+  match 'settings/lastfm_callback' => 'settings#lastfm_callback', via: :get
+  match 'settings/lastfm_connect' => 'settings#lastfm_connect', via: :get
+  match 'settings/lastfm_disconnect' => 'settings#lastfm_disconnect', via: :get
 
-  match 'playlists' => 'playlists#index'
+  match 'playlists' => 'playlists#index', via: :get
   get 'playlists/new'
 
   controller :sessions do
