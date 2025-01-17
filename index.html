@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <!--
-
  _______                __          __
 /______ \___________ __/ /_________/ /__________________ _______ ___
   / /__)/   _ \  __ `/  __/_  ___/  __/_  ___/  _ \  __ `/_  __ `__ \
  / /__) ||  __/ /_/ // /_  (__  )/ /_  / /   /  __/ /_/ / / / / / / /
 /______/ \___/\__,_/ \__/ /____/ \__/ /_/    \___/\__,_/ /_/ /_/ /_/
-
 
 -->
 <html lang="en">
@@ -15,18 +13,6 @@
     <title>Beatstream – Your own music streaming service</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-8682492-10']);
-      _gaq.push(['_setDomainName', 'beatstream.fi']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
 </head>
 <body>
 
@@ -41,17 +27,17 @@
         </h1>
     </header>
 
-    <p>Beatstream is a free, self-hosted, web-based media server for listening to music from your computer using a web browser. You only need to install Beatstream on your computer and set up the access to it. Beatstream is known to run &amp; sometimes actually play music on Google Chrome, Firefox, iPad and iPhone.</p>
+    <p>Beatstream is a free, self-hosted, web-based media server for listening to music from your server or computer, using a web browser. You only need to install Beatstream on your server/computer and set up public Internet access to it. Known to run on pretty much all modern browsers (Chrome, Safari, Firefox, Edge) & devices.</p>
 
     <p style="text-align: center;">
-       <!--<a href="http://demo.beatstream.fi/" class="btn">See demo</a>-->
-      (demo offline temporarily)
+       <a href="http://demo.beatstream.fi/" class="btn">See demo</a>
+      <span style="display: block; margin-top: 10px;">Username: demo – Password: demo</span>
     </p>
 
     <p>P.S. To take full use of Beatstream, you should have a computer running Beatstream 24/7.</p>
 
 
-    <h2>Screenshot</h2>
+    <!--<h2>Screenshot</h2>
 
     <ul class="slideshow">
         <li>
@@ -59,10 +45,14 @@
                 <img src="https://github-camo.global.ssl.fastly.net/072d6239b0518c35fad18919a889e7e104e5163d/687474703a2f2f692e696d6775722e636f6d2f6f524777752e706e67" alt="" />
             </a>
         </li>
-    </ul>
+    </ul>-->
 
 
     <h2 id="install">Installation <a href="#install" class="bookmark">#</a></h2>
+
+    <p>Beatstream v2 to be released along with new installation instructions.</p>
+ 
+    <h2 id="install-legacy">Installation (legacy version) <a href="#install-legacy" class="bookmark">#</a></h2>
 
     <p>Beatstream currently runs on Ruby on Rails and its installation is a lengthy and difficult process. We are working on making it better, but that won't happen until Beatstream itself is running better. Nevertheless, if you are a bad enough dude, here it is:</p>
 
@@ -148,65 +138,21 @@ $ bundle exec rails server -d</code></pre>
         </div><!-- .strutz -->
     </div><!-- #the-manual -->
 
-
-    <h2 id="quirks">Current quirks <a href="#quirks" class="bookmark">#</a></h2>
-
-    <ul class="quirks">
-        <li>
-            <strong>Last.fm:</strong> You need to manually go to <code>https://&lt;your_server&gt;/settings</code> and do the authentication there.
-        </li>
-        <li>
-            <strong>Media Library:</strong> Opens a blank page after refresh is done. Just go back, and start listening :)
-        </li>
-        <li>
-            <strong>Flash (Firefox):</strong> Beatstream's Flash plugin (SoundManager2) crashes sometimes. Restart browser / Flash.
-        </li>
-        <li>
-            <strong>UTF-8:</strong> Sometimes song info looks garbled. Sometimes Beastream can't play songs with funny characters in filenames or paths.
-        </li>
-        <li>
-            <strong>Endlessly spinning loader:</strong> You prorably have a Flash block of some kind. Allow Beatstream to use Flash.
-        </li>
-    </ul>
-
-
-    <h2>Future plans</h2>
-
-    <p>Beatstream is a work in progress and currently in alpha. Here's the current roadmap for Beatstream:</p>
-
-    <ul class="todo">
-        <li class="done"><i class="icon-tick">&#10003;</i> Separate back-end and front-end</li>
-        <li>UI tweaks all-around (media library refresh, preloader)</li>
-        <li>Working settings UI</li>
-        <li>Front-end regression &amp; unit tests</li>
-        <li>Playlists</li>
-        <li>REST API with authentication</li>
-    </ul>
-
-    <p>You can check the status of the <a href="https://github.com/Darep/Beatstream">project at Github</a>.</p>
-
     <h2>License</h2>
 
-    <p>Copyright &copy; 2012-2013 Antti-Jussi Kovalainen</p>
+    <p>Copyright &copy; 2012-2025 Antti-Jussi Kovalainen</p>
 
-    <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software with only one restriction: selling of the Software, or software and associated documentation files derived from it (the "Derived software"), is only permitted with the permission of the copyright owner.</p>
-
-    <div class="center">
-        <!-- AddThis Button BEGIN -->
-        <div class="addthis_toolbox addthis_default_style">
-            <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-            <a class="addthis_button_tweet"></a>
-            <a class="addthis_counter addthis_pill_style"></a>
-        </div>
-        <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4fc649c87892c488"></script>
-        <!-- AddThis Button END -->
-    </div>
+    <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+    <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+    <p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 </div>
 
 <footer>
     <p>
-        Beatstream was conceived by <a href="http://ajk.fi/">ajk</a> and is actively looking for contributors.<br/>
-        Contact <a href="http://twitter.com/Darep">@Darep</a>
+        <a href="https://github.com/Darep/Beatstream">Beatstream on GitHub</a>.
+    </p>
+    <p>
+        Created by <a href="http://ajk.fi/">ajk</a>.
     </p>
 </footer>
 
