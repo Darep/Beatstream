@@ -1,0 +1,48 @@
+# Dockerfile for publishing to hub.docker.com
+
+# ---- Frontend build ----
+FROM node:20.13 as frontend
+
+WORKDIR /app
+COPY frontend/ .
+RUN npm install && npm run build
+
+# ---- Backend build ----
+FROM golang:1.22 as build
+
+WORKDIR /app
+
+# requirements
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    libtagc0-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# installs
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+
+# copy frontend
+COPY --from=frontend /app/dist /app/frontend/dist
+
+# build
+RUN CGO_ENABLED=1 go build -o /beatstream
+
+# ---- Runtime ----
+FROM golang:1.22 as runtime
+
+ENV MUSIC_PATH=/music
+
+# requirements
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    libtagc0-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /beatstream /beatstream
+
+# expose default port by default
+EXPOSE 8080
+
+CMD ["/beatstream"]

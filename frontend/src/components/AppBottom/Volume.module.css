@@ -1,0 +1,20 @@
+.volume {
+  align-items: center;
+  display: flex;
+  gap: 5px;
+}
+
+.volume-label {
+  background: url('/img/icons.png') no-repeat -160px -197px;
+  height: 16px;
+  margin-top: -1px;
+  width: 16px;
+
+  overflow: hidden;
+  text-indent: 100%;
+  white-space: nowrap;
+}
+
+#volume {
+  width: 125px;
+}

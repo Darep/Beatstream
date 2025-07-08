@@ -1,0 +1,31 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  width: 100vw;
+}
+
+.app-top,
+.main,
+.app-bottom {
+  width: 100%;
+}
+
+.main {
+  display: flex;
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.appNav {
+  flex: 0 0 auto;
+}
+
+.appMain {
+  flex: 1 1 auto;
+}
+
+.app-bottom {
+  /* left intentionally blank */
+}
