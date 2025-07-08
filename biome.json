@@ -25,7 +25,7 @@
       "recommended": true,
       "a11y": {
         "noLabelWithoutControl": "warn",
-        "noPositiveTabindex": "off",
+        "noPositiveTabindex": "warn",
         "useButtonType": "warn",
         "useAriaPropsForRole": "warn",
         "useKeyWithClickEvents": "warn",
