@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "format": "biome format ./src",
-    "lint": "biome lint ./src",
-    "preview": "vite preview"
+    "lint": "biome check",
+    "lint:fix": "biome check --write",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@glideapps/glide-data-grid": "^6.0.3",
