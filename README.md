@@ -1,8 +1,8 @@
 # Beatstream [![Code Climate](https://codeclimate.com/github/Darep/Beatstream/badges/gpa.svg)](https://codeclimate.com/github/Darep/Beatstream) [![Build Status](https://travis-ci.org/Darep/Beatstream.svg?branch=master)](https://travis-ci.org/Darep/Beatstream)
 
-> **IMPORTANT:** I have been experimenting with some re-writes and I'm now slowly porting these changes from my [dev](https://github.com/Darep/Beatstream/tree/dev) branch into `master`. Stay tuned!
-
 ---
+
+⚠️⚠️⚠️ **Check out the v2 release, full re-write in Golang & React, at https://github.com/Darep/Beatstream/pull/56 -- releasing soon!** ⚠️⚠️⚠️
 
 Beatstream is an app for streaming music from your computer to anywhere with a modern Web browser!
 (Beatstream currently requires Ruby to be installed on your computer)
