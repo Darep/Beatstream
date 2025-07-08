@@ -1,0 +1,10 @@
+.button {
+  appearance: none;
+  background: transparent;
+  border: 0;
+}
+
+.button--plain {
+  padding: 0;
+  margin: 0;
+}

@@ -1,0 +1,96 @@
+.app-bottom {
+  background-color: #222;
+  background-image: linear-gradient(
+    to bottom,
+    #383838,
+    #383838 15%,
+    #1f1f1f 90%,
+    #1f1f1f
+  );
+  border-top: 1px solid #505050;
+  box-shadow: 0 -1px 0 black;
+  color: #fff;
+  font-weight: 700;
+  z-index: 10;
+}
+
+.app-bottom button {
+  background: transparent url('/img/icons.png') no-repeat;
+  border: 0;
+  cursor: default;
+  height: 40px;
+  width: 40px;
+  text-indent: -9999em;
+}
+
+.app-bottom button[disabled] {
+  opacity: 0.8;
+}
+
+.current-song {
+  border-bottom: 1px solid #000;
+  box-shadow: 0 1px 0 #434343;
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 700;
+  padding-block-start: 5px;
+  padding-block-end: 7px;
+  padding-inline: 10px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+
+  :first-child {
+    color: #aaa;
+  }
+}
+
+.current-song__song-name {
+  user-select: none;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.controls {
+  align-items: center;
+  display: flex;
+  gap: 15px;
+  padding-inline: 10px;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+
+.playback-buttons {
+  flex: 0 0 auto;
+}
+
+.playback-options {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 10px;
+  padding-inline-end: 10px;
+
+  button {
+    background: transparent url('/img/icons.png') no-repeat;
+    cursor: pointer;
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+  }
+}
+
+:global(#repeat) {
+  background-position: 3px -189px;
+}
+
+:global(#repeat.enabled) {
+  background-position: 3px -164px;
+}
+
+:global(#shuffle) {
+  background-position: -35px -189px;
+}
+
+:global(#shuffle.enabled) {
+  background-position: -35px -164px;
+}

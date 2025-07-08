@@ -1,0 +1,68 @@
+.app-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.playlist-header {
+  border-bottom: 1px solid #d1d1d1;
+  overflow: hidden;
+  padding: 20px 20px 13.33333px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.meta {
+  font-size: 13px;
+}
+
+.search {
+  position: relative;
+
+  input {
+    border-radius: 12px;
+    border: 1px solid #bbb;
+    box-shadow: inset 0 2px 1px rgba(0, 0, 0, 0.08);
+    padding: 4px 10px 3px;
+    transition: all 100ms ease-in;
+    width: 150px;
+
+    &::placeholder {
+      font-style: italic;
+    }
+
+    &:focus {
+      border-color: #999;
+    }
+  }
+}
+
+.search-clear {
+  appearance: none;
+  background: transparent url('/img/close.png') no-repeat 0 -14px;
+  border: 0;
+  display: inline-block;
+  height: 14px;
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  text-indent: -9999em;
+  width: 14px;
+
+  &:hover {
+    background-position: 0 0;
+  }
+}
+
+.grid-container {
+  background: #f1f1f1;
+  flex: 1 1 auto;
+  position: relative;
+  width: 100%;
+}

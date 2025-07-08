@@ -1,0 +1,11 @@
+services:
+  beatstream:
+    ports:
+      - 8080:8080
+    environment:
+      - MUSIC_PATH=/home/user/Music
+    volumes:
+      - /home/user/Music:/home/user/Music
+  # vite:
+  #   ports:
+  #     - 5137:5137
