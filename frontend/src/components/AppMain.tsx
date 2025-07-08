@@ -40,10 +40,7 @@ const PlaylistSearch = () => {
         value={search}
         onChange={(e) => handleSearch(e.currentTarget.value)}
       />
-      <button
-        type="button"
-        className={styles['search-clear']}
-        onClick={() => filterPlaylist('')}>
+      <button type="button" className={styles['search-clear']} onClick={() => filterPlaylist('')}>
         clear
       </button>
     </div>

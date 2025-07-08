@@ -24,9 +24,7 @@ export const AppNav = ({ className }: { className?: string }) => {
           <li id="all-music">
             <a className={styles.active}>
               <span className="name">All music</span>
-              <span className={styles.count}>
-                {songs?.length.toLocaleString() ?? <>&ndash;</>}
-              </span>
+              <span className={styles.count}>{songs?.length.toLocaleString() ?? <>&ndash;</>}</span>
             </a>
           </li>
           {/* <li className="artists">
@@ -54,11 +52,7 @@ export const AppNav = ({ className }: { className?: string }) => {
         )}
         {showPlaylistInput ? (
           <div className={styles['playlist-input']}>
-            <input
-              type="text"
-              className={styles['new-list']}
-              name="list-name"
-            />
+            <input type="text" className={styles['new-list']} name="list-name" />
             <p className={styles.error}>Sorry, that name is no good</p>
           </div>
         ) : null}
@@ -108,6 +102,7 @@ function Resizer({
         if (target.hasPointerCapture(event.pointerId)) {
           target.releasePointerCapture(event.pointerId);
         }
-      }}></div>
+      }}
+    />
   );
 }

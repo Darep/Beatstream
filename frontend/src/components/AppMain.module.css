@@ -45,7 +45,7 @@
 
 .search-clear {
   appearance: none;
-  background: transparent url('/img/close.png') no-repeat 0 -14px;
+  background: transparent url("/img/close.png") no-repeat 0 -14px;
   border: 0;
   display: inline-block;
   height: 14px;

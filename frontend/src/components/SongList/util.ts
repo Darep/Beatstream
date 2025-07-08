@@ -1,9 +1,6 @@
 import { CompactSelection, type GridSelection } from '@glideapps/glide-data-grid';
 
-export const selectionForRow = (
-  row: number | undefined,
-  totalColumns: number,
-): GridSelection => ({
+export const selectionForRow = (row: number | undefined, totalColumns: number): GridSelection => ({
   current:
     typeof row === 'number'
       ? {
@@ -13,8 +10,5 @@ export const selectionForRow = (
         }
       : undefined,
   columns: CompactSelection.empty(),
-  rows:
-    typeof row === 'number'
-      ? CompactSelection.fromSingleSelection(row)
-      : CompactSelection.empty(),
+  rows: typeof row === 'number' ? CompactSelection.fromSingleSelection(row) : CompactSelection.empty(),
 });

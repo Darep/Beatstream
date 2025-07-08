@@ -19,13 +19,7 @@
 
 .slider-fill {
   background-color: #f6a828;
-  background-image: linear-gradient(
-    to bottom,
-    #f6a828,
-    #f6a828 30%,
-    #d06010 85%,
-    #aa3311
-  );
+  background-image: linear-gradient(to bottom, #f6a828, #f6a828 30%, #d06010 85%, #aa3311);
   border-radius: 99px 0 0 99px;
   display: block;
   height: 100%;

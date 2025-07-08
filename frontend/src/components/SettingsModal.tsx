@@ -32,14 +32,11 @@ export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
       <section>
         <label>Last.fm</label>
         <div className="form-field">
-          <button
-            className="btn btn-lastfm not-ok"
-            id="lastfm-connect"
-            tabIndex={4}>
+          <button className="btn btn-lastfm not-ok" id="lastfm-connect" tabIndex={4}>
             Connect to Last.fm
           </button>
           <p className="connecting" style={{ display: 'none' }}>
-            <i className="icon-loading"></i>
+            <i className="icon-loading" />
             Connecting&hellip;
           </p>
           <p className="ok" style={{ display: 'none' }}>

@@ -1,12 +1,6 @@
 .app-bottom {
   background-color: #222;
-  background-image: linear-gradient(
-    to bottom,
-    #383838,
-    #383838 15%,
-    #1f1f1f 90%,
-    #1f1f1f
-  );
+  background-image: linear-gradient(to bottom, #383838, #383838 15%, #1f1f1f 90%, #1f1f1f);
   border-top: 1px solid #505050;
   box-shadow: 0 -1px 0 black;
   color: #fff;
@@ -15,7 +9,7 @@
 }
 
 .app-bottom button {
-  background: transparent url('/img/icons.png') no-repeat;
+  background: transparent url("/img/icons.png") no-repeat;
   border: 0;
   cursor: default;
   height: 40px;
@@ -71,7 +65,7 @@
   padding-inline-end: 10px;
 
   button {
-    background: transparent url('/img/icons.png') no-repeat;
+    background: transparent url("/img/icons.png") no-repeat;
     cursor: pointer;
     display: inline-block;
     height: 24px;

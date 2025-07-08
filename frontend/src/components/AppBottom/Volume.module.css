@@ -5,7 +5,7 @@
 }
 
 .volume-label {
-  background: url('/img/icons.png') no-repeat -160px -197px;
+  background: url("/img/icons.png") no-repeat -160px -197px;
   height: 16px;
   margin-top: -1px;
   width: 16px;

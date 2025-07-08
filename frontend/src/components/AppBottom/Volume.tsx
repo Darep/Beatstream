@@ -15,11 +15,7 @@ export const Volume = ({ className }: { className?: string }) => {
         Volume
       </label>
       <div id={styles.volume}>
-        <Slider
-          onSlide={(v) => changeVolume(v)}
-          onStop={(v) => changeVolume(v)}
-          value={volume}
-        />
+        <Slider onSlide={(v) => changeVolume(v)} onStop={(v) => changeVolume(v)} value={volume} />
       </div>
     </div>
   );

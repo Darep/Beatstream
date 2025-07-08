@@ -70,9 +70,7 @@ export const DataGrid = ({
     width: columnSizes[col.id] ?? col.width,
   }));
 
-  const [selection, setSelection] = useState<GridSelection>(
-    selectionForRow(activeRow, columns.length),
-  );
+  const [selection, setSelection] = useState<GridSelection>(selectionForRow(activeRow, columns.length));
 
   // holds double-click related state
   const doubleClickRef = useRef<{
@@ -111,10 +109,7 @@ export const DataGrid = ({
         };
       }
 
-      const data =
-        columnKey === 'title'
-          ? dataRow['title'] || dataRow['nice_title']
-          : dataRow[columnKey]?.toString() ?? '';
+      const data = columnKey === 'title' ? dataRow.title || dataRow.nice_title : (dataRow[columnKey]?.toString() ?? '');
 
       return {
         allowOverlay: false,
@@ -210,50 +205,43 @@ export const DataGrid = ({
         },
         [handleActivateRow],
       )}
-      onColumnResize={useCallback(
-        (
-          col: GridColumn,
-          _newSize: number,
-          _index: number,
-          newSizeWithGrow: number,
-        ) => {
-          if (col.id && col.id !== 'nowplaying') {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            setColumnSizes((prev) => ({ ...prev, [col.id]: newSizeWithGrow }));
+      onColumnResize={useCallback((col: GridColumn, _newSize: number, _index: number, newSizeWithGrow: number) => {
+        if (col.id && col.id !== 'nowplaying') {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          setColumnSizes((prev) => ({ ...prev, [col.id]: newSizeWithGrow }));
+        }
+      }, [])}
+      onGridSelectionChange={useCallback(
+        (sel: GridSelection) => {
+          const [, row] = sel.current?.cell || [];
+
+          if (typeof row !== 'number') {
+            // should not happen, hehe
+            return;
           }
+
+          setSelection(selectionForRow(row, columns.length));
         },
-        [],
+        [columns.length],
       )}
-      onGridSelectionChange={useCallback((sel: GridSelection) => {
-        const [, row] = sel.current?.cell || [];
+      onHeaderClicked={useCallback(
+        (colIndex: number) => {
+          const col = columns[colIndex];
+          if (!col || col.id === 'nowplaying') {
+            return;
+          }
 
-        if (typeof row !== 'number') {
-          // should not happen, hehe
-          return;
-        }
-
-        setSelection(selectionForRow(row, columns.length));
-      }, [])}
-      onHeaderClicked={useCallback((colIndex: number) => {
-        const col = columns[colIndex];
-        if (!col || col.id === 'nowplaying') {
-          return;
-        }
-
-        onSort(col.id === 'nice_length' ? 'length' : col.id);
-      }, [])}
+          onSort(col.id === 'nice_length' ? 'length' : col.id);
+        },
+        [columns, onSort],
+      )}
       onItemHovered={useCallback((args: GridMouseEventArgs) => {
         const [, row] = args.location;
         setHoverRow(args.kind !== 'cell' ? undefined : row);
       }, [])}
       getRowThemeOverride={(row) => ({
-        bgCell:
-          row === hoverRow
-            ? theme.bgCellHover
-            : row % 2 === 0
-              ? theme.bgCellEven
-              : theme.bgCellOdd,
+        bgCell: row === hoverRow ? theme.bgCellHover : row % 2 === 0 ? theme.bgCellEven : theme.bgCellOdd,
       })}
       theme={{
         // selected cell border color

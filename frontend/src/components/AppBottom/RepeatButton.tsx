@@ -5,11 +5,7 @@ export const RepeatButton = () => {
   const toggleRepeat = usePlayerStore((s) => s.toggleRepeat);
 
   return (
-    <button
-      className={repeat ? 'enabled' : undefined}
-      id="repeat"
-      type="button"
-      onClick={() => toggleRepeat()}>
+    <button className={repeat ? 'enabled' : undefined} id="repeat" type="button" onClick={() => toggleRepeat()}>
       Repeat <span className="status">{repeat ? 'On' : 'Off'}</span>
     </button>
   );

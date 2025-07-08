@@ -25,9 +25,7 @@ class AppAudio {
   }
 
   playSong(uri: string) {
-    const songUri = uri.startsWith('/api/songs/play')
-      ? uri
-      : `/api/songs/play?file=${encodeURIComponent(uri)}`;
+    const songUri = uri.startsWith('/api/songs/play') ? uri : `/api/songs/play?file=${encodeURIComponent(uri)}`;
 
     this.audio.src = songUri;
     this.audio.play();

@@ -19,11 +19,7 @@ export const Modal = ({
   }
 
   return createPortal(
-    <div
-      className={classNames(
-        styles['dialog-container'],
-        transparent && styles['dialog-container--transparent'],
-      )}>
+    <div className={classNames(styles['dialog-container'], transparent && styles['dialog-container--transparent'])}>
       <div className={styles.dialog} role="dialog">
         {onClose ? (
           <button className={styles.close} onClick={onClose}>

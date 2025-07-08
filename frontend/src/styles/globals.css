@@ -14,8 +14,8 @@
 
 body {
   color: #333333;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 1em;
   line-height: 1.5;
   overflow: hidden;
@@ -280,7 +280,7 @@ classes should alter those!
 /* line 11, ../sass/globals/_mixins.scss */
 .clearfix:before,
 .clearfix:after {
-  content: '';
+  content: "";
   display: table;
 }
 /* line 15, ../sass/globals/_mixins.scss */
@@ -290,8 +290,8 @@ classes should alter those!
 
 /* line 1, ../sass/components/_icons.scss */
 .icon,
-[class|='icon'] {
-  background: url('/img/icons.png') no-repeat;
+[class|="icon"] {
+  background: url("/img/icons.png") no-repeat;
 }
 
 /* line 5, ../sass/components/_icons.scss */
@@ -301,7 +301,7 @@ classes should alter those!
 
 /* line 9, ../sass/components/_icons.scss */
 .icon-sync {
-  background: url('/img/sync.gif') no-repeat;
+  background: url("/img/sync.gif") no-repeat;
   display: inline-block;
   height: 16px;
   width: 16px;
@@ -312,7 +312,7 @@ classes should alter those!
 
 /* line 17, ../sass/components/_icons.scss */
 .loading {
-  background: url('/img/preloader.gif') no-repeat;
+  background: url("/img/preloader.gif") no-repeat;
   height: 16px;
   width: 16px;
   text-indent: 100%;
@@ -322,14 +322,14 @@ classes should alter those!
 
 /* line 1, ../sass/components/_buttons.scss */
 .btn,
-[class|='btn'] {
+[class|="btn"] {
   background: #595959;
   background: linear-gradient(to bottom, #707070, #424242);
   border: 0;
   border-radius: 3px;
   color: #fff;
   display: inline-block;
-  font-family: 'Helvetica Neue', sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
   font-size: 12px;
   font-weight: 700;
   height: 28px;
@@ -343,38 +343,20 @@ classes should alter those!
 }
 /* line 21, ../sass/components/_buttons.scss */
 .btn:hover,
-[class|='btn']:hover {
+[class|="btn"]:hover {
   background: #707070;
-  background: -webkit-gradient(
-    linear,
-    50% 0%,
-    50% 100%,
-    color-stop(0%, #888888),
-    color-stop(100%, #424242)
-  );
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #888888), color-stop(100%, #424242));
   background: linear-gradient(to bottom, #888888, #424242);
   color: #fff;
 }
 
 /* line 28, ../sass/components/_buttons.scss */
 .btn-orange {
-  background: linear-gradient(
-    to bottom,
-    #d79424,
-    #e19a26 30%,
-    #bb560f 85%,
-    #992d10
-  );
+  background: linear-gradient(to bottom, #d79424, #e19a26 30%, #bb560f 85%, #992d10);
 }
 /* line 31, ../sass/components/_buttons.scss */
 .btn-orange:hover {
-  background: linear-gradient(
-    to bottom,
-    #c58722,
-    #c28520 30%,
-    #a2490d 85%,
-    #7e250d
-  );
+  background: linear-gradient(to bottom, #c58722, #c28520 30%, #a2490d 85%, #7e250d);
 }
 
 /* line 1, ../sass/components/_forms.scss */
@@ -384,15 +366,13 @@ label {
 }
 
 /* line 6, ../sass/components/_forms.scss */
-[type='text'],
-[type='password'],
-[type='search'] {
+[type="text"],
+[type="password"],
+[type="search"] {
   appearance: none;
   border: 1px solid #bbb;
   border-radius: 2px;
-  font:
-    0.8em/1.3 'Helvetica Neue',
-    sans-serif;
+  font: 0.8em / 1.3 "Helvetica Neue", sans-serif;
   margin: 0;
   padding: 0.3em 0.4em;
   box-shadow: inset 1px 2px 4px rgba(0, 0, 0, 0.1);
@@ -426,7 +406,7 @@ label {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid #bbb;
-  content: '';
+  content: "";
   display: inline-block;
   margin-left: 5px;
   position: relative;
@@ -510,7 +490,7 @@ label {
 /* line 87, ../sass/components/_dropdowns.scss */
 .dropdown-menu:before,
 .dropdown-menu:after {
-  content: '';
+  content: "";
   display: inline-block;
   position: absolute;
 }
@@ -519,9 +499,7 @@ label {
 .logo {
   color: #f1f1f1;
   display: inline-block;
-  font:
-    700 30px/55px 'PT Sans',
-    sans-serif;
+  font: 700 30px / 55px "PT Sans", sans-serif;
   position: relative;
   text-shadow: 0 1px 3px #000;
   vertical-align: middle;
@@ -615,7 +593,7 @@ label {
 /* line 87, ../sass/components/_songlist.scss */
 .slick-header:before,
 .slick-header:after {
-  content: '';
+  content: "";
   display: table;
 }
 
@@ -647,7 +625,7 @@ label {
 
 /* line 108, ../sass/components/_songlist.scss */
 #slickgrid .playing {
-  background-image: url('/img/icons.png');
+  background-image: url("/img/icons.png");
   background-repeat: no-repeat;
   background-position: -232px -194px;
 }

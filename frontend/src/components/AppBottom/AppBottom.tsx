@@ -23,9 +23,7 @@ export const AppBottom = ({ className }: { className?: string }) => {
     <div className={classNames(styles['app-bottom'], className)}>
       <div className={styles['current-song']}>
         <span className="label">Current song:</span>{' '}
-        <span
-          className={styles['current-song__song-name']}
-          onClick={scrollToCurrentSong}>
+        <span className={styles['current-song__song-name']} onClick={scrollToCurrentSong}>
           {song?.nice_title ?? 'No song playing'}
         </span>
       </div>

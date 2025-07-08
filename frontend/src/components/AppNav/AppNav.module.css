@@ -45,7 +45,7 @@
 
     :after {
       background: #aaa;
-      content: '';
+      content: "";
       display: block;
       height: 100%;
       position: absolute;
@@ -156,7 +156,7 @@ li a.active :after {
   &:after {
     background: transparent;
     bottom: 0;
-    content: '';
+    content: "";
     display: block;
     height: 100%;
     pointer-events: none;

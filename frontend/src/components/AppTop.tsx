@@ -39,10 +39,7 @@ export const AppTop = ({ className }: { className?: string }) => {
       setIsRefreshDone(true);
       mutate('/api/songs', data);
 
-      refreshDoneTimer.current = window.setTimeout(
-        () => setIsRefreshDone(false),
-        5000,
-      );
+      refreshDoneTimer.current = window.setTimeout(() => setIsRefreshDone(false), 5000);
     } catch (error) {
       setRefreshError(error!.toString());
     } finally {
@@ -68,29 +65,26 @@ export const AppTop = ({ className }: { className?: string }) => {
             </div>
           ) : isRefreshDone ? (
             <div className="media-library-refresh-done">
-              <i className="icon-tick"></i>
+              <i className="icon-tick" />
               <span>Done!</span>
             </div>
           ) : refreshError ? (
             <div className="media-library-refresh-fail">
-              <i className="icon-notify"></i>
+              <i className="icon-notify" />
               <span title={refreshError}>Refresh failed!</span>{' '}
               <Button
                 variant="plain"
                 onClick={() => {
                   setRefreshError(undefined);
-                }}>
+                }}
+              >
                 &times;
               </Button>
             </div>
           ) : null}
         </div>
         <div className="dropdown" id="user-menu">
-          <Button
-            className="dropdown-toggle username"
-            id="menu-toggle"
-            variant="plain"
-            onClick={toggleDropdown}>
+          <Button className="dropdown-toggle username" id="menu-toggle" variant="plain" onClick={toggleDropdown}>
             {user?.username ?? <>&hellip;</>}
           </Button>
           {dropdownOpen ? (
@@ -102,7 +96,8 @@ export const AppTop = ({ className }: { className?: string }) => {
                   onClick={() => {
                     setOpenModalName('settings');
                     setDropdownOpen(false);
-                  }}>
+                  }}
+                >
                   Settings&hellip;
                 </Button>
               </li>
@@ -113,7 +108,8 @@ export const AppTop = ({ className }: { className?: string }) => {
                   onClick={() => {
                     handleRefresh();
                     setDropdownOpen(false);
-                  }}>
+                  }}
+                >
                   Refresh media library&hellip;
                 </Button>
               </li>
@@ -127,16 +123,15 @@ export const AppTop = ({ className }: { className?: string }) => {
                   onClick={() => {
                     handleLogout();
                     setDropdownOpen(false);
-                  }}>
+                  }}
+                >
                   Log out
                 </Button>
               </li>
             </ul>
           ) : null}
 
-          {openModalName === 'settings' ? (
-            <SettingsModal onClose={() => setOpenModalName(undefined)} />
-          ) : null}
+          {openModalName === 'settings' ? <SettingsModal onClose={() => setOpenModalName(undefined)} /> : null}
         </div>
       </div>
     </header>

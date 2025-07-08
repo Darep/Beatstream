@@ -29,7 +29,8 @@ export const PlayPauseButton = () => {
       className={isPlaying ? 'playing' : undefined}
       type="button"
       disabled={isPlaylistEmpty}
-      onClick={() => (isPlaying ? pause() : play())}>
+      onClick={() => (isPlaying ? pause() : play())}
+    >
       Play/pause
     </button>
   );

@@ -16,14 +16,7 @@ interface SliderProps {
   onStop?: (value: number) => void;
 }
 
-export const Slider = ({
-  disabled,
-  max = 100,
-  onSlide,
-  onStart,
-  onStop,
-  value,
-}: SliderProps) => {
+export const Slider = ({ disabled, max = 100, onSlide, onStart, onStop, value }: SliderProps) => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLSpanElement>(null);
   const thumb = thumbRef.current;
@@ -34,10 +27,7 @@ export const Slider = ({
   const thumbHalfWidth = thumb ? thumb?.clientWidth / 2 : 8;
 
   // offset thumb so it doesn't go off the slider
-  const thumbOffset = (
-    thumbHalfWidth -
-    (thumbHalfWidth / 0.5) * percentage
-  ).toFixed(2);
+  const thumbOffset = (thumbHalfWidth - (thumbHalfWidth / 0.5) * percentage).toFixed(2);
 
   const updateValue = (newValue: number) => {
     if (newValue !== value) {
@@ -48,10 +38,7 @@ export const Slider = ({
   const getValueFromPointer = useCallback(
     (pointerPosition: number) => {
       const rect = sliderRef.current!.getBoundingClientRect();
-      const value = Math.max(
-        (Math.min(pointerPosition - rect.left, rect.width) / rect.width) * max,
-        min,
-      );
+      const value = Math.max((Math.min(pointerPosition - rect.left, rect.width) / rect.width) * max, min);
       return value;
     },
     [max, min, sliderRef],
@@ -85,7 +72,8 @@ export const Slider = ({
           onStop?.(newValue);
         }
       }}
-      ref={sliderRef}>
+      ref={sliderRef}
+    >
       <span className={styles['slider-track']}>
         <span className={styles['slider-fill']} style={{ left: 0, right }} />
       </span>

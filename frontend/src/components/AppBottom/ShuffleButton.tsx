@@ -5,11 +5,7 @@ export const ShuffleButton = () => {
   const toggleShuffle = usePlayerStore((s) => s.toggleShuffle);
 
   return (
-    <button
-      className={shuffle ? 'enabled' : undefined}
-      id="shuffle"
-      type="button"
-      onClick={() => toggleShuffle()}>
+    <button className={shuffle ? 'enabled' : undefined} id="shuffle" type="button" onClick={() => toggleShuffle()}>
       Shuffle <span className="status">{shuffle ? 'On' : 'Off'}</span>
     </button>
   );

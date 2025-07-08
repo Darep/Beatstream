@@ -22,18 +22,17 @@ export const AppLoader = () => {
 
   return (
     <div className={styles.pageloader}>
-      <div className={styles['pageloader__center']}>
-        <p className={styles['loading']} style={{ background: loading }}>
+      <div className={styles.pageloader__center}>
+        <p className={styles.loading} style={{ background: loading }}>
           Loading&hellip;
         </p>
         <div className="notifications">
           {songsError ? (
             <div className="playlist-error">
-              <i className="icon icon-notify"></i>
+              <i className="icon icon-notify" />
               <h3>Cannot load playlist</h3>
               <p>
-                Could not load the current playlist. Please, try{' '}
-                <em>something</em>.
+                Could not load the current playlist. Please, try <em>something</em>.
               </p>
             </div>
           ) : null}

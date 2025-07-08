@@ -16,13 +16,8 @@ export const Seekbar = () => {
   return (
     <>
       <div className={styles.time}>
-        <span className="elapsed">
-          {niceTime(positionProxy ?? currentPosition)}
-        </span>{' '}
-        /{' '}
-        <span className="duration">
-          {niceTime(parsedDuration ?? song?.length)}
-        </span>
+        <span className="elapsed">{niceTime(positionProxy ?? currentPosition)}</span> /{' '}
+        <span className="duration">{niceTime(parsedDuration ?? song?.length)}</span>
       </div>
       <div className={styles.seekbar}>
         <Slider
