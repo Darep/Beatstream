@@ -1,22 +1,18 @@
-Changelog
-=========
+# Changelog
 
-## vNext
+All notable changes to this project will be documented in this file.
 
-#### Major changes
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-- Added (or re-added?) preloader with a notice if Flash doesn't work
+## [Unreleased]
 
-#### Minor changes
+### Changed
 
-#### Refactoring
+- Full rewrite in Golang & React
+- Note: this will be released as "v2.0.0"
 
-- Frontend now uses React!
-- CSS now loaded with BEMs!
-- Removed the non-functioning code to re-open Settings when refreshing with the Settings open
-
-
-## 1.1.2
+## [1.1.2]
 
 #### Major changes
 
@@ -40,15 +36,13 @@ Changelog
 - Prefixed API HTTP request with "/api/v1/"
 - Scrobbling now uses proper HTTP methods instead of GET
 
-
-## 1.1.1
+## [1.1.1]
 
 #### Bug fixes
 
 - Fix crash on refresh if library contains a broken MP3 file
 
-
-## 1.1.0
+## [1.1.0]
 
 #### New features
 
@@ -60,15 +54,13 @@ Changelog
 - Don't play the same song in a row when shuffling
 - Previous button now actually plays the previous song when shuffling
 
-
-## 1.0.4
+## [1.0.4]
 
 #### Bug fixes
 
 - Fixed a crash bug on initial login or after logging out
 
-
-## 1.0.3
+## [1.0.3]
 
 #### Major changes
 
@@ -82,8 +74,7 @@ Changelog
 - Replaced mp3info gem with ruby-mp3info
 - Updated rockstar gem from 0.7.1 to 0.8.0
 
-
-## 1.0.2
+## [1.0.2]
 
 This is a "refactor release". Version 1.0.2 does not bring anything new, or even
 fix things, but instead contains major changes to the code, which might
@@ -103,8 +94,7 @@ independent release. -ajk
 - Scrobbling related code moved into ScrobblesController
 - Renamed Rails app internal name to Beatstream (from BeatStream)
 
-
-## 1.0.1
+## [1.0.1]
 
 #### Major changes
 
@@ -121,3 +111,18 @@ independent release. -ajk
 - Refactored User model
 - Removed rtaglib gem (not used anywhere)
 - Removed unused template `app/views/sessions/destroy.html.erb`
+
+## [1.0]
+
+- Initial release
+
+[unreleased]: https://github.com/Darep/Beatstream/compare/master...HEAD
+[1.1.2]: https://github.com/Darep/Beatstream/compare/1.1.1...1.1.2
+[1.1.1]: https://github.com/Darep/Beatstream/compare/1.1.0...1.1.1
+[1.1.0]: https://github.com/Darep/Beatstream/compare/1.0.4...1.1.0
+[1.0.4]: https://github.com/Darep/Beatstream/compare/1.0.3...1.0.4
+[1.0.3]: https://github.com/Darep/Beatstream/compare/1.0.2...1.0.3
+[1.0.2]: https://github.com/Darep/Beatstream/compare/1.0.1...1.0.2
+[1.0.1]: https://github.com/Darep/Beatstream/compare/1.0...1.0.1
+[1.0.0]: https://github.com/Darep/Beatstream/releases/tag/1.0.0
+[1.0]: https://github.com/Darep/Beatstream/releases/tag/1.0
