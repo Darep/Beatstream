@@ -8,3 +8,11 @@ interface Song {
   title: string;
   track_num: number;
 }
+
+interface Playlist {
+  id: string;
+  name: string;
+  username: string;
+  songs: string[];
+  created_at: string;
+}

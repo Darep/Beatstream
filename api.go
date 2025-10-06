@@ -70,10 +70,10 @@ func registerRoutes() *chi.Mux {
 		// r.Post("/lastfm/scrobble", scrobbleHandler)
 		// r.Post("/lastfm/now-playing", nowPlayingHandler)
 
-		// r.Get("/playlists", playlistsHandler)
-		// r.Post("/playlists", createPlaylistHandler)
+		r.Get("/playlists", playlistsHandler)
+		r.Post("/playlists", createPlaylistHandler)
 		// r.Put("/playlists/{id}", updatePlaylistHandler)
-		// r.Delete("/playlists/{id}", deletePlaylistHandler)
+		r.Delete("/playlists/{id}", deletePlaylistHandler)
 	})
 
 	r.Handle("/*", http.HandlerFunc(frontendHandler))
@@ -253,4 +253,64 @@ func refreshSongs() error {
 	}
 
 	return nil
+}
+
+// GET /api/playlists
+func playlistsHandler(w http.ResponseWriter, r *http.Request) {
+	username := r.Context().Value("username").(string)
+	userPlaylists := getUserPlaylists(username)
+	respondJSON(w, userPlaylists)
+}
+
+// POST /api/playlists
+func createPlaylistHandler(w http.ResponseWriter, r *http.Request) {
+	username := r.Context().Value("username").(string)
+
+	var request struct {
+		Name string `json:"name"`
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if request.Name == "" {
+		http.Error(w, "Playlist name is required", http.StatusBadRequest)
+		return
+	}
+
+	playlist, err := createPlaylist(request.Name, username)
+	if err != nil {
+		logger.Log.Printf("Failed to create playlist: %v", err)
+		http.Error(w, "Failed to create playlist", http.StatusInternalServerError)
+		return
+	}
+
+	respondJSON(w, playlist)
+}
+
+// DELETE /api/playlists/{id}
+func deletePlaylistHandler(w http.ResponseWriter, r *http.Request) {
+	username := r.Context().Value("username").(string)
+	playlistID := chi.URLParam(r, "id")
+
+	if playlistID == "" {
+		http.Error(w, "Playlist ID is required", http.StatusBadRequest)
+		return
+	}
+
+	err := deletePlaylist(playlistID, username)
+	if err != nil {
+		if _, ok := err.(*PlaylistNotFoundError); ok {
+			http.Error(w, "Playlist not found", http.StatusNotFound)
+			return
+		}
+		logger.Log.Printf("Failed to delete playlist: %v", err)
+		http.Error(w, "Failed to delete playlist", http.StatusInternalServerError)
+		return
+	}
+
+	respondJSON(w, map[string]string{"status": "deleted"})
 }

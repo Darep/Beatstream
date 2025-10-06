@@ -116,6 +116,53 @@ li a.active :after {
   margin-top: 10px;
 }
 
+.playlist {
+  position: relative;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  opacity: 0;
+  padding: 2px 6px;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: opacity 0.2s;
+}
+
+.playlist:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  color: #c22;
+}
+
+.input-actions {
+  display: flex;
+  gap: 5px;
+  margin: 5px 20px 0;
+}
+
+.input-actions button {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 10px;
+  padding: 3px 8px;
+}
+
+.input-actions button:hover {
+  background: #e5e5e5;
+}
+
 .btn-new-list {
   display: block;
   margin: 15px auto 0;

@@ -22,5 +22,10 @@ func main() {
 		logger.Log.Fatalf("Failed to load user configuration: %v", err)
 	}
 
+	err = loadPlaylists()
+	if err != nil {
+		logger.Log.Fatalf("Failed to load playlists: %v", err)
+	}
+
 	startApi()
 }

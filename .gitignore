@@ -6,6 +6,7 @@ pkg/
 tmp/
 
 songs.json
+playlists.json
 users.json
 
 # Binaries for programs and plugins

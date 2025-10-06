@@ -1,7 +1,8 @@
 import classNames from 'classnames';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
-import { useSongs } from 'hooks/swr';
+import { useSongs, usePlaylists } from 'hooks/swr';
+import { request } from 'utils/api';
 
 import { usePlayerStore } from 'store';
 
@@ -9,13 +10,60 @@ import styles from './AppNav.module.css';
 
 export const AppNav = ({ className }: { className?: string }) => {
   const { data: songs } = useSongs();
+  const { data: playlists, mutate: mutatePlaylists, isLoading: isLoadingPlaylists } = usePlaylists();
   const width = usePlayerStore((s) => s.appNavWidth);
   const resize = usePlayerStore((s) => s.resizeAppNav);
   const resetWidth = usePlayerStore((s) => s.resetAppNavWidth);
+  const [showPlaylistInput, setShowPlaylistInput] = useState(false);
+  const [newPlaylistName, setNewPlaylistName] = useState('');
+  const [error, setError] = useState('');
 
-  const isLoadingPlaylists = false;
-  const showPlaylistInput = false;
-  const playlists = [] as Song[][];
+  const handleCreatePlaylist = async () => {
+    if (!newPlaylistName.trim()) {
+      setError('Playlist name is required');
+      return;
+    }
+
+    try {
+      await request('/api/playlists', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newPlaylistName.trim() }),
+      });
+      
+      setNewPlaylistName('');
+      setShowPlaylistInput(false);
+      setError('');
+      mutatePlaylists();
+    } catch (err) {
+      setError('Failed to create playlist');
+    }
+  };
+
+  const handleDeletePlaylist = async (playlistId: string) => {
+    if (!confirm('Are you sure you want to delete this playlist?')) {
+      return;
+    }
+
+    try {
+      await request(`/api/playlists/${playlistId}`, {
+        method: 'DELETE',
+      });
+      mutatePlaylists();
+    } catch (err) {
+      console.error('Failed to delete playlist:', err);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleCreatePlaylist();
+    } else if (e.key === 'Escape') {
+      setShowPlaylistInput(false);
+      setNewPlaylistName('');
+      setError('');
+    }
+  };
 
   return (
     <div className={classNames(styles['app-nav'], className)} style={{ width }}>
@@ -45,19 +93,50 @@ export const AppNav = ({ className }: { className?: string }) => {
           <p className="none">No playlists, yet.</p>
         ) : (
           <ul>
-            {playlists?.map((p) => (
-              <li className={styles.playlist}>{p.length}</li>
+            {playlists?.map((playlist: Playlist) => (
+              <li key={playlist.id} className={styles.playlist}>
+                <a>
+                  <span className="name">{playlist.name}</span>
+                  <span className={styles.count}>{playlist.songs.length}</span>
+                </a>
+                <button 
+                  onClick={() => handleDeletePlaylist(playlist.id)}
+                  className={styles['delete-btn']}
+                  title="Delete playlist"
+                >
+                  ×
+                </button>
+              </li>
             ))}
           </ul>
         )}
         {showPlaylistInput ? (
           <div className={styles['playlist-input']}>
-            <input type="text" className={styles['new-list']} name="list-name" />
-            <p className={styles.error}>Sorry, that name is no good</p>
+            <input 
+              type="text" 
+              className={styles['new-list']} 
+              name="list-name"
+              value={newPlaylistName}
+              onChange={(e) => setNewPlaylistName(e.target.value)}
+              onKeyDown={handleKeyPress}
+              placeholder="Playlist name..."
+              autoFocus
+            />
+            {error && <p className={styles.error}>{error}</p>}
+            <div className={styles['input-actions']}>
+              <button onClick={handleCreatePlaylist}>Create</button>
+              <button onClick={() => setShowPlaylistInput(false)}>Cancel</button>
+            </div>
           </div>
         ) : null}
       </section>
-      {/* <a className="btn btn-new-list">+ New Playlist</a> */}
+      <button 
+        className="btn btn-new-list" 
+        onClick={() => setShowPlaylistInput(true)}
+        disabled={showPlaylistInput}
+      >
+        + New Playlist
+      </button>
 
       <Resizer width={width} onChange={(v) => resize(v)} onReset={resetWidth} />
     </div>

@@ -7,3 +7,5 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/wtolson/go-taglib v0.0.0-20210406152913-79209c280058
 )
+
+require github.com/google/uuid v1.6.0 // indirect

@@ -18,6 +18,12 @@ interface PlayerState {
   /** Current sorted & filtered playlist of songs */
   playlist: Song[];
 
+  /** User playlists */
+  playlists: Playlist[];
+
+  /** Currently selected playlist (if any) */
+  currentPlaylist: Playlist | null;
+
   /** Current song duration as parsed by the audio player */
   parsedDuration: number;
 
@@ -59,6 +65,12 @@ interface PlayerState {
   songsLoaded: (songs: Song[]) => void;
   sortPlaylist: (field: 'title' | 'album' | 'artist' | 'track_num' | 'length' | 'nice_length' | null) => void;
   playSongAtIndex: (index: number) => void;
+
+  /** Playlist actions */
+  loadPlaylists: (playlists: Playlist[]) => void;
+  setCurrentPlaylist: (playlist: Playlist | null) => void;
+  addPlaylist: (playlist: Playlist) => void;
+  removePlaylist: (playlistId: string) => void;
 
   pause: () => void;
   play: () => void;
@@ -114,6 +126,8 @@ export const usePlayerStore = create<PlayerState>()(
         volume: DEFAULT_VOLUME,
         playHistory: [],
         playHistoryIndex: -1,
+        playlists: [] as Playlist[],
+        currentPlaylist: null,
 
         nextSong: (force = false) => set(changeSong(1, { force })),
         prevSong: (force = false) => set(changeSong(-1, { force })),
@@ -235,6 +249,21 @@ export const usePlayerStore = create<PlayerState>()(
               return { songs };
             }
           }),
+
+        loadPlaylists: (playlists: Playlist[]) => set({ playlists }),
+
+        setCurrentPlaylist: (currentPlaylist: Playlist | null) => set({ currentPlaylist }),
+
+        addPlaylist: (playlist: Playlist) =>
+          set((state) => ({
+            playlists: [...state.playlists, playlist],
+          })),
+
+        removePlaylist: (playlistId: string) =>
+          set((state) => ({
+            playlists: state.playlists.filter((p) => p.id !== playlistId),
+            currentPlaylist: state.currentPlaylist?.id === playlistId ? null : state.currentPlaylist,
+          })),
       }),
       {
         name: 'player-storage',
@@ -248,6 +277,7 @@ export const usePlayerStore = create<PlayerState>()(
             shuffle: state.shuffle,
             song: state.song,
             volume: state.volume,
+            currentPlaylist: state.currentPlaylist,
           }),
       },
     ),
