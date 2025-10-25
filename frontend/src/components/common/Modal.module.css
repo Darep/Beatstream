@@ -1,0 +1,87 @@
+@keyframes dialog {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.dialog-container {
+  align-items: center;
+  background: rgba(15, 15, 15, 0.6);
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  & :global {
+    animation: fadeIn 200ms ease;
+  }
+
+  h2,
+  section {
+    margin: 0 -25px;
+  }
+
+  h2 {
+    padding: 0 25px 20px;
+  }
+
+  section {
+    padding: 20px 25px;
+  }
+
+  section + section {
+    border-top: 1px solid #c7c7c7;
+  }
+}
+
+.dialog-container--transparent {
+  background: transparent;
+
+  .dialog {
+    border-color: transparent;
+  }
+}
+
+.dialog {
+  background: #fff;
+  background-clip: padding-box;
+  border: 1px solid #555;
+  border-radius: 6px;
+  box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 5px 10px, rgba(15, 15, 15, 0.2) 0px 15px
+    40px;
+  overflow: hidden;
+  padding: 25px 35px;
+  position: relative;
+  width: 320px;
+  animation: dialog 200ms ease both;
+
+  @media (min-height: 700px) {
+    margin-top: calc(100vh * -0.25);
+  }
+}
+
+.close {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: #bbbbbb;
+  cursor: pointer;
+  font-size: 21px;
+  font-weight: 100;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 15px;
+  text-shadow: none;
+  top: 10px;
+}

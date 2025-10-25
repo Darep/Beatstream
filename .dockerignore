@@ -1,0 +1,11 @@
+README.md
+
+songs.json
+users.json
+
+tmp/
+dist/
+node_modules/
+docker-builder.sh
+
+beatstream-*

@@ -1,0 +1,14 @@
+.time {
+  flex: 1 0 auto;
+  font-size: 11px;
+  line-height: 14px;
+  text-align: center;
+  white-space: nowrap;
+  width: 90px;
+}
+
+.seekbar {
+  flex: 1 1 100%;
+  position: relative;
+  text-align: center;
+}

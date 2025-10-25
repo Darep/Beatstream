@@ -1,0 +1,17 @@
+.title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.fields {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 2fr;
+  align-items: center;
+}
+
+.error {
+  color: var(--text-red);
+  font-size: var(--text-small);
+  grid-column: span 2;
+}

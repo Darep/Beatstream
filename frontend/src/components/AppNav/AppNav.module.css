@@ -1,0 +1,174 @@
+.app-nav {
+  background: #eaeaea;
+  border-right: 1px solid #d4d4d4;
+  display: none;
+  font-size: 11px;
+  min-width: 130px;
+  overflow: hidden;
+  overflow-y: auto;
+  position: relative;
+
+  @media (min-width: 780px) {
+    display: inline-block;
+  }
+
+  section {
+    border-bottom: 1px solid #c7c7c7;
+    box-shadow: 0 1px 0 white;
+    padding: 10px 0;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    display: block;
+    line-height: 1.4em;
+    position: relative;
+    z-index: 0;
+  }
+
+  li a {
+    color: #777;
+    display: block;
+    padding: 5px 20px;
+    text-decoration: none;
+    user-select: none;
+
+    &:hover {
+      color: #222;
+      a {
+        color: #222;
+      }
+    }
+
+    :after {
+      background: #aaa;
+      content: "";
+      display: block;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 5px;
+    }
+  }
+}
+
+.content {
+  /* TODO: flex */
+}
+
+li a.active :after {
+  background-color: #f18c06;
+}
+
+.count {
+  font-weight: 400;
+  float: right;
+}
+
+.common {
+  font-size: 13px;
+  font-weight: 700;
+
+  a {
+    color: #222;
+  }
+}
+
+.icon-sync {
+  display: none;
+  position: absolute;
+  right: 0;
+}
+
+.syncing {
+  font-style: italic;
+}
+
+.syncing a:hover {
+  color: #777;
+  cursor: default;
+}
+
+.syncing .icon-sync {
+  display: block;
+}
+
+.error {
+  color: #c22;
+  margin: 0 20px;
+}
+
+.none {
+  border: 2px dashed #999;
+  border-radius: 6px;
+  font-size: 11px;
+  line-height: 16px;
+  padding: 12px;
+  text-align: left;
+  margin: 0 15px;
+}
+
+.playlist-input {
+  margin-top: 10px;
+}
+
+.btn-new-list {
+  display: block;
+  margin: 15px auto 0;
+  width: 82px;
+}
+
+.new-list {
+  border: 1px solid #bbb;
+  font-size: 11px;
+  margin: 0 20px;
+  padding: 3px 4px;
+}
+
+.new-list.error {
+  border: 1px solid red;
+  animation: shake 1s ease;
+}
+
+/* draginfo */
+#draginfo {
+  background: #fff;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  font-size: 11px;
+  padding: 0.5em 0.8em;
+}
+
+.resizer {
+  cursor: col-resize;
+  overflow: visible;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+
+  &:after {
+    background: transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 100%;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 4px;
+    z-index: 1;
+  }
+
+  &:focus:after,
+  &:hover:after {
+    background: #f18c06;
+  }
+}

@@ -1,0 +1,16 @@
+services:
+  beatstream:
+    build: .
+    command: go run .
+    environment:
+      - HOST=
+      - ENV=dev
+      - VITE_URL=http://vite:5137
+    volumes:
+      - .:/go
+  vite:
+    image: node:20
+    command: bash -c "cd frontend && npm i && npm run dev -- --host vite --port 5137"
+    working_dir: /app
+    volumes:
+      - .:/app

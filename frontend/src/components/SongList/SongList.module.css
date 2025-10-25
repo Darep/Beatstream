@@ -1,0 +1,8 @@
+.empty {
+  align-items: center;
+  color: var(--text-empty);
+  height: 100%;
+  display: flex;
+  font-size: 14px;
+  justify-content: center;
+}
