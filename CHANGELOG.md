@@ -7,10 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
+## [2.0.0]
+
+#### BREAKING CHANGES!
 
 - Full rewrite in Golang & React
-- Note: this will be released as "v2.0.0"
+
+#### Major changes
+
+- Songlist UI component changed temporarily to a worse one
 
 ## [1.1.2]
 
@@ -117,6 +122,7 @@ independent release. -ajk
 - Initial release
 
 [unreleased]: https://github.com/Darep/Beatstream/compare/master...HEAD
+[2.0.0]: https://github.com/Darep/Beatstream/compare/1.1.2...2.0.0
 [1.1.2]: https://github.com/Darep/Beatstream/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/Darep/Beatstream/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/Darep/Beatstream/compare/1.0.4...1.1.0
