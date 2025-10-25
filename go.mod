@@ -1,4 +1,4 @@
-module github.com/Darep/Beatstream-go
+module github.com/Darep/Beatstream
 
 go 1.23.5
 

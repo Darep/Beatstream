@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/Darep/Beatstream-go/logger"
+	"github.com/Darep/Beatstream/logger"
 	"github.com/joho/godotenv"
 )
 

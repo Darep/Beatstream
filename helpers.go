@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Darep/Beatstream-go/logger"
+	"github.com/Darep/Beatstream/logger"
 	tag "github.com/wtolson/go-taglib"
 )
 

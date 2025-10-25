@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/Darep/Beatstream-go/logger"
+	"github.com/Darep/Beatstream/logger"
 )
 
 //go:embed frontend/dist/**/*

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Darep/Beatstream-go/logger"
+	"github.com/Darep/Beatstream/logger"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )

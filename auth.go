@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/Darep/Beatstream-go/logger"
+	"github.com/Darep/Beatstream/logger"
 )
 
 type User struct {
