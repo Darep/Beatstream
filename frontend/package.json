@@ -20,7 +20,7 @@
     "zustand": "4.5.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.3.0",
     "@trivago/prettier-plugin-sort-imports": "4.3.0",
     "@types/natural-compare-lite": "1.4.2",
     "@types/node": "20.12.8",
