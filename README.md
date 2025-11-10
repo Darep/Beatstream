@@ -61,7 +61,3 @@ Development with docker:
 cp .env.example .env
 docker compose up
 ```
-
-### Known issues
-
-See [beatstream.fi/#quirks](https://www.beatstream.fi/#quirks).
