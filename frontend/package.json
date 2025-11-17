@@ -28,7 +28,7 @@
     "@types/react-dom": "18.3.0",
     "@vitejs/plugin-react-swc": "3.6.0",
     "classnames": "2.5.1",
-    "postcss-nesting": "12.1.2",
+    "postcss-nesting": "13.0.2",
     "typescript": "5.4.5",
     "vite": "5.2.10",
     "vite-tsconfig-paths": "4.3.2"
