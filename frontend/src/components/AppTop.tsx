@@ -18,7 +18,7 @@ export const AppTop = ({ className }: { className?: string }) => {
   const [isRefreshDone, setIsRefreshDone] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshError, setRefreshError] = useState<string | undefined>();
-  const refreshDoneTimer = useRef<number>();
+  const refreshDoneTimer = useRef<number | undefined>(undefined);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);

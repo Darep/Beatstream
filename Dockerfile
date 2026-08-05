@@ -1,7 +1,7 @@
 # Dockerfile for local dev
-FROM golang:1.22
+FROM golang:1.23.5
 
-RUN cd frontend && npm install && npm run build
+WORKDIR /app
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \

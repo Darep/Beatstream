@@ -7,7 +7,7 @@ services:
       - ENV=dev
       - VITE_URL=http://vite:5137
     volumes:
-      - .:/go
+      - .:/app
   vite:
     image: node:20
     command: bash -c "cd frontend && npm i && npm run dev -- --host vite --port 5137"
