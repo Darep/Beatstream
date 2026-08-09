@@ -1,9 +1,18 @@
+import { useState } from 'react';
+
 import { useSession } from 'hooks/swr';
 
+import { PasswordChangeModal } from './PasswordChangeModal';
+import { Button } from './common/Button';
 import { Modal } from './common/Modal';
 
 export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
   const { user } = useSession();
+  const [changingPassword, setChangingPassword] = useState(false);
+
+  if (changingPassword) {
+    return <PasswordChangeModal onClose={onClose} />;
+  }
 
   return (
     <Modal onClose={onClose}>
@@ -23,9 +32,9 @@ export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
         <label>Password</label>
         <div className="form-field">
           <p>
-            <a id="change-password-link" tabIndex={3}>
+            <Button id="change-password-link" tabIndex={3} variant="plain" onClick={() => setChangingPassword(true)}>
               Change password&hellip;
-            </a>
+            </Button>
           </p>
         </div>
       </section>

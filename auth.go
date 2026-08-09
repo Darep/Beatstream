@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
+	"slices"
 	"time"
 
 	"github.com/Darep/Beatstream/logger"
@@ -74,6 +75,20 @@ func deleteSession(token string) {
 		}
 	}
 	sessions = newSessions
+}
+
+func deleteOtherSessions(username, currentToken string) {
+	sessions = slices.DeleteFunc(sessions, func(session Session) bool {
+		return session.Username == username && session.Token != currentToken
+	})
+}
+
+func saveUsers(updated []User) error {
+	data, err := json.Marshal(updated)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile("./users.json", append(data, '\n'), 0o644)
 }
 
 func getSession(token string) *Session {
