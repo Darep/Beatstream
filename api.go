@@ -61,6 +61,7 @@ func registerRoutes() *chi.Mux {
 
 		r.Get("/session", sessionHandler)
 		r.Delete("/session", logoutHandler)
+		r.Put("/password", passwordHandler)
 
 		r.Get("/songs", songsHandler)
 		r.Get("/songs/play", playHandler)
@@ -79,6 +80,39 @@ func registerRoutes() *chi.Mux {
 	r.Handle("/*", http.HandlerFunc(frontendHandler))
 
 	return r
+}
+
+// PUT /api/password
+func passwordHandler(w http.ResponseWriter, r *http.Request) {
+	var passwords struct {
+		Current string `json:"currentPassword"`
+		New     string `json:"newPassword"`
+	}
+	if json.NewDecoder(r.Body).Decode(&passwords) != nil || passwords.New == "" {
+		http.Error(w, "Invalid password", http.StatusBadRequest)
+		return
+	}
+
+	username := r.Context().Value("username").(string)
+	updated := append([]User(nil), users...)
+	for i, user := range updated {
+		if user.Username == username && user.Password == passwords.Current {
+			updated[i].Password = passwords.New
+			if err := saveUsers(updated); err != nil {
+				logger.Log.Printf("Failed to save user configuration: %v", err)
+				http.Error(w, "Failed to save password", http.StatusInternalServerError)
+				return
+			}
+
+			users = updated
+			cookie, _ := r.Cookie("session")
+			deleteOtherSessions(username, cookie.Value)
+			respondJSON(w, map[string]string{})
+			return
+		}
+	}
+
+	http.Error(w, "Current password is incorrect", http.StatusUnauthorized)
 }
 
 // GET /api/session

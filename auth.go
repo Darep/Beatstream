@@ -76,6 +76,24 @@ func deleteSession(token string) {
 	sessions = newSessions
 }
 
+func deleteOtherSessions(username, currentToken string) {
+	var remaining []Session
+	for _, session := range sessions {
+		if session.Username != username || session.Token == currentToken {
+			remaining = append(remaining, session)
+		}
+	}
+	sessions = remaining
+}
+
+func saveUsers(updated []User) error {
+	data, err := json.Marshal(updated)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile("./users.json", append(data, '\n'), 0644)
+}
+
 func getSession(token string) *Session {
 	for _, session := range sessions {
 		if session.Token == token {
