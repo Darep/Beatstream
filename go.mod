@@ -1,6 +1,6 @@
 module github.com/Darep/Beatstream
 
-go 1.23.5
+go 1.25.0
 
 require (
 	github.com/go-chi/chi/v5 v5.2.3
@@ -8,4 +8,4 @@ require (
 	github.com/wtolson/go-taglib v0.0.0-20210406152913-79209c280058
 )
 
-require golang.org/x/crypto v0.38.0
+require golang.org/x/crypto v0.52.0
