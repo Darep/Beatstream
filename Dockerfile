@@ -11,6 +11,7 @@ RUN apt-get update \
 
 COPY go.mod go.sum ./
 RUN go mod download
+RUN go install github.com/air-verse/air@v1.61.7
 COPY . .
 
-CMD ["go", "run", "."]
+CMD ["air"]

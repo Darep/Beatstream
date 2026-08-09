@@ -1,0 +1,5 @@
+[build]
+cmd = "go build -tags dev -o ./tmp/beatstream ."
+bin = "./tmp/beatstream"
+include_ext = ["go"]
+exclude_dir = ["tmp", "frontend"]

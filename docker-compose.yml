@@ -1,7 +1,6 @@
 services:
   beatstream:
     build: .
-    command: go run -tags dev .
     environment:
       - HOST=
       - ENV=dev
