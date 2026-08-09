@@ -42,6 +42,29 @@ func loadUsers() error {
 		return err
 	}
 
+	migrated := false
+	for i := range users {
+		if _, err := bcrypt.Cost([]byte(users[i].Password)); err == nil {
+			continue
+		}
+
+		password, err := bcrypt.GenerateFromPassword([]byte(users[i].Password), bcrypt.DefaultCost)
+		if err != nil {
+			return err
+		}
+		users[i].Password = string(password)
+		migrated = true
+	}
+	if migrated {
+		data, err := json.Marshal(users)
+		if err != nil {
+			return err
+		}
+		if err := os.WriteFile("./users.json", data, 0600); err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
