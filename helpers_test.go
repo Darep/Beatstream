@@ -7,17 +7,18 @@ import (
 
 func TestNewSongFromFileMetadata(t *testing.T) {
 	tests := []struct {
-		name     string
-		file     string
-		duration int
+		name      string
+		file      string
+		extension string
+		duration  int
 	}{
-		{"MP3", "tagged.mp3", 3},
-		{"VBR MP3 without Xing", "tagged-vbr-no-xing.mp3", 10},
-		{"Ogg", "tagged.ogg", 3},
-		{"FLAC", "tagged.flac", 3},
-		{"M4A", "tagged.m4a", 3},
-		{"raw AAC", "tagged.aac", 3},
-		{"WAV with RIFF metadata", "tagged.wav", 3},
+		{"MP3", "tagged.mp3", "mp3", 3},
+		{"VBR MP3 without Xing", "tagged-vbr-no-xing.mp3", "mp3", 10},
+		{"Ogg", "tagged.ogg", "ogg", 3},
+		{"FLAC", "tagged.flac", "flac", 3},
+		{"M4A", "tagged.m4a", "m4a", 3},
+		{"raw AAC", "tagged.aac", "aac", 3},
+		{"WAV with RIFF metadata", "tagged.wav", "wav", 3},
 	}
 
 	for _, tt := range tests {
@@ -30,6 +31,9 @@ func TestNewSongFromFileMetadata(t *testing.T) {
 				t.Fatal("newSongFromFile returned no song")
 			}
 
+			if song.Extension != tt.extension {
+				t.Errorf("extension = %q, want %q", song.Extension, tt.extension)
+			}
 			if song.Title != "Fixture Title" {
 				t.Errorf("title = %q, want %q", song.Title, "Fixture Title")
 			}

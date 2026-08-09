@@ -44,13 +44,14 @@ func newSongFromFile(absolutePath string) (*Song, error) {
 
 	// Create new song
 	song := &Song{
-		Filename: filepath.Base(absolutePath),
-		Path:     strings.TrimPrefix(absolutePath, MusicPath),
-		Title:    file.Title(),
-		Artist:   file.Artist(),
-		Album:    file.Album(),
-		TrackNum: trackNumPtr,
-		Length:   int(file.Length().Seconds()),
+		Filename:  filepath.Base(absolutePath),
+		Path:      strings.TrimPrefix(absolutePath, MusicPath),
+		Extension: strings.TrimPrefix(strings.ToLower(filepath.Ext(absolutePath)), "."),
+		Title:     file.Title(),
+		Artist:    file.Artist(),
+		Album:     file.Album(),
+		TrackNum:  trackNumPtr,
+		Length:    int(file.Length().Seconds()),
 	}
 
 	return song, nil

@@ -7,13 +7,14 @@ import (
 )
 
 type Song struct {
-	Filename string `json:"filename"`
-	Path     string `json:"path"`
-	Title    string `json:"title"`
-	Artist   string `json:"artist"`
-	Album    string `json:"album"`
-	TrackNum *int   `json:"track_num"` // we use pointer for string, so we can set it to "nil" if there is no track number
-	Length   int    `json:"length"`
+	Filename  string `json:"filename"`
+	Path      string `json:"path"`
+	Extension string `json:"extension"`
+	Title     string `json:"title"`
+	Artist    string `json:"artist"`
+	Album     string `json:"album"`
+	TrackNum  *int   `json:"track_num"` // we use pointer for string, so we can set it to "nil" if there is no track number
+	Length    int    `json:"length"`
 }
 
 // For sorting songs in a natural way (artist, album, track number)
