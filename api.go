@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
+	"io"
 	"io/fs"
 	"net/http"
 	"os"
@@ -282,10 +284,29 @@ func refreshSongs() error {
 	defer file.Close()
 
 	logger.Log.Println("Writing songs to file…")
-	err = json.NewEncoder(file).Encode(songs)
-	if err != nil {
+	return writeSongsJSON(file, songs)
+}
+
+func writeSongsJSON(w io.Writer, songs []Song) error {
+	buffer := bufio.NewWriter(w)
+	if err := buffer.WriteByte('['); err != nil {
 		return err
 	}
 
-	return nil
+	encoder := json.NewEncoder(buffer)
+	for i := range songs {
+		if i > 0 {
+			if err := buffer.WriteByte(','); err != nil {
+				return err
+			}
+		}
+		if err := encoder.Encode(&songs[i]); err != nil {
+			return err
+		}
+	}
+
+	if err := buffer.WriteByte(']'); err != nil {
+		return err
+	}
+	return buffer.Flush()
 }
