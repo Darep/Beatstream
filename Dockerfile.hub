@@ -8,7 +8,7 @@ COPY frontend/ .
 RUN npm install && npm run build
 
 # ---- Backend build ----
-FROM golang:1.25.0 AS build
+FROM golang:1.26.0 AS build
 
 WORKDIR /app
 
@@ -30,7 +30,7 @@ COPY --from=frontend /app/dist /app/frontend/dist
 RUN CGO_ENABLED=1 go build -tags production -o /beatstream
 
 # ---- Runtime ----
-FROM golang:1.25.0 AS runtime
+FROM golang:1.26.0 AS runtime
 
 ENV MUSIC_PATH=/music
 
