@@ -14,6 +14,7 @@ import (
 	"github.com/Darep/Beatstream/logger"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"golang.org/x/crypto/bcrypt"
 )
 
 const SongsFilePath = "songs.json"
@@ -145,7 +146,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, user := range users {
-		if user.Username == username && user.Password == password {
+		if user.Username == username && bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) == nil {
 			token := createSession(user).Token
 
 			// Create & set a new cookie

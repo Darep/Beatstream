@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/Darep/Beatstream/logger"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -143,7 +144,12 @@ func createDefaultUser() (*os.File, error) {
 		return nil, err
 	}
 
-	err = json.NewEncoder(file).Encode([]User{{Username: "admin", Password: "admin"}})
+	password, err := bcrypt.GenerateFromPassword([]byte("admin"), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.NewEncoder(file).Encode([]User{{Username: "admin", Password: string(password)}})
 	if err != nil {
 		return nil, err
 	}
