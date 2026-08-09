@@ -9,6 +9,8 @@
     "lint": "biome check",
     "lint:fix": "biome check --write",
     "preview": "vite preview",
+    "test:e2e": "playwright test",
+    "test:e2e:install": "playwright install --with-deps chromium",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -21,6 +23,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.0",
+    "@playwright/test": "^1.62.1",
     "@trivago/prettier-plugin-sort-imports": "5.2.2",
     "@types/natural-compare-lite": "1.4.2",
     "@types/node": "20.12.8",
