@@ -16,6 +16,13 @@ docker run -d -p 8080:8080 -v /path/to/your/music:/music darep/beatstream:latest
 
 Open http://0.0.0.0:8080 on your browser. Log in and wait when indexing ends, refresh page and happy listening!
 
+For very large libraries, you can give Go a soft memory limit while leaving headroom for TagLib and the rest of the
+container. For example, with a 1 GiB container limit:
+
+```bash
+docker run -d --memory=1g -e GOMEMLIMIT=900MiB -p 8080:8080 -v /path/to/your/music:/music darep/beatstream:latest
+```
+
 ### Manual Install
 
 Requirements: Go 1.22 or newer. Node.js 20 or newer. TagLib (C bindings) e.g. libtagc
