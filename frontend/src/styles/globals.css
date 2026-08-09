@@ -80,184 +80,6 @@ a:hover {
   }
 }
 
-/**
- * WARNING: The CSS below has been automatically transformed from the 13 years old SCSS files into here!
- * Here be dragons!
- */
-
-/*
-IMPORTANT:
-In order to preserve the uniform grid appearance, all cell styles need to have padding, margin and border sizes.
-No built-in (selected, editable, highlight, flashing, invalid, loading, :focus) or user-specified CSS
-classes should alter those!
-*/
-.slick-header.ui-state-default,
-.slick-headerrow.ui-state-default {
-  width: 100%;
-  overflow: hidden;
-  border-left: 0px;
-}
-
-.slick-header-columns,
-.slick-headerrow-columns {
-  width: 999999px;
-  position: relative;
-  white-space: nowrap;
-  cursor: default;
-  overflow: hidden;
-}
-
-.slick-header-column.ui-state-default {
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  height: 20px;
-  line-height: 20px;
-  margin: 0;
-  padding: 4px;
-  border-right: 1px solid silver;
-  border-left: 0px;
-  border-top: 0px;
-  border-bottom: 0px;
-}
-
-.slick-headerrow-column.ui-state-default {
-  padding: 4px;
-}
-
-.slick-header-column-sorted {
-  font-style: italic;
-}
-
-.slick-sort-indicator {
-  display: inline-block;
-  width: 8px;
-  height: 5px;
-  margin-left: 4px;
-}
-
-/* line 53, ../sass/vendor/_slick.grid.scss */
-.slick-sort-indicator-desc {
-  background: url(images/sort-desc.gif);
-}
-
-/* line 57, ../sass/vendor/_slick.grid.scss */
-.slick-sort-indicator-asc {
-  background: url(images/sort-asc.gif);
-}
-
-/* line 61, ../sass/vendor/_slick.grid.scss */
-.slick-resizable-handle {
-  position: absolute;
-  font-size: 0.1px;
-  display: block;
-  cursor: col-resize;
-  width: 4px;
-  right: 0px;
-  top: 0;
-  height: 100%;
-}
-
-/* line 72, ../sass/vendor/_slick.grid.scss */
-.slick-sortable-placeholder {
-  background: silver;
-}
-
-/* line 76, ../sass/vendor/_slick.grid.scss */
-.slick-viewport {
-  display: block;
-  z-index: 1;
-}
-
-/* line 81, ../sass/vendor/_slick.grid.scss */
-.grid-canvas {
-  position: relative;
-  outline: 0;
-}
-
-/* line 86, ../sass/vendor/_slick.grid.scss */
-.slick-row.ui-widget-content,
-.slick-row.ui-state-active {
-  position: absolute;
-  border: 0px;
-  width: 100%;
-}
-
-/* line 92, ../sass/vendor/_slick.grid.scss */
-.slick-cell,
-.slick-headerrow-column {
-  position: absolute;
-  border: 1px solid transparent;
-  border-right: 1px dotted silver;
-  border-bottom-color: silver;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: middle;
-  z-index: 1;
-  padding: 1px 2px 2px 1px;
-  margin: 0;
-  white-space: nowrap;
-  cursor: default;
-}
-
-/* line 115, ../sass/vendor/_slick.grid.scss */
-.slick-group-toggle {
-  display: inline-block;
-}
-
-/* line 119, ../sass/vendor/_slick.grid.scss */
-.slick-cell.highlighted {
-  background: lightskyblue;
-  background: rgba(0, 0, 255, 0.2);
-  -webkit-transition: all 0.5s;
-  -moz-transition: all 0.5s;
-  transition: all 0.5s;
-}
-
-/* line 127, ../sass/vendor/_slick.grid.scss */
-.slick-cell.flashing {
-  border: 1px solid red !important;
-}
-
-/* line 131, ../sass/vendor/_slick.grid.scss */
-.slick-cell.editable {
-  z-index: 11;
-  overflow: visible;
-  background: white;
-  border-color: black;
-  border-style: solid;
-}
-
-/* line 139, ../sass/vendor/_slick.grid.scss */
-.slick-cell:focus {
-  outline: none;
-}
-
-/* line 143, ../sass/vendor/_slick.grid.scss */
-.slick-reorder-proxy {
-  display: inline-block;
-  background: blue;
-  opacity: 0.15;
-  cursor: move;
-}
-
-/* line 151, ../sass/vendor/_slick.grid.scss */
-.slick-reorder-guide {
-  display: inline-block;
-  height: 2px;
-  background: blue;
-  opacity: 0.7;
-}
-
-/* line 159, ../sass/vendor/_slick.grid.scss */
-.slick-selection {
-  z-index: 10;
-  position: absolute;
-  border: 2px dashed black;
-}
-
 /* line 6, ../sass/components/_common.scss */
 .ir {
   overflow: hidden;
@@ -580,11 +402,9 @@ label {
 
 /* line 75, ../sass/components/_songlist.scss */
 #slickgrid .slick-header {
-  background: #fafafa;
   background: linear-gradient(to bottom, #ffffff, #ffffff 50%, #eeeeee);
   border-bottom: 1px solid #bbb;
   font-weight: 700;
-  overflow: visible !important;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   z-index: 2;
 }
@@ -630,14 +450,7 @@ label {
 
 /* line 108, ../sass/components/_songlist.scss */
 #slickgrid .playing {
-  background-image: url("/img/icons.png");
-  background-repeat: no-repeat;
-  background-position: -232px -194px;
-}
-
-/* line 113, ../sass/components/_songlist.scss */
-#slickgrid .playing.selected {
-  background-position: -232px -151px;
+  text-align: center;
 }
 
 /* line 116, ../sass/components/_songlist.scss */
@@ -649,6 +462,10 @@ label {
 /* line 122, ../sass/components/_songlist.scss */
 #slickgrid .even {
   background: #f7f7f7;
+}
+
+#slickgrid .slick-row:hover {
+  background: #eef6ff;
 }
 
 /* overlay */

@@ -1,44 +1,20 @@
-import {
-  DataEditor,
-  type DataEditorRef,
-  type GridCell,
-  GridCellKind,
-  type GridColumn,
-  type GridMouseEventArgs,
-  type GridSelection,
-  type Item,
-  type Rectangle,
-} from '@glideapps/glide-data-grid';
-import '@glideapps/glide-data-grid/dist/index.css';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { type Column, type Formatter, SlickGrid, SlickRowSelectionModel } from 'slickgrid';
+import 'slickgrid/dist/styles/css/slick.grid.css';
+import 'slickgrid/dist/styles/css/slick-alpine-theme.css';
 
 import { useEvent } from 'hooks/useEvent';
-
-import { THEME_LIGHT } from './theme';
-import { selectionForRow } from './util';
+import { useCallback, useEffect, useRef } from 'react';
 
 type SortableColumn = 'artist' | 'track_num' | 'title' | 'album' | 'length';
+type SongGridItem = Song & { nowplaying?: string };
 
-type SongGridColumn = GridColumn & {
-  id: 'nowplaying' | 'artist' | 'track_num' | 'title' | 'album' | 'nice_length';
-};
-
-const DOUBLE_CLICK_LATENCY_MS = 300;
-
-const COLUMNS: SongGridColumn[] = [
-  { id: 'nowplaying', title: '', width: 40 },
-  { id: 'artist', title: 'Artist', grow: 1 },
-  { id: 'track_num', title: '#', width: 50 },
-  { id: 'title', title: 'Title', grow: 1 },
-  { id: 'album', title: 'Album', grow: 1 },
-  { id: 'nice_length', title: 'Duration', width: 120 },
-];
+const titleFormatter: Formatter<SongGridItem> = (_row, _cell, _value, _column, item) => item.title || item.nice_title;
 
 export const DataGrid = ({
   activeRow,
   items,
-  // sort,
-  // sortDir,
+  sort,
+  sortDir,
   onActivateRow,
   onSort,
 }: {
@@ -57,219 +33,133 @@ export const DataGrid = ({
   /** Change sorting */
   onSort: (column: SortableColumn) => void;
 }) => {
-  const ref = useRef<DataEditorRef>(null);
-  const initialScrollPendingRef = useRef(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<SlickGrid<SongGridItem>>();
+  const itemsRef = useRef(items);
+  const activeRowRef = useRef(activeRow);
+  const onActivateRowRef = useRef(onActivateRow);
+  const onSortRef = useRef(onSort);
   const skipScrollToRowRef = useRef(false);
-  const [columnSizes, setColumnSizes] = useState<Record<string, number>>({});
-  const [hoverRow, setHoverRow] = useState<number | undefined>(undefined);
-  const theme = THEME_LIGHT;
+  const skipScrollTimerRef = useRef<number>();
 
-  const columns: SongGridColumn[] = COLUMNS.map((col) => ({
-    ...col,
-    grow: typeof columnSizes[col.id] === 'number' ? undefined : col.grow,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    width: columnSizes[col.id] ?? col.width,
-  }));
+  activeRowRef.current = activeRow;
+  itemsRef.current = items;
+  onActivateRowRef.current = onActivateRow;
+  onSortRef.current = onSort;
 
-  const [selection, setSelection] = useState<GridSelection>(selectionForRow(activeRow, columns.length));
-
-  // holds double-click related state
-  const doubleClickRef = useRef<{
-    count: number;
-    row: null | number;
-    timer: number | null;
-  }>({
-    count: 0,
-    row: null,
-    timer: null,
-  });
-
-  const getCellContent = useCallback(
-    (cell: Item): GridCell => {
-      const [col, row] = cell;
-      const dataRow = items[row];
-      const columnKey = COLUMNS[col]?.id;
-
-      if (!columnKey || !dataRow) {
-        return {
-          allowOverlay: false,
-          data: 'ERROR',
-          displayData: 'ERROR',
-          kind: GridCellKind.Text,
-          readonly: true,
-        };
-      }
-
-      if (columnKey === 'nowplaying') {
-        return {
-          allowOverlay: false,
-          data: '',
-          displayData: row === activeRow ? '▶️' : '',
-          kind: GridCellKind.Text,
-          readonly: true,
-        };
-      }
-
-      const data = columnKey === 'title' ? dataRow.title || dataRow.nice_title : (dataRow[columnKey]?.toString() ?? '');
-
-      return {
-        allowOverlay: false,
-        allowWrapping: false,
-        contentAlign: columnKey === 'track_num' ? 'right' : undefined,
-        data,
-        displayData: data,
-        kind: GridCellKind.Text,
-        readonly: true,
-      };
-    },
-    [activeRow, items],
-  );
-
-  const handleActivateRow = useCallback(
-    (row: number) => {
-      skipScrollToRowRef.current = true;
-      onActivateRow(row);
-
-      // reset flag after a short delay
-      setTimeout(() => {
-        skipScrollToRowRef.current = false;
-      }, 10);
-    },
-    [onActivateRow],
-  );
+  const activateRow = useCallback((row: number) => {
+    skipScrollToRowRef.current = true;
+    window.clearTimeout(skipScrollTimerRef.current);
+    skipScrollTimerRef.current = window.setTimeout(() => {
+      skipScrollToRowRef.current = false;
+    }, 10);
+    onActivateRowRef.current(row);
+  }, []);
 
   const scrollToActiveRow = useCallback(() => {
-    if (typeof activeRow !== 'number' || skipScrollToRowRef.current) {
-      return;
+    const grid = gridRef.current;
+    const row = activeRowRef.current;
+    if (grid && typeof row === 'number' && row >= 0 && row < grid.getDataLength() && !skipScrollToRowRef.current) {
+      grid.scrollRowIntoView(row);
+      grid.setSelectedRows([row]);
     }
-
-    ref.current?.scrollTo(0, activeRow, 'vertical', undefined, undefined, {
-      vAlign: 'center',
-    });
-
-    setTimeout(() => {
-      setSelection(selectionForRow(activeRow, columns.length));
-    }, 50);
-  }, [activeRow, setSelection, columns.length]);
+  }, []);
 
   useEvent('show-nowplaying', scrollToActiveRow);
 
-  // TODO: scroll to playing row on mount, or if user is idle, or active is not visible, or active is not already selected?
   useEffect(() => {
-    scrollToActiveRow();
-  }, [scrollToActiveRow]);
+    const container = containerRef.current;
+    if (!container) return;
 
-  const handleVisibleRegionChanged = useCallback(
-    (range: Rectangle) => {
-      if (!initialScrollPendingRef.current || range.height <= 1) {
-        return;
+    const columns: Column<SongGridItem>[] = [
+      {
+        id: 'nowplaying',
+        field: 'nowplaying',
+        name: '',
+        width: 40,
+        minWidth: 40,
+        maxWidth: 40,
+        resizable: false,
+        formatter: (row) => (row === activeRowRef.current ? '▶' : ''),
+      },
+      { id: 'artist', field: 'artist', name: 'Artist', sortable: true, minWidth: 80 },
+      { id: 'track_num', field: 'track_num', name: '#', sortable: true, width: 50, cssClass: 'tracknum' },
+      { id: 'title', field: 'title', name: 'Title', sortable: true, minWidth: 80, formatter: titleFormatter },
+      { id: 'album', field: 'album', name: 'Album', sortable: true, minWidth: 80 },
+      { id: 'nice_length', field: 'nice_length', name: 'Duration', sortable: true, width: 120 },
+    ];
+
+    const grid = new SlickGrid<SongGridItem, Column<SongGridItem>>(container, itemsRef.current, columns, {
+      editable: false,
+      enableCellNavigation: true,
+      enableColumnReorder: false,
+      enableHtmlRendering: false,
+      forceFitColumns: true,
+      multiSelect: true,
+      rowHeight: 26,
+    });
+    grid.setSelectionModel(new SlickRowSelectionModel());
+    grid.onDblClick.subscribe((_event, args) => activateRow(args.row));
+    grid.onKeyDown.subscribe((event, args) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        activateRow(args.row);
       }
+    });
+    grid.onSort.subscribe((_event, args) => {
+      if (!args.multiColumnSort) {
+        const id = args.sortCol?.id;
+        if (id && id !== 'nowplaying') {
+          onSortRef.current(id === 'nice_length' ? 'length' : (id as SortableColumn));
+        }
+      }
+    });
 
-      initialScrollPendingRef.current = false;
-      window.requestAnimationFrame(scrollToActiveRow);
-    },
-    [scrollToActiveRow],
-  );
+    const resizeObserver = new ResizeObserver(() => grid.resizeCanvas());
+    resizeObserver.observe(container);
+    gridRef.current = grid;
+
+    return () => {
+      window.clearTimeout(skipScrollTimerRef.current);
+      resizeObserver.disconnect();
+      grid.destroy(true);
+      gridRef.current = undefined;
+    };
+  }, [activateRow]);
+
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    grid.setData(items);
+    grid.invalidateAllRows();
+    grid.render();
+  }, [items]);
+
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    grid.setSortColumns(
+      sort ? [{ columnId: sort === 'length' ? 'nice_length' : sort, sortAsc: sortDir === 'asc' }] : [],
+    );
+  }, [sort, sortDir]);
+
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    grid.setCellCssStyles(
+      'playing',
+      typeof activeRow === 'number' && activeRow >= 0 ? { [activeRow]: { nowplaying: 'playing' } } : {},
+    );
+    grid.invalidateAllRows();
+    grid.render();
+    scrollToActiveRow();
+  }, [activeRow, scrollToActiveRow]);
 
   return (
-    <DataEditor
-      cellActivationBehavior="double-click"
-      columns={columns}
-      columnSelect="multi"
-      getCellContent={getCellContent}
-      gridSelection={selection}
-      headerHeight={26}
-      height="100%"
-      maxColumnWidth={window.screen.width}
-      rangeSelect="none"
-      ref={ref}
-      rowHeight={26}
-      rows={items.length}
-      rowSelect="multi"
-      verticalBorder={false}
-      width="100%"
-      onCellClicked={useCallback(
-        (cell: Item) => {
-          const [, row] = cell;
-
-          if (doubleClickRef.current.row !== row) {
-            doubleClickRef.current.row = row;
-            doubleClickRef.current.count = 1;
-            clearTimeout(doubleClickRef.current.timer as number);
-            return;
-          }
-
-          doubleClickRef.current.count += 1;
-
-          if (doubleClickRef.current.count === 2) {
-            handleActivateRow(row);
-          } else {
-            doubleClickRef.current.timer = window.setTimeout(() => {
-              doubleClickRef.current.count = 0;
-            }, DOUBLE_CLICK_LATENCY_MS);
-          }
-        },
-        [handleActivateRow],
-      )}
-      onCellActivated={useCallback(
-        (cell: Item) => {
-          const [, row] = cell;
-          handleActivateRow(row);
-        },
-        [handleActivateRow],
-      )}
-      onColumnResize={useCallback((col: GridColumn, _newSize: number, _index: number, newSizeWithGrow: number) => {
-        if (col.id && col.id !== 'nowplaying') {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          setColumnSizes((prev) => ({ ...prev, [col.id]: newSizeWithGrow }));
-        }
-      }, [])}
-      onGridSelectionChange={useCallback(
-        (sel: GridSelection) => {
-          const [, row] = sel.current?.cell || [];
-
-          if (typeof row !== 'number') {
-            // should not happen, hehe
-            return;
-          }
-
-          setSelection(selectionForRow(row, columns.length));
-        },
-        [columns.length],
-      )}
-      onHeaderClicked={useCallback(
-        (colIndex: number) => {
-          const col = columns[colIndex];
-          if (!col || col.id === 'nowplaying') {
-            return;
-          }
-
-          onSort(col.id === 'nice_length' ? 'length' : col.id);
-        },
-        [columns, onSort],
-      )}
-      onItemHovered={useCallback((args: GridMouseEventArgs) => {
-        const [, row] = args.location;
-        setHoverRow(args.kind !== 'cell' ? undefined : row);
-      }, [])}
-      onVisibleRegionChanged={handleVisibleRegionChanged}
-      getRowThemeOverride={(row) => ({
-        bgCell: row === hoverRow ? theme.bgCellHover : row % 2 === 0 ? theme.bgCellEven : theme.bgCellOdd,
-      })}
-      theme={{
-        // selected cell border color
-        accentColor: theme.accentColor,
-        // selected row color
-        accentLight: theme.accentLight,
-
-        borderColor: 'transparent',
-        cellHorizontalPadding: 10,
-        fontFamily:
-          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif',
-        // textDark: theme.textDark,
-      }}
-    />
+    // biome-ignore lint/a11y/useSemanticElements: SlickGrid requires a div host and populates its ARIA grid structure.
+    <div aria-label="Songs" id="slickgrid" ref={containerRef} role="grid" />
   );
 };
