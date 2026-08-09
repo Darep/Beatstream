@@ -26,3 +26,8 @@ export const useSession = (opts?: RequestInit, swrOpts?: SWRConfiguration) => {
 };
 
 export const useSongs = ({ skip }: { skip?: boolean } = {}) => useSWRImmutable(skip ? null : '/api/songs', fetcher);
+
+export const useRefreshStatus = () =>
+  useApi<{ refreshing: boolean }>('/api/songs/refresh', undefined, {
+    refreshInterval: (status) => (status?.refreshing ? 1000 : 0),
+  });

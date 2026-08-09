@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"sync/atomic"
 
 	"github.com/Darep/Beatstream/logger"
 	"github.com/go-chi/chi/v5"
@@ -19,7 +20,7 @@ import (
 
 const SongsFilePath = "songs.json"
 
-var refreshMutex = &sync.Mutex{}
+var songsRefreshing atomic.Bool
 var songsMutex = &sync.RWMutex{}
 
 // Define valid audio file extensions
@@ -67,6 +68,7 @@ func registerRoutes() *chi.Mux {
 
 		r.Get("/songs", songsHandler)
 		r.Get("/songs/play", playHandler)
+		r.Get("/songs/refresh", refreshStatusHandler)
 		r.Post("/songs/refresh", refreshHandler)
 
 		// r.Put("/lastfm", lastfmHandler)
@@ -223,11 +225,11 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 
 // POST /api/songs/refresh
 func refreshHandler(w http.ResponseWriter, r *http.Request) {
-	if !refreshMutex.TryLock() {
+	if !songsRefreshing.CompareAndSwap(false, true) {
 		http.Error(w, "Another refresh operation is already in progress", http.StatusConflict)
 		return
 	}
-	defer refreshMutex.Unlock()
+	defer songsRefreshing.Store(false)
 
 	err := refreshSongs()
 	if err != nil {
@@ -237,6 +239,11 @@ func refreshHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		http.ServeFile(w, r, SongsFilePath)
 	}
+}
+
+// GET /api/songs/refresh
+func refreshStatusHandler(w http.ResponseWriter, _ *http.Request) {
+	respondJSON(w, map[string]bool{"refreshing": songsRefreshing.Load()})
 }
 
 func refreshSongs() error {
