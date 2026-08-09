@@ -7,4 +7,5 @@ interface Song {
   path: string;
   title: string;
   track_num: number;
+  extension: string;
 }
