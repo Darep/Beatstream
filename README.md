@@ -61,3 +61,18 @@ Development with docker:
 cp .env.example .env
 docker compose up
 ```
+
+### Integration test
+
+The Playwright test builds the production Docker image, starts it with a generated audio fixture, and exercises login,
+library indexing, streaming, playback controls, search, and logout in headless Chromium. Docker must be running.
+
+```bash
+cd frontend
+npm ci
+npm run test:e2e:install
+npm run test:e2e
+```
+
+Failed runs keep a screenshot, browser trace, and application logs in `frontend/test-results`. The same test runs on
+every push and pull request to `master`.
