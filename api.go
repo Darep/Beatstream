@@ -267,7 +267,7 @@ func refreshSongs() error {
 
 	// Sort songs
 	sort.Slice(songs, func(i, j int) bool {
-		return songs[i].ToNaturalSortString() < songs[j].ToNaturalSortString()
+		return compareSongs(&songs[i], &songs[j]) < 0
 	})
 
 	// lock "songs.json" so that it's not read while being written

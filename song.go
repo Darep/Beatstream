@@ -1,9 +1,9 @@
 package main
 
 import (
+	"cmp"
 	"encoding/json"
 	"fmt"
-	"strings"
 )
 
 type Song struct {
@@ -16,27 +16,26 @@ type Song struct {
 	Length   int    `json:"length"`
 }
 
-// For sorting songs in a natural way (artist, album, track number)
-func (song *Song) ToNaturalSortString() string {
-	sortables := []string{}
-
-	if song.Artist != "" {
-		sortables = append(sortables, song.Artist)
+func compareSongs(a, b *Song) int {
+	if result := cmp.Compare(a.Artist, b.Artist); result != 0 {
+		return result
 	}
-	if song.Album != "" {
-		sortables = append(sortables, song.Album)
+	if result := cmp.Compare(a.Album, b.Album); result != 0 {
+		return result
 	}
-	if song.TrackNum == nil {
-		sortables = append(sortables, song.Title)
-	} else {
-		sortables = append(sortables, fmt.Sprintf("%03d", *song.TrackNum))
+	if a.TrackNum != nil && b.TrackNum != nil {
+		if result := cmp.Compare(*a.TrackNum, *b.TrackNum); result != 0 {
+			return result
+		}
+	} else if a.TrackNum != nil {
+		return -1
+	} else if b.TrackNum != nil {
+		return 1
 	}
-
-	if len(sortables) > 0 {
-		return strings.Join(sortables, " ")
+	if result := cmp.Compare(a.Title, b.Title); result != 0 {
+		return result
 	}
-
-	return song.Filename
+	return cmp.Compare(a.Filename, b.Filename)
 }
 
 // Return a nice title for the song, like "Artist - Title". Fallback to the filename
