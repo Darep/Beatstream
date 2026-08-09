@@ -69,9 +69,12 @@ func registerRoutes() *chi.Mux {
 		r.Get("/songs/play", playHandler)
 		r.Post("/songs/refresh", refreshHandler)
 
-		// r.Put("/lastfm", lastfmHandler)
-		// r.Post("/lastfm/scrobble", scrobbleHandler)
-		// r.Post("/lastfm/now-playing", nowPlayingHandler)
+		r.Get("/lastfm", lastFMStatusHandler)
+		r.Post("/lastfm/connect", lastFMConnectHandler)
+		r.Post("/lastfm/complete", lastFMCompleteHandler)
+		r.Delete("/lastfm", lastFMDisconnectHandler)
+		r.Post("/lastfm/scrobble", lastFMScrobbleHandler)
+		r.Post("/lastfm/now-playing", lastFMNowPlayingHandler)
 
 		// r.Get("/playlists", playlistsHandler)
 		// r.Post("/playlists", createPlaylistHandler)
@@ -94,6 +97,8 @@ func passwordHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid password", http.StatusBadRequest)
 		return
 	}
+	usersMutex.Lock()
+	defer usersMutex.Unlock()
 
 	username := r.Context().Value("username").(string)
 	updated := slices.Clone(users)

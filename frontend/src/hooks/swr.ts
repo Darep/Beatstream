@@ -26,3 +26,5 @@ export const useSession = (opts?: RequestInit, swrOpts?: SWRConfiguration) => {
 };
 
 export const useSongs = ({ skip }: { skip?: boolean } = {}) => useSWRImmutable(skip ? null : '/api/songs', fetcher);
+
+export const useLastFM = () => useApi<{ configured: boolean; connected: boolean; username: string }>('/api/lastfm');

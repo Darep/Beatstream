@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"slices"
+	"sync"
 	"time"
 
 	"github.com/Darep/Beatstream/logger"
@@ -15,14 +16,24 @@ import (
 )
 
 type User struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username       string `json:"username"`
+	Password       string `json:"password"`
+	LastFMUsername string `json:"lastfm_username,omitempty"`
+	LastFMSession  string `json:"lastfm_session,omitempty"`
+	LastFMToken    string `json:"lastfm_token,omitempty"`
 }
 
 // holds all users in memory
 var users []User
+var usersMutex sync.Mutex
 
 func loadUsers() error {
+	usersMutex.Lock()
+	defer usersMutex.Unlock()
+	return loadUsersUnlocked()
+}
+
+func loadUsersUnlocked() error {
 	file, err := os.Open("./users.json")
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -59,6 +70,20 @@ func loadUsers() error {
 		return saveUsers(users)
 	}
 
+	return nil
+}
+
+func saveUsersUnlocked() error {
+	return saveUsers(users)
+}
+
+func currentUser(r *http.Request) *User {
+	username, _ := r.Context().Value("username").(string)
+	for i := range users {
+		if users[i].Username == username {
+			return &users[i]
+		}
+	}
 	return nil
 }
 
