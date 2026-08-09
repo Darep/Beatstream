@@ -1,0 +1,50 @@
+package main
+
+import (
+	"path/filepath"
+	"testing"
+)
+
+func TestNewSongFromFileMetadata(t *testing.T) {
+	tests := []struct {
+		name     string
+		file     string
+		duration int
+	}{
+		{"MP3", "tagged.mp3", 3},
+		{"VBR MP3 without Xing", "tagged-vbr-no-xing.mp3", 10},
+		{"Ogg", "tagged.ogg", 3},
+		{"FLAC", "tagged.flac", 3},
+		{"M4A", "tagged.m4a", 3},
+		{"raw AAC", "tagged.aac", 3},
+		{"WAV with RIFF metadata", "tagged.wav", 3},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			song, err := newSongFromFile(filepath.Join("testdata", "metadata", tt.file))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if song == nil {
+				t.Fatal("newSongFromFile returned no song")
+			}
+
+			if song.Title != "Fixture Title" {
+				t.Errorf("title = %q, want %q", song.Title, "Fixture Title")
+			}
+			if song.Artist != "Fixture Artist" {
+				t.Errorf("artist = %q, want %q", song.Artist, "Fixture Artist")
+			}
+			if song.Album != "Fixture Album" {
+				t.Errorf("album = %q, want %q", song.Album, "Fixture Album")
+			}
+			if song.TrackNum == nil || *song.TrackNum != 7 {
+				t.Errorf("track number = %v, want 7", song.TrackNum)
+			}
+			if song.Length != tt.duration {
+				t.Errorf("duration = %d, want %d", song.Length, tt.duration)
+			}
+		})
+	}
+}
