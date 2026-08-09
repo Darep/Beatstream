@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/Darep/Beatstream/logger"
-	tag "github.com/wtolson/go-taglib"
+	tag "github.com/Darep/Beatstream/taglib"
 )
 
 // Helper for responding as JSON
