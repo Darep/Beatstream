@@ -98,8 +98,13 @@ func passwordHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.Context().Value("username").(string)
 	updated := slices.Clone(users)
 	for i := range updated {
-		if user := &updated[i]; user.Username == username && user.Password == passwords.Current {
-			user.Password = passwords.New
+		if user := &updated[i]; user.Username == username && bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(passwords.Current)) == nil {
+			password, err := bcrypt.GenerateFromPassword([]byte(passwords.New), bcrypt.DefaultCost)
+			if err != nil {
+				http.Error(w, "Invalid password", http.StatusBadRequest)
+				return
+			}
+			user.Password = string(password)
 			if err := saveUsers(updated); err != nil {
 				logger.Log.Printf("Failed to save user configuration: %v", err)
 				http.Error(w, "Failed to save password", http.StatusInternalServerError)

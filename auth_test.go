@@ -1,7 +1,11 @@
 package main
 
 import (
+	"bytes"
+	"context"
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 
@@ -40,5 +44,37 @@ func TestLoadUsersMigratesPlaintextPasswords(t *testing.T) {
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(migrated[0].Password), []byte("secret")); err != nil {
 		t.Fatal("migrated password no longer authenticates")
+	}
+}
+
+func TestPasswordHandlerHashesNewPassword(t *testing.T) {
+	dir := t.TempDir()
+	oldDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(dir); err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = os.Chdir(oldDir) })
+
+	password, err := bcrypt.GenerateFromPassword([]byte("old"), bcrypt.DefaultCost)
+	if err != nil {
+		t.Fatal(err)
+	}
+	users = []User{{Username: "alice", Password: string(password)}}
+	sessions = []Session{{Token: "token", Username: "alice"}}
+
+	req := httptest.NewRequest(http.MethodPut, "/api/password", bytes.NewBufferString(`{"currentPassword":"old","newPassword":"new"}`))
+	req.AddCookie(&http.Cookie{Name: "session", Value: "token"})
+	req = req.WithContext(context.WithValue(req.Context(), "username", "alice"))
+	response := httptest.NewRecorder()
+	passwordHandler(response, req)
+
+	if response.Code != http.StatusOK {
+		t.Fatalf("unexpected status: %d", response.Code)
+	}
+	if err := bcrypt.CompareHashAndPassword([]byte(users[0].Password), []byte("new")); err != nil {
+		t.Fatal("new password was not hashed")
 	}
 }
