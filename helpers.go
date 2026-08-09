@@ -11,7 +11,7 @@ import (
 )
 
 // Helper for responding as JSON
-func respondJSON(w http.ResponseWriter, data interface{}) {
+func respondJSON(w http.ResponseWriter, data any) {
 	jsonResponse, err := json.Marshal(data)
 	if err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)

@@ -1,4 +1,4 @@
-.PHONY: build check format test vet
+.PHONY: build check fix format test vet
 
 build:
 	cd frontend && npm run build
@@ -7,6 +7,9 @@ build:
 format:
 	gofmt -w $$(git ls-files '*.go')
 	cd frontend && npx biome format --write .
+
+fix:
+	go fix ./...
 
 vet:
 	go vet ./...
