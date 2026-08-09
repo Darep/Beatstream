@@ -3,6 +3,7 @@ import { AppLoader } from 'components/AppLoader';
 import { AppMain } from 'components/AppMain';
 import { AppNav } from 'components/AppNav/AppNav';
 import { AppTop } from 'components/AppTop';
+import { LastFMScrobbler } from 'components/LastFMScrobbler';
 import { LoginModal } from 'components/LoginModal';
 import { MediaSession } from 'components/MediaSession';
 import { useSession } from 'hooks/swr';
@@ -36,6 +37,7 @@ export const App = () => {
       <AppLoader />
 
       <MediaSession />
+      {isAuthenticated ? <LastFMScrobbler /> : null}
     </div>
   );
 };
