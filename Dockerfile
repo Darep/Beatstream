@@ -1,5 +1,5 @@
 # Dockerfile for local dev
-FROM golang:1.23.5
+FROM golang:1.25.0
 
 WORKDIR /app
 
