@@ -27,7 +27,7 @@ COPY . .
 COPY --from=frontend /app/dist /app/frontend/dist
 
 # build
-RUN CGO_ENABLED=1 go build -o /beatstream
+RUN CGO_ENABLED=1 go build -tags production -o /beatstream
 
 # ---- Runtime ----
 FROM golang:1.25.0 AS runtime
