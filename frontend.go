@@ -1,7 +1,6 @@
 package main
 
 import (
-	"embed"
 	"io/fs"
 	"net/http"
 	"net/http/httputil"
@@ -10,10 +9,6 @@ import (
 
 	"github.com/Darep/Beatstream/logger"
 )
-
-//go:embed frontend/dist/**/*
-//go:embed frontend/dist/*
-var distFS embed.FS
 
 func frontendHandler(w http.ResponseWriter, r *http.Request) {
 	env := os.Getenv("ENV")
