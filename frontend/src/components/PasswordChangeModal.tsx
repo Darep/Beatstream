@@ -29,7 +29,11 @@ export const PasswordChangeModal = ({ onClose }: { onClose: () => void }) => {
       });
       onClose();
     } catch (error) {
-      setError(error instanceof ApiError && error.status === 401 ? 'Current password is incorrect' : 'Could not change password');
+      setError(
+        error instanceof ApiError && error.status === 401
+          ? 'Current password is incorrect'
+          : 'Could not change password',
+      );
     } finally {
       setSaving(false);
     }

@@ -76,3 +76,15 @@ npm run test:e2e
 
 Failed runs keep a screenshot, browser trace, and application logs in `frontend/test-results`. The same test runs on
 every push and pull request to `master`.
+
+### Checks
+
+Before committing changes, run:
+
+```bash
+make format
+make check
+```
+
+`make check` verifies Go formatting, vet, tests, development and production builds, frontend formatting and build,
+and the Docker Compose image. GitHub Actions runs the same command on every push and pull request to `master`.
