@@ -56,13 +56,7 @@ func loadUsers() error {
 		migrated = true
 	}
 	if migrated {
-		data, err := json.Marshal(users)
-		if err != nil {
-			return err
-		}
-		if err := os.WriteFile("./users.json", data, 0600); err != nil {
-			return err
-		}
+		return saveUsers(users)
 	}
 
 	return nil
@@ -112,7 +106,29 @@ func saveUsers(updated []User) error {
 	if err != nil {
 		return err
 	}
-	return os.WriteFile("./users.json", append(data, '\n'), 0o644)
+
+	file, err := os.CreateTemp(".", ".users.json-*")
+	if err != nil {
+		return err
+	}
+	defer os.Remove(file.Name())
+
+	if err := file.Chmod(0o600); err != nil {
+		file.Close()
+		return err
+	}
+	if _, err := file.Write(append(data, '\n')); err != nil {
+		file.Close()
+		return err
+	}
+	if err := file.Sync(); err != nil {
+		file.Close()
+		return err
+	}
+	if err := file.Close(); err != nil {
+		return err
+	}
+	return os.Rename(file.Name(), "./users.json")
 }
 
 func getSession(token string) *Session {
@@ -161,25 +177,18 @@ func AuthMiddleware(next http.Handler) http.Handler {
 }
 
 func createDefaultUser() (*os.File, error) {
-	// users.json file does not exist, let's add the default user
-	file, err := os.Create("./users.json")
-	if err != nil {
-		return nil, err
-	}
-
 	password, err := bcrypt.GenerateFromPassword([]byte("admin"), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
 	}
 
-	err = json.NewEncoder(file).Encode([]User{{Username: "admin", Password: string(password)}})
-	if err != nil {
+	if err := saveUsers([]User{{Username: "admin", Password: string(password)}}); err != nil {
 		return nil, err
 	}
 
 	logger.Log.Println("Created default user \"admin\" in users.json")
 
-	file, err = os.Open("./users.json")
+	file, err := os.Open("./users.json")
 	if err != nil {
 		return nil, err
 	}
