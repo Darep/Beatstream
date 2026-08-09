@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -88,16 +89,16 @@ func passwordHandler(w http.ResponseWriter, r *http.Request) {
 		Current string `json:"currentPassword"`
 		New     string `json:"newPassword"`
 	}
-	if json.NewDecoder(r.Body).Decode(&passwords) != nil || passwords.New == "" {
+	if err := json.NewDecoder(r.Body).Decode(&passwords); err != nil || passwords.New == "" {
 		http.Error(w, "Invalid password", http.StatusBadRequest)
 		return
 	}
 
 	username := r.Context().Value("username").(string)
-	updated := append([]User(nil), users...)
-	for i, user := range updated {
-		if user.Username == username && user.Password == passwords.Current {
-			updated[i].Password = passwords.New
+	updated := slices.Clone(users)
+	for i := range updated {
+		if user := &updated[i]; user.Username == username && user.Password == passwords.Current {
+			user.Password = passwords.New
 			if err := saveUsers(updated); err != nil {
 				logger.Log.Printf("Failed to save user configuration: %v", err)
 				http.Error(w, "Failed to save password", http.StatusInternalServerError)
