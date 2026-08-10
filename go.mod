@@ -8,4 +8,4 @@ require (
 	github.com/wtolson/go-taglib v0.0.0-20210406152913-79209c280058
 )
 
-require golang.org/x/crypto v0.52.0
+require golang.org/x/crypto v0.54.0
