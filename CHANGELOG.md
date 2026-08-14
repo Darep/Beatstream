@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+#### New features
+
+- Added password change in Settings
+- Media library refresh progress is now preserved across page reloads
+- Added disc number metadata and disc-aware song sorting
+- Exposed song file extensions in the API
+
+#### Minor changes
+
+- Added version and revision output with `beatstream --version`
+
+#### Security
+
+- Passwords are now stored with bcrypt; existing plaintext passwords are migrated automatically
+- Password changes invalidate the user's other sessions and update credentials atomically
+
+#### Bug fixes
+
+- Preserves the correct playback order when the player opens
+- Scroll to the currently playing song when the player opens
+- Render HTML special characters correctly in the song list
+- Fixed song list and playlist header styling and alignment
+
+#### Refactoring
+
+- Replaced the song list's Glide Data Grid implementation with SlickGrid
+
 ## [2.0.0]
 
 #### BREAKING CHANGES!
