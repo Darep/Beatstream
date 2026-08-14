@@ -12,11 +12,14 @@ export const trackCompare = (sortcol: keyof Song) => (a: Song, b: Song) => {
   }
 
   if (sortcol === 'album') {
-    x = `${a.album.toLowerCase()} ${a.track_num}`;
-    y = `${b.album.toLowerCase()} ${b.track_num}`;
+    x = `${a.album.toLowerCase()} ${a.disc_num ?? 0} ${a.track_num ?? 0}`;
+    y = `${b.album.toLowerCase()} ${b.disc_num ?? 0} ${b.track_num ?? 0}`;
   } else if (sortcol === 'artist') {
-    x = `${a.artist.toLowerCase()} ${a.album.toLowerCase()} ${a.track_num}`;
-    y = `${b.artist.toLowerCase()} ${b.album.toLowerCase()} ${b.track_num}`;
+    x = `${a.artist.toLowerCase()} ${a.album.toLowerCase()} ${a.disc_num ?? 0} ${a.track_num ?? 0}`;
+    y = `${b.artist.toLowerCase()} ${b.album.toLowerCase()} ${b.disc_num ?? 0} ${b.track_num ?? 0}`;
+  } else if (sortcol === 'track_num') {
+    x = `${a.disc_num ?? 0} ${a.track_num}`;
+    y = `${b.disc_num ?? 0} ${b.track_num}`;
   }
 
   return naturalsort(x.toString(), y.toString());

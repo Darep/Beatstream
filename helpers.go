@@ -50,6 +50,7 @@ func newSongFromFile(absolutePath string) (*Song, error) {
 		Title:     file.Title(),
 		Artist:    file.Artist(),
 		Album:     file.Album(),
+		DiscNum:   discNumber(absolutePath),
 		TrackNum:  trackNumPtr,
 		Length:    int(file.Length().Seconds()),
 	}

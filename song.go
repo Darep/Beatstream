@@ -13,6 +13,7 @@ type Song struct {
 	Title     string `json:"title"`
 	Artist    string `json:"artist"`
 	Album     string `json:"album"`
+	DiscNum   *int   `json:"disc_num"`
 	TrackNum  *int   `json:"track_num"` // we use pointer for string, so we can set it to "nil" if there is no track number
 	Length    int    `json:"length"`
 }
@@ -26,6 +27,9 @@ func (song *Song) ToNaturalSortString() string {
 	}
 	if song.Album != "" {
 		sortables = append(sortables, song.Album)
+	}
+	if song.DiscNum != nil {
+		sortables = append(sortables, fmt.Sprintf("%03d", *song.DiscNum))
 	}
 	if song.TrackNum == nil {
 		sortables = append(sortables, song.Title)
