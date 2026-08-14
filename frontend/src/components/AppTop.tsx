@@ -17,7 +17,6 @@ export const AppTop = ({ className }: { className?: string }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [openModalName, setOpenModalName] = useState<'settings'>();
   const [isRefreshDone, setIsRefreshDone] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshError, setRefreshError] = useState<string | undefined>();
   const refreshDoneTimer = useRef<number | undefined>(undefined);
   const wasRefreshing = useRef(false);
@@ -37,7 +36,6 @@ export const AppTop = ({ className }: { className?: string }) => {
   };
 
   const handleRefresh = async () => {
-    setIsRefreshing(true);
     mutate('/api/songs/refresh', { refreshing: true }, false);
 
     if (refreshDoneTimer.current) {
@@ -56,7 +54,6 @@ export const AppTop = ({ className }: { className?: string }) => {
     } catch (error) {
       setRefreshError(error!.toString());
     } finally {
-      setIsRefreshing(false);
       mutate('/api/songs/refresh');
     }
   };
@@ -72,7 +69,7 @@ export const AppTop = ({ className }: { className?: string }) => {
 
       <div className="right">
         <div className="status-bar">
-          {isRefreshing || refreshStatus?.refreshing ? (
+          {refreshStatus?.refreshing ? (
             <div className="media-library-refresh">
               <img src={preloader} alt="" />
               <span>Refreshing media library&hellip;</span>
