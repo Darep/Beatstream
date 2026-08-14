@@ -90,6 +90,7 @@ export const DataGrid = ({
     ];
 
     const grid = new SlickGrid<SongGridItem, Column<SongGridItem>>(container, itemsRef.current, columns, {
+      defaultFormatter: (_row, _cell, value) => (value == null ? '' : String(value)),
       editable: false,
       enableCellNavigation: true,
       enableColumnReorder: false,
