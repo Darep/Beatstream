@@ -288,7 +288,7 @@ function changeSong(direction: -1 | 1, { force } = { force: false }): (state: Pl
           nextSong = state.playlist[randomIndex];
 
           // If the next random song was the current song, try at random again
-          if (state.song === nextSong) {
+          if (state.song?.path === nextSong?.path) {
             randomIndex = Math.floor(Math.random() * state.playlist.length);
             nextSong = state.playlist[randomIndex];
           }
@@ -311,7 +311,7 @@ function changeSong(direction: -1 | 1, { force } = { force: false }): (state: Pl
       nextSong = state.playlist[direction === -1 ? state.playlist.length - 1 : 0];
     } else {
       // Normal playback, no shuffle or such
-      const currentIndex = state.playlist.indexOf(state.song);
+      const currentIndex = state.playlist.findIndex((song) => song.path === state.song?.path);
       const nextIndex = currentIndex + direction;
 
       nextSong = state.playlist[nextIndex];
