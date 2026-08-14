@@ -387,6 +387,9 @@ label {
 
 /* slickgrid */
 #slickgrid {
+  --alpine-header-align-items: center;
+  --alpine-sort-indicator-margin: 1px 0 0 3px;
+
   background: #fff;
   color: #222;
   font-size: 13px;
