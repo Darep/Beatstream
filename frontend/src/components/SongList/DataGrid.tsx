@@ -1,5 +1,4 @@
 import { type Column, type Formatter, SlickGrid, SlickRowSelectionModel } from 'slickgrid';
-import 'slickgrid/dist/styles/css/slick.grid.css';
 import 'slickgrid/dist/styles/css/slick-alpine-theme.css';
 
 import { useEvent } from 'hooks/useEvent';
