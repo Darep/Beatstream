@@ -7,6 +7,7 @@ import {
   type GridMouseEventArgs,
   type GridSelection,
   type Item,
+  type Rectangle,
 } from '@glideapps/glide-data-grid';
 import '@glideapps/glide-data-grid/dist/index.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -57,6 +58,7 @@ export const DataGrid = ({
   onSort: (column: SortableColumn) => void;
 }) => {
   const ref = useRef<DataEditorRef>(null);
+  const initialScrollPendingRef = useRef(true);
   const skipScrollToRowRef = useRef(false);
   const [columnSizes, setColumnSizes] = useState<Record<string, number>>({});
   const [hoverRow, setHoverRow] = useState<number | undefined>(undefined);
@@ -158,6 +160,18 @@ export const DataGrid = ({
     scrollToActiveRow();
   }, [scrollToActiveRow]);
 
+  const handleVisibleRegionChanged = useCallback(
+    (range: Rectangle) => {
+      if (!initialScrollPendingRef.current || range.height <= 1) {
+        return;
+      }
+
+      initialScrollPendingRef.current = false;
+      window.requestAnimationFrame(scrollToActiveRow);
+    },
+    [scrollToActiveRow],
+  );
+
   return (
     <DataEditor
       cellActivationBehavior="double-click"
@@ -240,6 +254,7 @@ export const DataGrid = ({
         const [, row] = args.location;
         setHoverRow(args.kind !== 'cell' ? undefined : row);
       }, [])}
+      onVisibleRegionChanged={handleVisibleRegionChanged}
       getRowThemeOverride={(row) => ({
         bgCell: row === hoverRow ? theme.bgCellHover : row % 2 === 0 ? theme.bgCellEven : theme.bgCellOdd,
       })}
