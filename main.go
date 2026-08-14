@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/Darep/Beatstream/logger"
@@ -8,8 +9,15 @@ import (
 )
 
 var MusicPath string
+var version = "dev"
+var revision = "unknown"
 
 func main() {
+	if len(os.Args) > 1 && os.Args[1] == "--version" {
+		fmt.Printf("Beatstream %s (%s)\n", version, revision)
+		return
+	}
+
 	godotenv.Load()
 
 	MusicPath = os.Getenv("MUSIC_PATH")

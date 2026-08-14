@@ -10,6 +10,9 @@ RUN npm install && npm run build
 # ---- Backend build ----
 FROM golang:1.26.0 AS build
 
+ARG VERSION=dev
+ARG REVISION=unknown
+
 WORKDIR /app
 
 # requirements
@@ -27,7 +30,9 @@ COPY . .
 COPY --from=frontend /app/dist /app/frontend/dist
 
 # build
-RUN CGO_ENABLED=1 go build -tags production -o /beatstream
+RUN CGO_ENABLED=1 go build -tags production \
+    -ldflags="-X main.version=${VERSION} -X main.revision=${REVISION}" \
+    -o /beatstream
 
 # ---- Runtime ----
 FROM golang:1.26.0 AS runtime
