@@ -37,13 +37,13 @@ export const DataGrid = ({
   onSort: (column: SortableColumn) => void;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<SlickGrid<SongGridItem>>();
+  const gridRef = useRef<SlickGrid<SongGridItem> | undefined>(undefined);
   const itemsRef = useRef(items);
   const activeRowRef = useRef(activeRow);
   const onActivateRowRef = useRef(onActivateRow);
   const onSortRef = useRef(onSort);
   const skipScrollToRowRef = useRef(false);
-  const skipScrollTimerRef = useRef<number>();
+  const skipScrollTimerRef = useRef<number | undefined>(undefined);
 
   activeRowRef.current = activeRow;
   itemsRef.current = items;
