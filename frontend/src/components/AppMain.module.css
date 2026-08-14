@@ -4,6 +4,7 @@
 }
 
 .playlist-header {
+  background: #fff;
   border-bottom: 1px solid #d1d1d1;
   overflow: hidden;
   padding: 20px 20px 13.33333px;
