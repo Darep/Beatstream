@@ -22,10 +22,13 @@ export const AppTop = ({ className }: { className?: string }) => {
   const refreshDoneTimer = useRef<number | undefined>(undefined);
   const wasRefreshing = useRef(false);
 
+  // Keep track of refresh status in case we should reload songs
   useEffect(() => {
     if (wasRefreshing.current && !refreshStatus?.refreshing) {
+      // Refresh the song list since we were just refreshing
       mutate('/api/songs');
     }
+
     wasRefreshing.current = refreshStatus?.refreshing ?? false;
   }, [refreshStatus?.refreshing]);
 
