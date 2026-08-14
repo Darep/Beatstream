@@ -14,6 +14,9 @@ Requirements: Docker
 docker run -d -p 8080:8080 -v /path/to/your/music:/music darep/beatstream:latest
 ```
 
+For reproducible deployments, replace `latest` with an exact release version from
+[GitHub Releases](https://github.com/Darep/Beatstream/releases).
+
 Open http://0.0.0.0:8080 on your browser. Log in and wait when indexing ends, refresh page and happy listening!
 
 ### Manual Install
@@ -88,3 +91,15 @@ make check
 
 `make check` verifies Go formatting, vet, tests, development and production builds, frontend formatting and build,
 and the Docker Compose image. GitHub Actions runs the same command on every push and pull request to `master`.
+
+## Releasing
+
+Releases follow Semantic Versioning and are published from GitHub Releases. Configure the `DOCKERHUB_USERNAME`
+repository variable and `DOCKERHUB_TOKEN` Actions secret before the first release.
+
+1. Move the relevant entries in `CHANGELOG.md` from `Unreleased` into a dated version section.
+2. Create and push an annotated version tag, such as `2.1.0`.
+3. Publish a GitHub Release for that tag.
+
+The release workflow runs all checks and publishes multi-platform Docker images. Every release gets its exact version
+tag; stable releases also update the corresponding major, minor, and `latest` tags.
