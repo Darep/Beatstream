@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { mutate } from 'swr';
 
-import { useSession } from 'hooks/swr';
+import { useRefreshStatus, useSession } from 'hooks/swr';
 import { request } from 'utils/api';
 
 import preloader from 'assets/preloader.gif';
@@ -13,19 +13,30 @@ import { Button } from './common/Button';
 
 export const AppTop = ({ className }: { className?: string }) => {
   const { user } = useSession();
+  const { data: refreshStatus } = useRefreshStatus();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [openModalName, setOpenModalName] = useState<'settings'>();
   const [isRefreshDone, setIsRefreshDone] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshError, setRefreshError] = useState<string | undefined>();
   const refreshDoneTimer = useRef<number | undefined>(undefined);
+  const wasRefreshing = useRef(false);
+
+  // Keep track of refresh status in case we should reload songs
+  useEffect(() => {
+    if (wasRefreshing.current && !refreshStatus?.refreshing) {
+      // Refresh the song list since we were just refreshing
+      mutate('/api/songs');
+    }
+
+    wasRefreshing.current = refreshStatus?.refreshing ?? false;
+  }, [refreshStatus?.refreshing]);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
   const handleRefresh = async () => {
-    setIsRefreshing(true);
+    mutate('/api/songs/refresh', { refreshing: true }, false);
 
     if (refreshDoneTimer.current) {
       clearTimeout(refreshDoneTimer.current);
@@ -43,7 +54,7 @@ export const AppTop = ({ className }: { className?: string }) => {
     } catch (error) {
       setRefreshError(error!.toString());
     } finally {
-      setIsRefreshing(false);
+      mutate('/api/songs/refresh');
     }
   };
 
@@ -58,7 +69,7 @@ export const AppTop = ({ className }: { className?: string }) => {
 
       <div className="right">
         <div className="status-bar">
-          {isRefreshing ? (
+          {refreshStatus?.refreshing ? (
             <div className="media-library-refresh">
               <img src={preloader} alt="" />
               <span>Refreshing media library&hellip;</span>
