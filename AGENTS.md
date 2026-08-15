@@ -6,3 +6,6 @@ tracks, mount it at `/music`, and publish `0.0.0.0:8080` with restart policy `un
 run preflight/status checks. Report `http://ajktux:8080` and the default `admin` / `admin` login.
 
 After changing code or build configuration, run `make format` and `make check` before reporting completion.
+
+Use semantic commit messages matching the repository history: `type(scope): description`, with the scope omitted when
+unnecessary.
