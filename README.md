@@ -92,14 +92,10 @@ make check
 `make check` verifies Go formatting, vet, tests, development and production builds, frontend formatting and build,
 and the Docker Compose image. GitHub Actions runs the same command on every push and pull request to `master`.
 
-## Releasing
+### Releasing
 
-Releases follow Semantic Versioning and are published from GitHub Releases. Configure the `DOCKERHUB_USERNAME`
-repository variable and `DOCKERHUB_TOKEN` Actions secret before the first release.
+Releases follow Semantic Versioning and are published from GitHub Releases.
 
-1. Move the relevant entries in `CHANGELOG.md` from `Unreleased` into a dated version section.
-2. Create and push an annotated version tag, such as `2.1.0`.
-3. Publish a GitHub Release for that tag.
-
-The release workflow runs all checks and publishes multi-platform Docker images. Every release gets its exact version
-tag; stable releases also update the corresponding major, minor, and `latest` tags.
+1. Update `CHANGELOG.md`: move items from `Unreleased` into a new versioned section.
+2. Go to https://github.com/Darep/Beatstream/releases/new and publish a new release.
+3. The GitHub action workflow will publish the new version to Docker Hub.
