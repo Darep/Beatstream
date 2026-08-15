@@ -7,12 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0]
+
 #### New features
 
-- Added password change in Settings
+- Added a quick'n'dirty ugly password change in Settings
 - Media library refresh progress is now preserved across page reloads
 - Added disc number metadata and disc-aware song sorting
 - Exposed song file extensions in the API
+- Broke the settings UI visuals
+- New song list UI (Glide Data Grid changed back to SlickGrid)
 
 #### Minor changes
 
@@ -21,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Security
 
 - Passwords are now stored with bcrypt; existing plaintext passwords are migrated automatically
-- Password changes invalidate the user's other sessions and update credentials atomically
+- Password changes invalidate the user's other sessions
 
 #### Bug fixes
 
@@ -29,10 +33,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Scroll to the currently playing song when the player opens
 - Render HTML special characters correctly in the song list
 - Fixed song list and playlist header styling and alignment
-
-#### Refactoring
-
-- Replaced the song list's Glide Data Grid implementation with SlickGrid
 
 ## [2.0.0]
 
@@ -148,7 +148,8 @@ independent release. -ajk
 
 - Initial release
 
-[Unreleased]: https://github.com/Darep/Beatstream/compare/2.0.0...HEAD
+[Unreleased]: https://github.com/Darep/Beatstream/compare/2.1.0...HEAD
+[2.1.0]: https://github.com/Darep/Beatstream/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/Darep/Beatstream/compare/1.1.2...2.0.0
 [1.1.2]: https://github.com/Darep/Beatstream/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/Darep/Beatstream/compare/1.1.0...1.1.1
