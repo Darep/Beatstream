@@ -1,7 +1,7 @@
 # Dockerfile for publishing to hub.docker.com
 
 # ---- Frontend build ----
-FROM node:26.7.0 AS frontend
+FROM --platform=$BUILDPLATFORM node:26.7.0 AS frontend
 
 WORKDIR /app
 COPY frontend/ .
