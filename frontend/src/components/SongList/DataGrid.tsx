@@ -92,14 +92,14 @@ export const DataGrid = ({
         field: 'track_num',
         name: '#',
         sortable: true,
-        width: 50,
+        width: 10,
         cssClass: 'tracknum',
         formatter: trackFormatter,
       },
       { id: 'title', field: 'title', name: 'Title', sortable: true, minWidth: 80, formatter: titleFormatter },
       { id: 'album', field: 'album', name: 'Album', sortable: true, minWidth: 80 },
-      { id: 'extension', field: 'extension', name: 'Format', sortable: true, width: 40, formatter: formatFormatter },
-      { id: 'nice_length', field: 'nice_length', name: 'Duration', sortable: true, width: 120 },
+      { id: 'extension', field: 'extension', name: 'Format', sortable: true, width: 10, formatter: formatFormatter },
+      { id: 'nice_length', field: 'nice_length', name: 'Duration', sortable: true, width: 10 },
     ];
 
     const grid = new SlickGrid<SongGridItem, Column<SongGridItem>>(container, itemsRef.current, columns, {
