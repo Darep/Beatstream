@@ -30,7 +30,7 @@
     "@types/react-dom": "19.2.4",
     "@vitejs/plugin-react-swc": "4.3.3",
     "classnames": "2.5.1",
-    "postcss-nesting": "13.0.2",
+    "postcss-nesting": "14.0.1",
     "typescript": "7.0.2",
     "vite": "8.2.1"
   }
