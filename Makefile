@@ -1,4 +1,4 @@
-.PHONY: build check fix format test vet
+.PHONY: build check fix format release test vet
 
 build:
 	cd frontend && npm run build
@@ -10,6 +10,9 @@ format:
 
 fix:
 	go fix ./...
+
+release:
+	./docker-release.sh
 
 vet:
 	go vet ./...
