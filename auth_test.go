@@ -14,16 +14,11 @@ import (
 
 func TestLoadUsersMigratesPlaintextPasswords(t *testing.T) {
 	dir := t.TempDir()
-	oldDir, err := os.Getwd()
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := os.Chdir(dir); err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() { _ = os.Chdir(oldDir) })
+	oldDataPath := DataPath
+	DataPath = dir
+	t.Cleanup(func() { DataPath = oldDataPath })
 
-	if err := os.WriteFile("users.json", []byte(`[{"username":"alice","password":"secret"}]`), 0600); err != nil {
+	if err := os.WriteFile(dataFilePath("users.json"), []byte(`[{"username":"alice","password":"secret"}]`), 0600); err != nil {
 		t.Fatal(err)
 	}
 
@@ -31,7 +26,7 @@ func TestLoadUsersMigratesPlaintextPasswords(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := os.ReadFile("users.json")
+	data, err := os.ReadFile(dataFilePath("users.json"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -49,14 +44,9 @@ func TestLoadUsersMigratesPlaintextPasswords(t *testing.T) {
 
 func TestPasswordHandlerHashesNewPassword(t *testing.T) {
 	dir := t.TempDir()
-	oldDir, err := os.Getwd()
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := os.Chdir(dir); err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() { _ = os.Chdir(oldDir) })
+	oldDataPath := DataPath
+	DataPath = dir
+	t.Cleanup(func() { DataPath = oldDataPath })
 
 	password, err := bcrypt.GenerateFromPassword([]byte("old"), bcrypt.DefaultCost)
 	if err != nil {
