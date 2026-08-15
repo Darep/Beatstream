@@ -18,7 +18,7 @@ type Song struct {
 	Length    int    `json:"length"`
 }
 
-// For sorting songs in a natural way (artist, album, track number)
+// For sorting songs in a natural way (artist, album, format, track number)
 func (song *Song) ToNaturalSortString() string {
 	sortables := []string{}
 
@@ -27,6 +27,9 @@ func (song *Song) ToNaturalSortString() string {
 	}
 	if song.Album != "" {
 		sortables = append(sortables, song.Album)
+	}
+	if song.Extension != "" {
+		sortables = append(sortables, song.Extension)
 	}
 	if song.DiscNum != nil {
 		sortables = append(sortables, fmt.Sprintf("%03d", *song.DiscNum))

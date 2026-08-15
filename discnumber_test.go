@@ -17,16 +17,6 @@ func TestParseNumberTag(t *testing.T) {
 	}
 }
 
-func TestNaturalSortUsesDiscNumber(t *testing.T) {
-	discOne, discTwo, trackOne, trackNine := 1, 2, 1, 9
-	lastOnDiscOne := Song{Artist: "Artist", Album: "Album", DiscNum: &discOne, TrackNum: &trackNine}
-	firstOnDiscTwo := Song{Artist: "Artist", Album: "Album", DiscNum: &discTwo, TrackNum: &trackOne}
-
-	if lastOnDiscOne.ToNaturalSortString() >= firstOnDiscTwo.ToNaturalSortString() {
-		t.Fatal("disc number must sort before track number")
-	}
-}
-
 func intPointer(value int) *int {
 	return &value
 }

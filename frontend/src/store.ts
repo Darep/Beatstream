@@ -35,7 +35,7 @@ interface PlayerState {
   song: Song | null;
 
   /** Current playlist sorting */
-  sort: null | 'title' | 'album' | 'artist' | 'track_num' | 'length';
+  sort: null | 'title' | 'album' | 'artist' | 'track_num' | 'extension' | 'length';
   sortDir: 'asc' | 'desc';
 
   /** Current state of the player */
@@ -57,7 +57,9 @@ interface PlayerState {
   resetAppNavWidth: () => void;
   resizeAppNav: (width: number) => void;
   songsLoaded: (songs: Song[]) => void;
-  sortPlaylist: (field: 'title' | 'album' | 'artist' | 'track_num' | 'length' | 'nice_length' | null) => void;
+  sortPlaylist: (
+    field: 'title' | 'album' | 'artist' | 'track_num' | 'extension' | 'length' | 'nice_length' | null,
+  ) => void;
   playSongAtIndex: (index: number) => void;
 
   pause: () => void;

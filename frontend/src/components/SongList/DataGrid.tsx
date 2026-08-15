@@ -4,10 +4,11 @@ import 'slickgrid/dist/styles/css/slick-alpine-theme.css';
 import { useEvent } from 'hooks/useEvent';
 import { useCallback, useEffect, useRef } from 'react';
 
-type SortableColumn = 'artist' | 'track_num' | 'title' | 'album' | 'length';
+type SortableColumn = 'artist' | 'track_num' | 'title' | 'album' | 'extension' | 'length';
 type SongGridItem = Song & { nowplaying?: string };
 
 const titleFormatter: Formatter<SongGridItem> = (_row, _cell, _value, _column, item) => item.title || item.nice_title;
+const formatFormatter: Formatter<SongGridItem> = (_row, _cell, value) => String(value).replace(/^\./, '').toUpperCase();
 const trackFormatter: Formatter<SongGridItem> = (_row, _cell, _value, _column, item) => {
   if (item.track_num == null) return '';
   return item.disc_num == null ? String(item.track_num) : `${item.disc_num}-${String(item.track_num).padStart(2, '0')}`;
@@ -97,6 +98,7 @@ export const DataGrid = ({
       },
       { id: 'title', field: 'title', name: 'Title', sortable: true, minWidth: 80, formatter: titleFormatter },
       { id: 'album', field: 'album', name: 'Album', sortable: true, minWidth: 80 },
+      { id: 'extension', field: 'extension', name: 'Format', sortable: true, width: 40, formatter: formatFormatter },
       { id: 'nice_length', field: 'nice_length', name: 'Duration', sortable: true, width: 120 },
     ];
 
