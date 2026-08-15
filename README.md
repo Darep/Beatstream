@@ -11,7 +11,11 @@ Beatstream is an app for streaming music from your computer or server to anywher
 Requirements: Docker
 
 ```bash
-docker run -d -p 8080:8080 -v /path/to/your/music:/music darep/beatstream:latest
+docker run -d -p 8080:8080 \
+  -v /path/to/your/music:/music \
+  -v /path/to/your/data:/data \
+  -e DATA_PATH=/data \
+  darep/beatstream:latest
 ```
 
 For reproducible deployments, replace `latest` with an exact release version from

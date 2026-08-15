@@ -18,8 +18,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-const SongsFilePath = "songs.json"
-
 var songsRefreshing atomic.Bool
 var songsMutex = &sync.RWMutex{}
 
@@ -197,14 +195,14 @@ func songsHandler(w http.ResponseWriter, r *http.Request) {
 	songsMutex.RLock()
 	defer songsMutex.RUnlock()
 
-	fileInfo, err := os.Stat(SongsFilePath)
+	fileInfo, err := os.Stat(songsFilePath)
 	if err != nil || fileInfo.Size() <= 2 {
 		respondJSON(w, []Song{})
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	http.ServeFile(w, r, SongsFilePath)
+	http.ServeFile(w, r, songsFilePath)
 }
 
 // GET /api/songs/play?file=relative/path/to/song.mp3
@@ -237,7 +235,7 @@ func refreshHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	} else {
 		w.Header().Set("Content-Type", "application/json")
-		http.ServeFile(w, r, SongsFilePath)
+		http.ServeFile(w, r, songsFilePath)
 	}
 }
 
@@ -288,7 +286,7 @@ func refreshSongs() error {
 	defer songsMutex.Unlock()
 
 	// Write songs to file
-	file, err := os.Create(SongsFilePath)
+	file, err := os.Create(songsFilePath)
 	if err != nil {
 		return err
 	}

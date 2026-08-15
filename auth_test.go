@@ -12,18 +12,23 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func TestLoadUsersMigratesPlaintextPasswords(t *testing.T) {
+func useTempDataPath(t *testing.T) {
+	oldDataPath, oldSongsFilePath, oldUsersFilePath := dataPath, songsFilePath, usersFilePath
 	dir := t.TempDir()
-	oldDir, err := os.Getwd()
-	if err != nil {
+	t.Setenv("DATA_PATH", dir)
+	if err := configureDataPath(); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.Chdir(dir); err != nil {
-		t.Fatal(err)
+	if dataPath != dir {
+		t.Fatalf("data path = %q, want %q", dataPath, dir)
 	}
-	t.Cleanup(func() { _ = os.Chdir(oldDir) })
+	t.Cleanup(func() { dataPath, songsFilePath, usersFilePath = oldDataPath, oldSongsFilePath, oldUsersFilePath })
+}
 
-	if err := os.WriteFile("users.json", []byte(`[{"username":"alice","password":"secret"}]`), 0600); err != nil {
+func TestLoadUsersMigratesPlaintextPasswords(t *testing.T) {
+	useTempDataPath(t)
+
+	if err := os.WriteFile(usersFilePath, []byte(`[{"username":"alice","password":"secret"}]`), 0600); err != nil {
 		t.Fatal(err)
 	}
 
@@ -31,7 +36,7 @@ func TestLoadUsersMigratesPlaintextPasswords(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := os.ReadFile("users.json")
+	data, err := os.ReadFile(usersFilePath)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,15 +53,7 @@ func TestLoadUsersMigratesPlaintextPasswords(t *testing.T) {
 }
 
 func TestPasswordHandlerHashesNewPassword(t *testing.T) {
-	dir := t.TempDir()
-	oldDir, err := os.Getwd()
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := os.Chdir(dir); err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() { _ = os.Chdir(oldDir) })
+	useTempDataPath(t)
 
 	password, err := bcrypt.GenerateFromPassword([]byte("old"), bcrypt.DefaultCost)
 	if err != nil {

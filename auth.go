@@ -23,7 +23,7 @@ type User struct {
 var users []User
 
 func loadUsers() error {
-	file, err := os.Open("./users.json")
+	file, err := os.Open(usersFilePath)
 	if err != nil {
 		if os.IsNotExist(err) {
 			file, err = createDefaultUser()
@@ -107,7 +107,7 @@ func saveUsers(updated []User) error {
 		return err
 	}
 
-	file, err := os.CreateTemp(".", ".users.json-*")
+	file, err := os.CreateTemp(dataPath, ".users.json-*")
 	if err != nil {
 		return err
 	}
@@ -128,7 +128,7 @@ func saveUsers(updated []User) error {
 	if err := file.Close(); err != nil {
 		return err
 	}
-	return os.Rename(file.Name(), "./users.json")
+	return os.Rename(file.Name(), usersFilePath)
 }
 
 func getSession(token string) *Session {
@@ -188,7 +188,7 @@ func createDefaultUser() (*os.File, error) {
 
 	logger.Log.Println("Created default user \"admin\" in users.json")
 
-	file, err := os.Open("./users.json")
+	file, err := os.Open(usersFilePath)
 	if err != nil {
 		return nil, err
 	}
