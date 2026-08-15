@@ -21,23 +21,4 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - uses: docker/metadata-action@v6
-        id: metadata
-        with:
-          images: darep/beatstream
-          tags: |
-            type=semver,pattern={{version}},value=${{ github.event.release.tag_name }}
-            type=semver,pattern={{major}}.{{minor}},value=${{ github.event.release.tag_name }}
-            type=semver,pattern={{major}},value=${{ github.event.release.tag_name }}
-
-      - uses: docker/build-push-action@v7
-        with:
-          context: .
-          file: Dockerfile.hub
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
-          push: true
-          tags: ${{ steps.metadata.outputs.tags }}
-          labels: ${{ steps.metadata.outputs.labels }}
-          build-args: |
-            VERSION=${{ github.event.release.tag_name }}
-            REVISION=${{ github.sha }}
+      - run: make release
