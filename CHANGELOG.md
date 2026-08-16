@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+#### New features
+
+- Added "media format" to song list and as part of default sorting, so if you have same album in different formats, they are grouped separately by format
+
 #### Minor changes
 
 - Reduced the Docker runtime image size by removing the Go toolchain and development libraries
+
+#### Bug fixes
+
+- Fixed song list column widths
+- Fixed the seek bar retaining the previous song's position and duration
+- Fixed the seek bar getting stuck & not actually seeking sometimes
 
 ## [2.1.0]
 
