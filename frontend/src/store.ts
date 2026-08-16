@@ -170,6 +170,8 @@ export const usePlayerStore = create<PlayerState>()(
             newHistory.push(song);
 
             return {
+              parsedDuration: 0,
+              position: 0,
               song,
               state: 'playing',
               playHistory: newHistory,
@@ -327,6 +329,8 @@ function changeSong(direction: -1 | 1, { force } = { force: false }): (state: Pl
       AppAudio.playSong(nextSong.path);
 
       return {
+        parsedDuration: 0,
+        position: 0,
         song: nextSong,
         ...newHistory,
       };

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePlayerStore } from 'store';
 
 import { Slider } from 'components/common/Slider';
@@ -12,21 +12,27 @@ export const Seekbar = () => {
   const parsedDuration = usePlayerStore((s) => s.parsedDuration);
 
   const [positionProxy, setPositionProxy] = useState<number | undefined>();
+  const duration = parsedDuration || song?.length;
+
+  // Reset position proxy when song changes, so that the slider doesn't stay at the previous position
+  useEffect(() => setPositionProxy(undefined), [song?.path]);
 
   return (
     <>
       <div className={styles.time}>
-        <span className="elapsed">{niceTime(positionProxy ?? currentPosition)}</span> /{' '}
-        <span className="duration">{niceTime(parsedDuration ?? song?.length)}</span>
+        <span className="elapsed">{niceTime(positionProxy ?? currentPosition)}</span>
+        <span className="separator"> / </span>
+        <span className="duration">{niceTime(duration)}</span>
       </div>
       <div className={styles.seekbar}>
         <Slider
           disabled={!song}
-          max={song?.length}
+          max={duration}
+          onCancel={() => setPositionProxy(undefined)}
           onStart={() => setPositionProxy(currentPosition)}
-          onSlide={(v) => setPositionProxy(v)}
-          onStop={(v) => {
-            jumpToPosition(v);
+          onSlide={setPositionProxy}
+          onStop={(position) => {
+            jumpToPosition(position);
             setPositionProxy(undefined);
           }}
           value={positionProxy ?? currentPosition}

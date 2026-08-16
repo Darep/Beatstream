@@ -11,12 +11,13 @@ interface SliderProps {
   /** Value between 0 & max */
   value: number;
 
+  onCancel?: () => void;
   onStart?: (event: React.PointerEvent<HTMLDivElement>) => void;
   onSlide?: (value: number) => void;
   onStop?: (value: number) => void;
 }
 
-export const Slider = ({ disabled, max = 100, onSlide, onStart, onStop, value }: SliderProps) => {
+export const Slider = ({ disabled, max = 100, onCancel, onSlide, onStart, onStop, value }: SliderProps) => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLSpanElement>(null);
   const thumb = thumbRef.current;
@@ -64,6 +65,7 @@ export const Slider = ({ disabled, max = 100, onSlide, onStart, onStop, value }:
           updateValue(newValue);
         }
       }}
+      onPointerCancel={onCancel}
       onPointerUp={(event) => {
         const target = event.target as HTMLElement;
         if (target.hasPointerCapture(event.pointerId)) {

@@ -146,7 +146,9 @@ test('login, index, play, search, and logout', async ({ page }) => {
       .locator('.slick-cell')
       .first()
       .click({ modifiers: ['Control'] });
-    await expect(page.locator('#slickgrid .slick-cell.selected')).toHaveCount(12);
+    await expect(
+      page.locator('#slickgrid .slick-row').filter({ has: page.locator('.slick-cell.selected') }),
+    ).toHaveCount(2);
 
     const audioResponsePromise = page.waitForResponse((response) => response.url().includes('/api/songs/play'));
     await page.locator('#slickgrid .slick-row').filter({ hasText: 'fixture-b.wav' }).dblclick();
@@ -155,6 +157,25 @@ test('login, index, play, search, and logout', async ({ page }) => {
     expect(audioResponse.status()).toBe(206);
     await expect(page.getByText('Current song:').locator('..')).toContainText('fixture-b.wav');
     await expect.poll(() => page.locator('#audio').evaluate((audio: HTMLAudioElement) => audio.paused)).toBe(false);
+
+    const seekbarThumb = page.getByRole('slider').nth(1);
+    const seekbar = seekbarThumb.locator('..');
+    const seekbarBox = await seekbar.boundingBox();
+    if (!seekbarBox) throw new Error('Could not find the seekbar');
+
+    await page.locator('#audio').evaluate((audio: HTMLAudioElement) => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+    await page.mouse.move(seekbarBox.x, seekbarBox.y + seekbarBox.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(seekbarBox.x + seekbarBox.width * 0.8, seekbarBox.y + seekbarBox.height / 2);
+    await expect(page.locator('#audio')).toHaveJSProperty('currentTime', 0);
+    await seekbarThumb.dispatchEvent('pointercancel', { pointerId: 1, pointerType: 'mouse' });
+    await expect(page.locator('.elapsed')).toHaveText('00:00');
+    await seekbarThumb.evaluate((thumb) => thumb.releasePointerCapture(1));
+    await page.mouse.up();
+    await page.locator('#audio').evaluate((audio: HTMLAudioElement) => audio.play());
 
     const keyboardAudioResponsePromise = page.waitForResponse((response) => response.url().includes('/api/songs/play'));
     await page
