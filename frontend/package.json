@@ -22,7 +22,7 @@
     "zustand": "5.0.15"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.8",
+    "@biomejs/biome": "2.5.9",
     "@playwright/test": "^1.62.1",
     "@types/natural-compare-lite": "1.4.2",
     "@types/node": "26.2.0",
@@ -32,6 +32,6 @@
     "classnames": "2.5.1",
     "postcss-nesting": "14.0.1",
     "typescript": "7.0.2",
-    "vite": "8.2.1"
+    "vite": "8.2.2"
   }
 }
