@@ -10,7 +10,6 @@ export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
   const { user } = useSession();
   const [changingPassword, setChangingPassword] = useState(false);
   const { data: lastFM } = useLastFM();
-  const [pending, setPending] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
 
@@ -25,7 +24,7 @@ export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
     try {
       const { url } = await request<{ url: string }>('/api/lastfm/connect', { method: 'POST' });
       popup.location.href = url;
-      setPending(true);
+      await mutate('/api/lastfm');
     } catch (err) {
       popup.close();
       setError(err instanceof Error ? err.message : 'Could not connect to Last.fm');
@@ -39,7 +38,6 @@ export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
     setError('');
     try {
       await request('/api/lastfm/complete', { method: 'POST' });
-      setPending(false);
       await mutate('/api/lastfm');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not finish the Last.fm connection');
@@ -93,7 +91,7 @@ export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
         <label>Last.fm</label>
         <div className="form-field">
           {!lastFM?.configured ? <p>Set LASTFM_API_KEY and LASTFM_API_SECRET to enable Last.fm.</p> : null}
-          {lastFM?.configured && !lastFM.connected && !pending ? (
+          {lastFM?.configured && !lastFM.connected && !lastFM.pending ? (
             <Button
               variant="secondary"
               className="btn btn-lastfm not-ok"
@@ -105,11 +103,15 @@ export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
               Connect to Last.fm
             </Button>
           ) : null}
-          {pending ? (
+          {lastFM?.pending ? (
             <p>
               Authorize Beatstream in the opened window, then{' '}
               <Button variant="secondary" className="btn" tabIndex={4} disabled={busy} onClick={complete}>
                 Finish connection
+              </Button>{' '}
+              or{' '}
+              <Button variant="secondary" className="btn" tabIndex={4} disabled={busy} onClick={connect}>
+                Restart authorization
               </Button>
             </p>
           ) : null}

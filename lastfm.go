@@ -98,7 +98,7 @@ func lastFMStatusHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
 	}
-	respondJSON(w, map[string]any{"configured": os.Getenv("LASTFM_API_KEY") != "" && os.Getenv("LASTFM_API_SECRET") != "", "connected": user.LastFMSession != "", "username": user.LastFMUsername})
+	respondJSON(w, map[string]any{"configured": os.Getenv("LASTFM_API_KEY") != "" && os.Getenv("LASTFM_API_SECRET") != "", "connected": user.LastFMSession != "", "pending": user.LastFMToken != "", "username": user.LastFMUsername})
 }
 
 func lastFMUpdatedUser(r *http.Request) ([]User, *User) {

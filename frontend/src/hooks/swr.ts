@@ -32,4 +32,5 @@ export const useRefreshStatus = () =>
     refreshInterval: (status) => (status?.refreshing ? 1000 : 0),
   });
 
-export const useLastFM = () => useApi<{ configured: boolean; connected: boolean; username: string }>('/api/lastfm');
+export const useLastFM = () =>
+  useApi<{ configured: boolean; connected: boolean; pending: boolean; username: string }>('/api/lastfm');

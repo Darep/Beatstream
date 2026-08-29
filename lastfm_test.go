@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -11,6 +12,27 @@ import (
 	"strings"
 	"testing"
 )
+
+func TestLastFMStatusExposesPendingAuthorization(t *testing.T) {
+	oldUsers := users
+	users = []User{{Username: "alice", LastFMToken: "token"}}
+	t.Cleanup(func() { users = oldUsers })
+
+	req := httptest.NewRequest(http.MethodGet, "/api/lastfm", nil)
+	req = req.WithContext(context.WithValue(req.Context(), "username", "alice"))
+	response := httptest.NewRecorder()
+	lastFMStatusHandler(response, req)
+
+	var status struct {
+		Pending bool `json:"pending"`
+	}
+	if err := json.NewDecoder(response.Body).Decode(&status); err != nil {
+		t.Fatal(err)
+	}
+	if !status.Pending {
+		t.Fatal("pending authorization was not reported")
+	}
+}
 
 func TestLastFMCallExplainsHTTPFailures(t *testing.T) {
 	t.Setenv("LASTFM_API_KEY", "key")
