@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"net/http"
 	"net/url"
 	"os"
@@ -28,11 +29,11 @@ type lastFMResponse struct {
 }
 
 type lastFMTrack struct {
-	Artist    string `json:"artist"`
-	Track     string `json:"track"`
-	Album     string `json:"album,omitempty"`
-	Duration  int    `json:"duration,omitempty"`
-	Timestamp int64  `json:"timestamp,omitempty"`
+	Artist    string  `json:"artist"`
+	Track     string  `json:"track"`
+	Album     string  `json:"album,omitempty"`
+	Duration  float64 `json:"duration,omitempty"`
+	Timestamp int64   `json:"timestamp,omitempty"`
 }
 
 func lastFMCredentials() (string, string, error) {
@@ -169,7 +170,7 @@ func lastFMTrackHandler(method string) http.HandlerFunc {
 			values.Set("album", track.Album)
 		}
 		if track.Duration > 0 {
-			values.Set("duration", fmt.Sprint(track.Duration))
+			values.Set("duration", fmt.Sprint(math.Round(track.Duration)))
 		}
 		if method == "track.scrobble" {
 			if track.Timestamp == 0 {
