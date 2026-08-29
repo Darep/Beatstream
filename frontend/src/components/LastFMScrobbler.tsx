@@ -1,49 +1,52 @@
 import { useLastFM } from 'hooks/swr';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { usePlayerStore } from 'store';
 import { request } from 'utils/api';
 
 export const LastFMScrobbler = () => {
   const { data: lastFM } = useLastFM();
-  const song = usePlayerStore((state) => state.song);
-  const state = usePlayerStore((state) => state.state);
-  const position = usePlayerStore((state) => state.position);
-  const duration = usePlayerStore((state) => state.parsedDuration || state.song?.length || 0);
-  const startedAt = useRef(0);
-  const announced = useRef('');
-  const scrobbled = useRef('');
-
-  const id = song?.path ?? '';
 
   useEffect(() => {
-    if (!lastFM?.connected || !song || state !== 'playing' || announced.current === id) return;
-    announced.current = id;
-    scrobbled.current = '';
-    startedAt.current = Math.floor(Date.now() / 1000);
-    void request('/api/lastfm/now-playing', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ artist: song.artist, track: song.title, album: song.album, duration }),
-    }).catch(() => undefined);
-  }, [duration, id, lastFM?.connected, song, state]);
+    if (!lastFM?.connected) return;
 
-  useEffect(() => {
-    if (!lastFM?.connected || !song || !song.artist || !song.title || duration < 30 || scrobbled.current === id) return;
-    const threshold = Math.min(240, duration / 2);
-    if (!threshold || position < threshold) return;
-    scrobbled.current = id;
-    void request('/api/lastfm/scrobble', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        artist: song.artist,
-        track: song.title,
-        album: song.album,
-        duration,
-        timestamp: startedAt.current,
-      }),
-    }).catch(() => undefined);
-  }, [duration, id, lastFM?.connected, position, song]);
+    let currentTrack = '';
+    let startedAt = 0;
+    let scrobbled = false;
+
+    const sync = (player: ReturnType<typeof usePlayerStore.getState>) => {
+      const { song, state, position, parsedDuration } = player;
+      if (!song?.artist || !song.title) return;
+
+      const duration = parsedDuration || song.length || 0;
+      if (state === 'playing' && currentTrack !== song.path) {
+        currentTrack = song.path;
+        startedAt = Math.floor(Date.now() / 1000);
+        scrobbled = false;
+        void request('/api/lastfm/now-playing', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ artist: song.artist, track: song.title, album: song.album, duration }),
+        }).catch(() => undefined);
+      }
+
+      if (currentTrack !== song.path || scrobbled || duration < 30 || position < Math.min(240, duration / 2)) return;
+      scrobbled = true;
+      void request('/api/lastfm/scrobble', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          artist: song.artist,
+          track: song.title,
+          album: song.album,
+          duration,
+          timestamp: startedAt,
+        }),
+      }).catch(() => undefined);
+    };
+
+    sync(usePlayerStore.getState());
+    return usePlayerStore.subscribe(sync);
+  }, [lastFM?.connected]);
 
   return null;
 };
