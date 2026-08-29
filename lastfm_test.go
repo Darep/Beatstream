@@ -6,9 +6,40 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
+	"strings"
 	"testing"
 )
+
+func TestLastFMCallExplainsHTTPFailures(t *testing.T) {
+	t.Setenv("LASTFM_API_KEY", "key")
+	t.Setenv("LASTFM_API_SECRET", "secret")
+	oldURL := lastFMAPIURL
+	t.Cleanup(func() { lastFMAPIURL = oldURL })
+
+	for _, test := range []struct {
+		name, body, want string
+		status           int
+	}{
+		{name: "non-JSON", status: http.StatusServiceUnavailable, body: "try later", want: "HTTP 503 Service Unavailable"},
+		{name: "Last.fm JSON", status: http.StatusBadRequest, body: `{"error":6,"message":"Invalid parameters"}`, want: "Last.fm: Invalid parameters"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.WriteHeader(test.status)
+				fmt.Fprint(w, test.body)
+			}))
+			defer server.Close()
+			lastFMAPIURL = server.URL
+
+			_, err := lastFMCall(url.Values{"method": {"test"}})
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("error = %v, want %q", err, test.want)
+			}
+		})
+	}
+}
 
 func TestLastFMTrackRoundsFractionalDuration(t *testing.T) {
 	var duration string

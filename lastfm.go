@@ -78,10 +78,16 @@ func lastFMCall(values url.Values) (*lastFMResponse, error) {
 	defer response.Body.Close()
 	var result lastFMResponse
 	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
-		return nil, err
+		if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
+			return nil, fmt.Errorf("Last.fm: HTTP %s", response.Status)
+		}
+		return nil, fmt.Errorf("Last.fm: invalid response: %w", err)
 	}
 	if result.Error != 0 {
 		return nil, fmt.Errorf("Last.fm: %s", result.Message)
+	}
+	if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
+		return nil, fmt.Errorf("Last.fm: HTTP %s", response.Status)
 	}
 	return &result, nil
 }
