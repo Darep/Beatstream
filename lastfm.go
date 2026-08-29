@@ -27,8 +27,21 @@ type lastFMResponse struct {
 		Name string `json:"name"`
 		Key  string `json:"key"`
 	} `json:"session"`
-	Error   int    `json:"error"`
-	Message string `json:"message"`
+	Error      int    `json:"error"`
+	Message    string `json:"message"`
+	NowPlaying struct {
+		Ignored lastFMIgnoredMessage `json:"ignoredMessage"`
+	} `json:"nowplaying"`
+	Scrobbles struct {
+		Scrobble struct {
+			Ignored lastFMIgnoredMessage `json:"ignoredMessage"`
+		} `json:"scrobble"`
+	} `json:"scrobbles"`
+}
+
+type lastFMIgnoredMessage struct {
+	Code string `json:"code"`
+	Text string `json:"#text"`
 }
 
 type lastFMError struct {
@@ -210,7 +223,8 @@ func lastFMTrackHandler(method string) http.HandlerFunc {
 			}
 			values.Set("timestamp", fmt.Sprint(track.Timestamp))
 		}
-		if _, err := lastFMCall(values); err != nil {
+		result, err := lastFMCall(values)
+		if err != nil {
 			logger.Log.Printf("Last.fm %s failed for %q by %q: %v", method, track.Track, track.Artist, err)
 			var apiErr *lastFMError
 			if errors.As(err, &apiErr) && apiErr.Code == 9 {
@@ -228,6 +242,19 @@ func lastFMTrackHandler(method string) http.HandlerFunc {
 				return
 			}
 			http.Error(w, err.Error(), http.StatusBadGateway)
+			return
+		}
+		ignored := result.NowPlaying.Ignored
+		if method == "track.scrobble" {
+			ignored = result.Scrobbles.Scrobble.Ignored
+		}
+		if ignored.Code != "" && ignored.Code != "0" {
+			message := ignored.Text
+			if message == "" {
+				message = "ignored with code " + ignored.Code
+			}
+			logger.Log.Printf("Last.fm %s ignored %q by %q: %s", method, track.Track, track.Artist, message)
+			http.Error(w, "Last.fm: "+message, http.StatusUnprocessableEntity)
 			return
 		}
 		respondJSON(w, map[string]any{})

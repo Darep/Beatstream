@@ -72,6 +72,39 @@ func TestLastFMTrackClearsInvalidSession(t *testing.T) {
 	}
 }
 
+func TestLastFMTrackReportsIgnoredSubmissions(t *testing.T) {
+	oldURL, oldUsers := lastFMAPIURL, users
+	users = []User{{Username: "alice", LastFMSession: "session"}}
+	t.Cleanup(func() { lastFMAPIURL, users = oldURL, oldUsers })
+	t.Setenv("LASTFM_API_KEY", "key")
+	t.Setenv("LASTFM_API_SECRET", "secret")
+
+	for _, test := range []struct {
+		name, path, response string
+		handler              http.HandlerFunc
+	}{
+		{name: "now playing", path: "/api/lastfm/now-playing", handler: lastFMNowPlayingHandler, response: `{"nowplaying":{"ignoredMessage":{"code":"1","#text":"Filtered"}}}`},
+		{name: "scrobble", path: "/api/lastfm/scrobble", handler: lastFMScrobbleHandler, response: `{"scrobbles":{"scrobble":{"ignoredMessage":{"code":"1","#text":"Filtered"}}}}`},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				fmt.Fprint(w, test.response)
+			}))
+			defer server.Close()
+			lastFMAPIURL = server.URL
+
+			req := httptest.NewRequest(http.MethodPost, test.path, bytes.NewBufferString(`{"artist":"Artist","track":"Track"}`))
+			req = req.WithContext(context.WithValue(req.Context(), "username", "alice"))
+			response := httptest.NewRecorder()
+			test.handler(response, req)
+
+			if response.Code != http.StatusUnprocessableEntity || !strings.Contains(response.Body.String(), "Filtered") {
+				t.Fatalf("status = %d, body = %q", response.Code, response.Body.String())
+			}
+		})
+	}
+}
+
 func TestLastFMCallExplainsHTTPFailures(t *testing.T) {
 	t.Setenv("LASTFM_API_KEY", "key")
 	t.Setenv("LASTFM_API_SECRET", "secret")
