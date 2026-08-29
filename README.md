@@ -103,3 +103,22 @@ Releases follow Semantic Versioning and are published from GitHub Releases.
 1. Update `CHANGELOG.md`: move items from `Unreleased` into a new versioned section.
 2. Go to https://github.com/Darep/Beatstream/releases/new and publish a new release.
 3. The GitHub action workflow will publish the new version to Docker Hub.
+
+To run the Docker release locally, check out the exact release tag and ensure Docker Buildx is available. Publishing
+requires a Docker Hub account with permission to push `darep/beatstream`; authenticate it with `docker login` before
+running:
+
+```bash
+make release
+```
+
+The script publishes Linux images for amd64, arm64, and arm/v7 by default. To test the build without Docker Hub
+credentials or pushing an image, build only one platform (change it to match the host if needed):
+
+```bash
+PUSH=false PLATFORMS=linux/amd64 make release
+```
+
+Both commands require `HEAD` to have an exact semantic-version tag, such as `2.2.0`, and publishing also requires a
+clean worktree. In GitHub Actions, Docker Hub authentication comes from the `DOCKERHUB_USERNAME` repository variable
+and `DOCKERHUB_TOKEN` repository secret.
