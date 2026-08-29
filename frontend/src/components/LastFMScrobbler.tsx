@@ -60,7 +60,7 @@ export const LastFMScrobbler = () => {
       if (
         currentInstance !== playbackInstance ||
         scrobbled ||
-        duration < 30 ||
+        duration <= 30 ||
         playedSeconds < Math.min(240, duration / 2)
       )
         return;
