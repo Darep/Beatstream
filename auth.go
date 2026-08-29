@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"slices"
-	"sync"
 	"time"
 
 	"github.com/Darep/Beatstream/logger"
@@ -25,15 +24,8 @@ type User struct {
 
 // holds all users in memory
 var users []User
-var usersMutex sync.Mutex
 
 func loadUsers() error {
-	usersMutex.Lock()
-	defer usersMutex.Unlock()
-	return loadUsersUnlocked()
-}
-
-func loadUsersUnlocked() error {
 	file, err := os.Open(usersFilePath)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -71,10 +63,6 @@ func loadUsersUnlocked() error {
 	}
 
 	return nil
-}
-
-func saveUsersUnlocked() error {
-	return saveUsers(users)
 }
 
 func currentUser(r *http.Request) *User {

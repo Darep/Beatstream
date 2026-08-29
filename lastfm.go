@@ -85,8 +85,6 @@ func lastFMCall(values url.Values) (*lastFMResponse, error) {
 }
 
 func lastFMStatusHandler(w http.ResponseWriter, r *http.Request) {
-	usersMutex.Lock()
-	defer usersMutex.Unlock()
 	user := currentUser(r)
 	if user == nil {
 		http.Error(w, "User not found", http.StatusNotFound)
@@ -101,15 +99,13 @@ func lastFMConnectHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadGateway)
 		return
 	}
-	usersMutex.Lock()
-	defer usersMutex.Unlock()
 	user := currentUser(r)
 	if user == nil {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
 	}
 	user.LastFMToken = result.Token
-	if err := saveUsersUnlocked(); err != nil {
+	if err := saveUsers(users); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -117,29 +113,24 @@ func lastFMConnectHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func lastFMCompleteHandler(w http.ResponseWriter, r *http.Request) {
-	usersMutex.Lock()
 	user := currentUser(r)
 	if user == nil || user.LastFMToken == "" {
-		usersMutex.Unlock()
 		http.Error(w, "No Last.fm connection is pending", http.StatusBadRequest)
 		return
 	}
 	token := user.LastFMToken
-	usersMutex.Unlock()
 	result, err := lastFMCall(url.Values{"method": {"auth.getSession"}, "token": {token}})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadGateway)
 		return
 	}
-	usersMutex.Lock()
-	defer usersMutex.Unlock()
 	user = currentUser(r)
 	if user == nil || user.LastFMToken != token {
 		http.Error(w, "Last.fm connection changed", http.StatusConflict)
 		return
 	}
 	user.LastFMUsername, user.LastFMSession, user.LastFMToken = result.Session.Name, result.Session.Key, ""
-	if err := saveUsersUnlocked(); err != nil {
+	if err := saveUsers(users); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -147,15 +138,13 @@ func lastFMCompleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func lastFMDisconnectHandler(w http.ResponseWriter, r *http.Request) {
-	usersMutex.Lock()
-	defer usersMutex.Unlock()
 	user := currentUser(r)
 	if user == nil {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
 	}
 	user.LastFMUsername, user.LastFMSession, user.LastFMToken = "", "", ""
-	if err := saveUsersUnlocked(); err != nil {
+	if err := saveUsers(users); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -169,15 +158,12 @@ func lastFMTrackHandler(method string) http.HandlerFunc {
 			http.Error(w, "Artist and track are required", http.StatusBadRequest)
 			return
 		}
-		usersMutex.Lock()
 		user := currentUser(r)
 		if user == nil || user.LastFMSession == "" {
-			usersMutex.Unlock()
 			http.Error(w, "Last.fm is not connected", http.StatusConflict)
 			return
 		}
 		session := user.LastFMSession
-		usersMutex.Unlock()
 		values := url.Values{"method": {method}, "artist": {track.Artist}, "track": {track.Track}, "sk": {session}}
 		if track.Album != "" {
 			values.Set("album", track.Album)

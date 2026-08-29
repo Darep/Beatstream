@@ -97,9 +97,6 @@ func passwordHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid password", http.StatusBadRequest)
 		return
 	}
-	usersMutex.Lock()
-	defer usersMutex.Unlock()
-
 	username := r.Context().Value("username").(string)
 	updated := slices.Clone(users)
 	for i := range updated {
