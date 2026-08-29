@@ -25,7 +25,7 @@ Open http://0.0.0.0:8080 on your browser. Log in and wait when indexing ends, re
 
 ### Manual Install
 
-Requirements: Go 1.26 or newer. Node.js 20 or newer. TagLib (C bindings) e.g. libtagc
+Requirements: Go 1.26 or newer. Node.js 20 or newer.
 
 ```bash
 git clone https://github.com/Darep/Beatstream

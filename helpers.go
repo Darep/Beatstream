@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/Darep/Beatstream/logger"
-	tag "github.com/wtolson/go-taglib"
+	"github.com/tommyo123/mtag"
 )
 
 // Helper for responding as JSON
@@ -23,23 +23,17 @@ func respondJSON(w http.ResponseWriter, data any) {
 
 func newSongFromFile(absolutePath string) (*Song, error) {
 	// Read metadata
-	file, err := tag.Read(absolutePath)
+	file, err := mtag.Open(absolutePath, mtag.WithReadOnly(), mtag.WithSkipPictures())
 	if err != nil {
 		logger.Log.Println("Failed to read audio file metadata:", err, absolutePath)
 		return nil, err
 	}
 	defer file.Close()
 
-	if file.Length() == 0 {
+	length := file.AudioProperties().Duration
+	if length == 0 {
 		logger.Log.Println("Skipping file with length 0:", absolutePath)
 		return nil, nil
-	}
-
-	// Check track number
-	trackNum := file.Track()
-	var trackNumPtr *int
-	if trackNum != 0 {
-		trackNumPtr = &trackNum
 	}
 
 	// Create new song
@@ -50,9 +44,9 @@ func newSongFromFile(absolutePath string) (*Song, error) {
 		Title:     file.Title(),
 		Artist:    file.Artist(),
 		Album:     file.Album(),
-		DiscNum:   discNumber(absolutePath),
-		TrackNum:  trackNumPtr,
-		Length:    int(file.Length().Seconds()),
+		DiscNum:   optionalPositiveInt(file.Disc()),
+		TrackNum:  optionalPositiveInt(file.Track()),
+		Length:    int(length.Seconds()),
 	}
 
 	return song, nil

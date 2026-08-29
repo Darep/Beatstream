@@ -11,14 +11,15 @@ func TestNewSongFromFileMetadata(t *testing.T) {
 		file      string
 		extension string
 		duration  int
+		disc      int
 	}{
-		{"MP3", "tagged.mp3", "mp3", 3},
-		{"VBR MP3 without Xing", "tagged-vbr-no-xing.mp3", "mp3", 10},
-		{"Ogg", "tagged.ogg", "ogg", 3},
-		{"FLAC", "tagged.flac", "flac", 3},
-		{"M4A", "tagged.m4a", "m4a", 3},
-		{"raw AAC", "tagged.aac", "aac", 3},
-		{"WAV with RIFF metadata", "tagged.wav", "wav", 3},
+		{"MP3", "tagged.mp3", "mp3", 3, 0},
+		{"VBR MP3 without Xing", "tagged-vbr-no-xing.mp3", "mp3", 10, 0},
+		{"Ogg", "tagged.ogg", "ogg", 3, 0},
+		{"FLAC", "tagged.flac", "flac", 3, 0},
+		{"M4A", "tagged.m4a", "m4a", 3, 0},
+		{"raw AAC", "tagged.aac", "aac", 3, 2},
+		{"WAV with RIFF metadata", "tagged.wav", "wav", 3, 0},
 	}
 
 	for _, tt := range tests {
@@ -45,6 +46,9 @@ func TestNewSongFromFileMetadata(t *testing.T) {
 			}
 			if song.TrackNum == nil || *song.TrackNum != 7 {
 				t.Errorf("track number = %v, want 7", song.TrackNum)
+			}
+			if tt.disc == 0 && song.DiscNum != nil || tt.disc > 0 && (song.DiscNum == nil || *song.DiscNum != tt.disc) {
+				t.Errorf("disc number = %v, want %d", song.DiscNum, tt.disc)
 			}
 			if song.Length != tt.duration {
 				t.Errorf("duration = %d, want %d", song.Length, tt.duration)
