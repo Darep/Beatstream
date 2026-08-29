@@ -9,17 +9,17 @@ export const LastFMScrobbler = () => {
   useEffect(() => {
     if (!lastFM?.connected) return;
 
-    let currentTrack = '';
+    let currentInstance = -1;
     let startedAt = 0;
     let scrobbled = false;
 
     const sync = (player: ReturnType<typeof usePlayerStore.getState>) => {
-      const { song, state, position, parsedDuration } = player;
+      const { song, state, position, parsedDuration, playbackInstance } = player;
       if (!song?.artist || !song.title) return;
 
       const duration = parsedDuration || song.length || 0;
-      if (state === 'playing' && currentTrack !== song.path) {
-        currentTrack = song.path;
+      if (state === 'playing' && currentInstance !== playbackInstance) {
+        currentInstance = playbackInstance;
         startedAt = Math.floor(Date.now() / 1000);
         scrobbled = false;
         void request('/api/lastfm/now-playing', {
@@ -29,7 +29,8 @@ export const LastFMScrobbler = () => {
         }).catch(() => undefined);
       }
 
-      if (currentTrack !== song.path || scrobbled || duration < 30 || position < Math.min(240, duration / 2)) return;
+      if (currentInstance !== playbackInstance || scrobbled || duration < 30 || position < Math.min(240, duration / 2))
+        return;
       scrobbled = true;
       void request('/api/lastfm/scrobble', {
         method: 'POST',
