@@ -34,6 +34,44 @@ func TestLastFMStatusExposesPendingAuthorization(t *testing.T) {
 	}
 }
 
+func TestLastFMTrackClearsInvalidSession(t *testing.T) {
+	useTempDataPath(t)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		fmt.Fprint(w, `{"error":9,"message":"Invalid session key"}`)
+	}))
+	defer server.Close()
+
+	oldURL, oldUsers := lastFMAPIURL, users
+	lastFMAPIURL = server.URL
+	users = []User{{Username: "alice", LastFMUsername: "lastfm-alice", LastFMSession: "invalid"}}
+	t.Cleanup(func() { lastFMAPIURL, users = oldURL, oldUsers })
+	t.Setenv("LASTFM_API_KEY", "key")
+	t.Setenv("LASTFM_API_SECRET", "secret")
+
+	req := httptest.NewRequest(http.MethodPost, "/api/lastfm/now-playing", bytes.NewBufferString(`{"artist":"Artist","track":"Track"}`))
+	req = req.WithContext(context.WithValue(req.Context(), "username", "alice"))
+	response := httptest.NewRecorder()
+	lastFMNowPlayingHandler(response, req)
+
+	if response.Code != http.StatusConflict {
+		t.Fatalf("status = %d, want %d: %s", response.Code, http.StatusConflict, response.Body.String())
+	}
+	if users[0].LastFMSession != "" || users[0].LastFMUsername != "" {
+		t.Fatalf("invalid connection was not cleared: %#v", users[0])
+	}
+	data, err := os.ReadFile(usersFilePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var persisted []User
+	if err := json.Unmarshal(data, &persisted); err != nil {
+		t.Fatal(err)
+	}
+	if persisted[0].LastFMSession != "" {
+		t.Fatalf("invalid session was still persisted: %#v", persisted[0])
+	}
+}
+
 func TestLastFMCallExplainsHTTPFailures(t *testing.T) {
 	t.Setenv("LASTFM_API_KEY", "key")
 	t.Setenv("LASTFM_API_SECRET", "secret")

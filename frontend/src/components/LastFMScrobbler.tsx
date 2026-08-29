@@ -1,7 +1,8 @@
 import { useLastFM } from 'hooks/swr';
 import { useEffect } from 'react';
+import { mutate } from 'swr';
 import { usePlayerStore } from 'store';
-import { request } from 'utils/api';
+import { ApiError, request } from 'utils/api';
 
 export const LastFMScrobbler = () => {
   const { data: lastFM } = useLastFM();
@@ -43,7 +44,10 @@ export const LastFMScrobbler = () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ artist: song.artist, track: song.title, album: song.album, duration }),
-        }).catch(() => undefined);
+        }).catch((error: unknown) => {
+          console.error(`Could not update Last.fm now playing for ${song.artist} — ${song.title}`, error);
+          if (error instanceof ApiError && error.status === 409) void mutate('/api/lastfm');
+        });
       }
 
       if (
@@ -64,7 +68,10 @@ export const LastFMScrobbler = () => {
           duration,
           timestamp: startedAt,
         }),
-      }).catch(() => undefined);
+      }).catch((error: unknown) => {
+        console.error(`Could not scrobble ${song.artist} — ${song.title}`, error);
+        if (error instanceof ApiError && error.status === 409) void mutate('/api/lastfm');
+      });
     };
 
     sync(usePlayerStore.getState());

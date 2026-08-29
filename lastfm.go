@@ -14,6 +14,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/Darep/Beatstream/logger"
 )
 
 var lastFMAPIURL = "https://ws.audioscrobbler.com/2.0/"
@@ -27,6 +29,15 @@ type lastFMResponse struct {
 	} `json:"session"`
 	Error   int    `json:"error"`
 	Message string `json:"message"`
+}
+
+type lastFMError struct {
+	Code    int
+	Message string
+}
+
+func (err *lastFMError) Error() string {
+	return fmt.Sprintf("Last.fm: %s", err.Message)
 }
 
 type lastFMTrack struct {
@@ -84,7 +95,7 @@ func lastFMCall(values url.Values) (*lastFMResponse, error) {
 		return nil, fmt.Errorf("Last.fm: invalid response: %w", err)
 	}
 	if result.Error != 0 {
-		return nil, fmt.Errorf("Last.fm: %s", result.Message)
+		return nil, &lastFMError{Code: result.Error, Message: result.Message}
 	}
 	if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
 		return nil, fmt.Errorf("Last.fm: HTTP %s", response.Status)
@@ -200,6 +211,22 @@ func lastFMTrackHandler(method string) http.HandlerFunc {
 			values.Set("timestamp", fmt.Sprint(track.Timestamp))
 		}
 		if _, err := lastFMCall(values); err != nil {
+			logger.Log.Printf("Last.fm %s failed for %q by %q: %v", method, track.Track, track.Artist, err)
+			var apiErr *lastFMError
+			if errors.As(err, &apiErr) && apiErr.Code == 9 {
+				updated, user := lastFMUpdatedUser(r)
+				if user != nil && user.LastFMSession == session {
+					user.LastFMUsername, user.LastFMSession, user.LastFMToken = "", "", ""
+					if err := saveUsers(updated); err != nil {
+						logger.Log.Printf("Failed to clear invalid Last.fm session: %v", err)
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+						return
+					}
+					users = updated
+				}
+				http.Error(w, "Last.fm session expired; reconnect", http.StatusConflict)
+				return
+			}
 			http.Error(w, err.Error(), http.StatusBadGateway)
 			return
 		}
