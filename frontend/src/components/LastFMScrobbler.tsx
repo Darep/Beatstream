@@ -9,7 +9,8 @@ export const LastFMScrobbler = () => {
   useEffect(() => {
     if (!lastFM?.connected) return;
 
-    let currentInstance = -1;
+    const ignoredInstance = usePlayerStore.getState().playbackInstance;
+    let currentInstance = ignoredInstance;
     let startedAt = 0;
     let playedSeconds = 0;
     let lastUpdate = Date.now();
@@ -21,6 +22,11 @@ export const LastFMScrobbler = () => {
       if (!song?.artist || !song.title) return;
 
       const now = Date.now();
+      if (playbackInstance === ignoredInstance) {
+        lastUpdate = now;
+        previousState = state;
+        return;
+      }
       if (currentInstance === playbackInstance && previousState === 'playing') {
         playedSeconds += (now - lastUpdate) / 1000;
       }
