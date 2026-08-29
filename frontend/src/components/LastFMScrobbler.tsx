@@ -11,16 +11,27 @@ export const LastFMScrobbler = () => {
 
     let currentInstance = -1;
     let startedAt = 0;
+    let playedSeconds = 0;
+    let lastUpdate = Date.now();
+    let previousState: ReturnType<typeof usePlayerStore.getState>['state'] = 'stopped';
     let scrobbled = false;
 
     const sync = (player: ReturnType<typeof usePlayerStore.getState>) => {
-      const { song, state, position, parsedDuration, playbackInstance } = player;
+      const { song, state, parsedDuration, playbackInstance } = player;
       if (!song?.artist || !song.title) return;
+
+      const now = Date.now();
+      if (currentInstance === playbackInstance && previousState === 'playing') {
+        playedSeconds += (now - lastUpdate) / 1000;
+      }
+      lastUpdate = now;
+      previousState = state;
 
       const duration = parsedDuration || song.length || 0;
       if (state === 'playing' && currentInstance !== playbackInstance) {
         currentInstance = playbackInstance;
         startedAt = Math.floor(Date.now() / 1000);
+        playedSeconds = 0;
         scrobbled = false;
         void request('/api/lastfm/now-playing', {
           method: 'POST',
@@ -29,7 +40,12 @@ export const LastFMScrobbler = () => {
         }).catch(() => undefined);
       }
 
-      if (currentInstance !== playbackInstance || scrobbled || duration < 30 || position < Math.min(240, duration / 2))
+      if (
+        currentInstance !== playbackInstance ||
+        scrobbled ||
+        duration < 30 ||
+        playedSeconds < Math.min(240, duration / 2)
+      )
         return;
       scrobbled = true;
       void request('/api/lastfm/scrobble', {
