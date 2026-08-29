@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"slices"
 	"sort"
 	"strings"
 	"time"
@@ -94,22 +95,34 @@ func lastFMStatusHandler(w http.ResponseWriter, r *http.Request) {
 	respondJSON(w, map[string]any{"configured": os.Getenv("LASTFM_API_KEY") != "" && os.Getenv("LASTFM_API_SECRET") != "", "connected": user.LastFMSession != "", "username": user.LastFMUsername})
 }
 
+func lastFMUpdatedUser(r *http.Request) ([]User, *User) {
+	updated := slices.Clone(users)
+	username, _ := r.Context().Value("username").(string)
+	for i := range updated {
+		if updated[i].Username == username {
+			return updated, &updated[i]
+		}
+	}
+	return updated, nil
+}
+
 func lastFMConnectHandler(w http.ResponseWriter, r *http.Request) {
 	result, err := lastFMCall(url.Values{"method": {"auth.getToken"}})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadGateway)
 		return
 	}
-	user := currentUser(r)
+	updated, user := lastFMUpdatedUser(r)
 	if user == nil {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
 	}
 	user.LastFMToken = result.Token
-	if err := saveUsers(users); err != nil {
+	if err := saveUsers(updated); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	users = updated
 	respondJSON(w, map[string]string{"url": "https://www.last.fm/api/auth/?api_key=" + url.QueryEscape(os.Getenv("LASTFM_API_KEY")) + "&token=" + url.QueryEscape(result.Token)})
 }
 
@@ -125,30 +138,32 @@ func lastFMCompleteHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadGateway)
 		return
 	}
-	user = currentUser(r)
+	updated, user := lastFMUpdatedUser(r)
 	if user == nil || user.LastFMToken != token {
 		http.Error(w, "Last.fm connection changed", http.StatusConflict)
 		return
 	}
 	user.LastFMUsername, user.LastFMSession, user.LastFMToken = result.Session.Name, result.Session.Key, ""
-	if err := saveUsers(users); err != nil {
+	if err := saveUsers(updated); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	users = updated
 	respondJSON(w, map[string]any{"connected": true, "username": user.LastFMUsername})
 }
 
 func lastFMDisconnectHandler(w http.ResponseWriter, r *http.Request) {
-	user := currentUser(r)
+	updated, user := lastFMUpdatedUser(r)
 	if user == nil {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
 	}
 	user.LastFMUsername, user.LastFMSession, user.LastFMToken = "", "", ""
-	if err := saveUsers(users); err != nil {
+	if err := saveUsers(updated); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	users = updated
 	respondJSON(w, map[string]any{"connected": false})
 }
 

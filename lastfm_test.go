@@ -38,6 +38,26 @@ func TestLastFMTrackRoundsFractionalDuration(t *testing.T) {
 	}
 }
 
+func TestLastFMDisconnectKeepsMemoryWhenPersistenceFails(t *testing.T) {
+	oldDataPath, oldUsersFilePath, oldUsers := dataPath, usersFilePath, users
+	dataPath = t.TempDir() + "/missing"
+	usersFilePath = dataPath + "/users.json"
+	users = []User{{Username: "alice", LastFMUsername: "lastfm-alice", LastFMSession: "session", LastFMToken: "token"}}
+	t.Cleanup(func() { dataPath, usersFilePath, users = oldDataPath, oldUsersFilePath, oldUsers })
+
+	req := httptest.NewRequest(http.MethodDelete, "/api/lastfm", nil)
+	req = req.WithContext(context.WithValue(req.Context(), "username", "alice"))
+	response := httptest.NewRecorder()
+	lastFMDisconnectHandler(response, req)
+
+	if response.Code != http.StatusInternalServerError {
+		t.Fatalf("status = %d, want %d", response.Code, http.StatusInternalServerError)
+	}
+	if users[0].LastFMSession != "session" || users[0].LastFMToken != "token" {
+		t.Fatalf("user changed after failed persistence: %#v", users[0])
+	}
+}
+
 func TestLastFMConnectionsBelongToEachUser(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token := r.FormValue("token")
