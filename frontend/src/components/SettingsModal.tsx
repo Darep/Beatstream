@@ -54,6 +54,8 @@ export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
     try {
       await request('/api/lastfm', { method: 'DELETE' });
       await mutate('/api/lastfm');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not disconnect from Last.fm');
     } finally {
       setBusy(false);
     }
