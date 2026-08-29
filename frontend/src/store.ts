@@ -198,6 +198,8 @@ export const usePlayerStore = create<PlayerState>()(
               return {};
             }
 
+            const isResume = state.state === 'paused';
+
             AppAudio.playSong(song.path);
 
             // if we were playing something before, play & seek to previous position
@@ -206,7 +208,7 @@ export const usePlayerStore = create<PlayerState>()(
             }
 
             return {
-              playbackInstance: state.song ? state.playbackInstance : state.playbackInstance + 1,
+              playbackInstance: isResume ? state.playbackInstance : state.playbackInstance + 1,
               song,
               state: 'playing',
             };
