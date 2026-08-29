@@ -15,13 +15,19 @@ export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
   const [error, setError] = useState('');
 
   const connect = async () => {
+    const popup = window.open('', 'lastfm-auth', 'popup,width=900,height=700');
+    if (!popup) {
+      setError('Allow popups to connect to Last.fm');
+      return;
+    }
     setBusy(true);
     setError('');
     try {
       const { url } = await request<{ url: string }>('/api/lastfm/connect', { method: 'POST' });
-      window.open(url, 'lastfm-auth', 'popup,width=900,height=700');
+      popup.location.href = url;
       setPending(true);
     } catch (err) {
+      popup.close();
       setError(err instanceof Error ? err.message : 'Could not connect to Last.fm');
     } finally {
       setBusy(false);
