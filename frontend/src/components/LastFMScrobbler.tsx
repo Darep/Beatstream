@@ -4,6 +4,8 @@ import { mutate } from 'swr';
 import { usePlayerStore } from 'store';
 import { ApiError, request } from 'utils/api';
 
+const PLAYBACK_CLOCK_TOLERANCE = 1;
+
 export const LastFMScrobbler = () => {
   const { data: lastFM } = useLastFM();
 
@@ -15,23 +17,28 @@ export const LastFMScrobbler = () => {
     let startedAt = 0;
     let playedSeconds = 0;
     let lastUpdate = Date.now();
+    let lastPosition = 0;
     let previousState: ReturnType<typeof usePlayerStore.getState>['state'] = 'stopped';
     let scrobbled = false;
 
     const sync = (player: ReturnType<typeof usePlayerStore.getState>) => {
-      const { song, state, parsedDuration, playbackInstance } = player;
+      const { song, state, position, parsedDuration, playbackInstance } = player;
       if (!song?.artist || !song.title) return;
 
       const now = Date.now();
       if (playbackInstance === ignoredInstance) {
         lastUpdate = now;
+        lastPosition = position;
         previousState = state;
         return;
       }
       if (currentInstance === playbackInstance && previousState === 'playing') {
-        playedSeconds += (now - lastUpdate) / 1000;
+        const progress = position - lastPosition;
+        const elapsed = (now - lastUpdate) / 1000;
+        if (progress > 0 && progress <= elapsed + PLAYBACK_CLOCK_TOLERANCE) playedSeconds += progress;
       }
       lastUpdate = now;
+      lastPosition = position;
       previousState = state;
 
       const duration = parsedDuration || song.length || 0;
