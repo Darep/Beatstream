@@ -9,7 +9,8 @@
     "lint": "biome check",
     "lint:fix": "biome check --write",
     "preview": "vite preview",
-    "test:e2e": "playwright test",
+    "test": "playwright test unit",
+    "test:e2e": "playwright test e2e",
     "test:e2e:install": "playwright install --with-deps chromium",
     "typecheck": "tsc --noEmit"
   },
@@ -23,7 +24,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.9",
-    "@playwright/test": "^1.62.1",
+    "@playwright/test": "1.62.1",
     "@types/natural-compare-lite": "1.4.2",
     "@types/node": "26.2.0",
     "@types/react": "19.2.18",

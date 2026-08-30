@@ -17,6 +17,10 @@ import (
 type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+
+	LastFMUsername string `json:"lastfm_username,omitempty"`
+	LastFMSession  string `json:"lastfm_session,omitempty"`
+	LastFMToken    string `json:"lastfm_token,omitempty"`
 }
 
 // holds all users in memory
@@ -59,6 +63,16 @@ func loadUsers() error {
 		return saveUsers(users)
 	}
 
+	return nil
+}
+
+func currentUser(r *http.Request) *User {
+	username, _ := r.Context().Value("username").(string)
+	for i := range users {
+		if users[i].Username == username {
+			return &users[i]
+		}
+	}
 	return nil
 }
 

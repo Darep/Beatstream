@@ -18,10 +18,21 @@ docker run -d -p 8080:8080 \
   darep/beatstream:latest
 ```
 
-For reproducible deployments, replace `latest` with an exact release version from
-[GitHub Releases](https://github.com/Darep/Beatstream/releases).
-
 Open http://0.0.0.0:8080 on your browser. Log in and wait when indexing ends, refresh page and happy listening!
+
+Note: We suggest the `DATA_PATH` to make sure your data is persisted, but you can also start the Beatstream docker image without it.
+
+#### Last.fm
+
+To enable per-user Last.fm connections, create a Last.fm API application and pass its credentials to Beatstream:
+
+```bash
+docker run -d -p 8080:8080 -v /path/to/your/music:/music \
+  -e LASTFM_API_KEY=your-key -e LASTFM_API_SECRET=your-secret \
+  darep/beatstream:latest
+```
+
+Each Beatstream user can then connect and disconnect their own Last.fm account from Settings.
 
 ### Manual Install
 
