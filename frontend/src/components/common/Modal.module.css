@@ -86,4 +86,5 @@
   right: 15px;
   text-shadow: none;
   top: 10px;
+  z-index: 9999;
 }

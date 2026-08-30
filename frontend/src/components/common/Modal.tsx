@@ -5,10 +5,12 @@ import styles from './Modal.module.css';
 
 export const Modal = ({
   children,
+  className,
   onClose,
   transparent,
 }: {
   children: React.ReactNode;
+  className?: string;
   onClose?: () => void;
   transparent?: boolean;
 }) => {
@@ -20,9 +22,9 @@ export const Modal = ({
 
   return createPortal(
     <div className={classNames(styles['dialog-container'], transparent && styles['dialog-container--transparent'])}>
-      <div className={styles.dialog} role="dialog">
+      <div className={classNames(styles.dialog, className)} role="dialog" aria-modal="true">
         {onClose ? (
-          <button className={styles.close} onClick={onClose}>
+          <button type="button" className={styles.close} aria-label="Close dialog" onClick={onClose}>
             &times;
           </button>
         ) : null}
