@@ -11,23 +11,23 @@ export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
   const [changingPassword, setChangingPassword] = useState(false);
   const { data: lastFM } = useLastFM();
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState('');
+  const [lastFMError, setLastFMError] = useState('');
 
   const connect = async () => {
     const popup = window.open('', 'lastfm-auth', 'popup,width=900,height=700');
     if (!popup) {
-      setError('Allow popups to connect to Last.fm');
+      setLastFMError('Allow popups to connect to Last.fm');
       return;
     }
     setBusy(true);
-    setError('');
+    setLastFMError('');
     try {
       const { url } = await request<{ url: string }>('/api/lastfm/connect', { method: 'POST' });
       popup.location.href = url;
       await mutate('/api/lastfm');
     } catch (err) {
       popup.close();
-      setError(err instanceof Error ? err.message : 'Could not connect to Last.fm');
+      setLastFMError(err instanceof Error ? err.message : 'Could not connect to Last.fm');
     } finally {
       setBusy(false);
     }
@@ -35,12 +35,12 @@ export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
 
   const complete = async () => {
     setBusy(true);
-    setError('');
+    setLastFMError('');
     try {
       await request('/api/lastfm/complete', { method: 'POST' });
       await mutate('/api/lastfm');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not finish the Last.fm connection');
+      setLastFMError(err instanceof Error ? err.message : 'Could not finish the Last.fm connection');
     } finally {
       setBusy(false);
     }
@@ -48,12 +48,12 @@ export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
 
   const disconnect = async () => {
     setBusy(true);
-    setError('');
+    setLastFMError('');
     try {
       await request('/api/lastfm', { method: 'DELETE' });
       await mutate('/api/lastfm');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not disconnect from Last.fm');
+      setLastFMError(err instanceof Error ? err.message : 'Could not disconnect from Last.fm');
     } finally {
       setBusy(false);
     }
@@ -130,7 +130,7 @@ export const SettingsModal = ({ onClose }: { onClose: () => void }) => {
               </Button>
             </p>
           ) : null}
-          {error ? <p>{error}</p> : null}
+          {lastFMError ? <p>{lastFMError}</p> : null}
         </div>
       </section>
       <div className="right">

@@ -7,7 +7,7 @@ import { createLastFMPlaybackTracker } from 'utils/LastFMPlayback';
 
 export const LastFMScrobbler = () => {
   const { data: lastFM } = useLastFM();
-  const scrobbledPlaybackCounts = useRef(new Map<string, number>());
+  const scrobbledPlaybackCount = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     if (!lastFM?.connected) return;
@@ -38,15 +38,19 @@ export const LastFMScrobbler = () => {
           body: JSON.stringify({ artist: song.artist, track: song.title, album: song.album, duration }),
         }).catch((error: unknown) => {
           console.error(`Could not update Last.fm now playing for ${song.artist} — ${song.title}`, error);
-          if (error instanceof ApiError && error.status === 409) void mutate('/api/lastfm');
+
+          if (error instanceof ApiError && error.status === 409) {
+            // Refresh connection state when the Last.fm session expires.
+            void mutate('/api/lastfm');
+          }
         });
       }
 
-      if (!playback.shouldScrobble || scrobbledPlaybackCounts.current.get(lastFM.username) === playbackCount) {
+      if (!playback.shouldScrobble || scrobbledPlaybackCount.current === playbackCount) {
         return;
       }
 
-      scrobbledPlaybackCounts.current.set(lastFM.username, playbackCount);
+      scrobbledPlaybackCount.current = playbackCount;
 
       void request('/api/lastfm/scrobble', {
         method: 'POST',
@@ -60,7 +64,11 @@ export const LastFMScrobbler = () => {
         }),
       }).catch((error: unknown) => {
         console.error(`Could not scrobble ${song.artist} — ${song.title}`, error);
-        if (error instanceof ApiError && error.status === 409) void mutate('/api/lastfm');
+
+        if (error instanceof ApiError && error.status === 409) {
+          // Refresh connection state when the Last.fm session expires.
+          void mutate('/api/lastfm');
+        }
       });
     };
 
@@ -69,7 +77,7 @@ export const LastFMScrobbler = () => {
 
     // Continuously sync playback state when state in store updates
     return usePlayerStore.subscribe(sync);
-  }, [lastFM?.connected, lastFM?.username]);
+  }, [lastFM?.connected]);
 
   return null;
 };
