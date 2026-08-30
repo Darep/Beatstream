@@ -20,6 +20,7 @@ export const LastFMScrobbler = () => {
       if (!song?.artist || !song.title) return;
 
       const duration = parsedDuration || song.length || 0;
+
       const playback = trackPlayback({
         duration,
         instance: playbackInstance,
@@ -27,6 +28,7 @@ export const LastFMScrobbler = () => {
         position,
         state,
       });
+
       if (playback.started) {
         startedAt = Math.floor(Date.now() / 1000);
         void request('/api/lastfm/now-playing', {
@@ -39,8 +41,12 @@ export const LastFMScrobbler = () => {
         });
       }
 
-      if (!playback.shouldScrobble || scrobbledInstances.current.get(lastFM.username) === playbackInstance) return;
+      if (!playback.shouldScrobble || scrobbledInstances.current.get(lastFM.username) === playbackInstance) {
+        return;
+      }
+
       scrobbledInstances.current.set(lastFM.username, playbackInstance);
+
       void request('/api/lastfm/scrobble', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -57,7 +63,10 @@ export const LastFMScrobbler = () => {
       });
     };
 
+    // Set initial state
     sync(usePlayerStore.getState());
+    
+    // Continously sync playback state when state in store updates
     return usePlayerStore.subscribe(sync);
   }, [lastFM?.connected, lastFM?.username]);
 

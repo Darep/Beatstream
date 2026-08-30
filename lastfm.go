@@ -92,14 +92,17 @@ func lastFMCall(values url.Values) (*lastFMResponse, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	values.Set("api_key", key)
 	values.Set("api_sig", lastFMSign(values, secret))
 	values.Set("format", "json")
+
 	response, err := lastFMHTTPClient.PostForm(lastFMAPIURL, values)
 	if err != nil {
 		return nil, err
 	}
 	defer response.Body.Close()
+
 	var result lastFMResponse
 	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
 		if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
@@ -107,12 +110,15 @@ func lastFMCall(values url.Values) (*lastFMResponse, error) {
 		}
 		return nil, fmt.Errorf("Last.fm: invalid response: %w", err)
 	}
+
 	if result.Error != 0 {
 		return nil, &lastFMError{Code: result.Error, Message: result.Message}
 	}
+
 	if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
 		return nil, fmt.Errorf("Last.fm: HTTP %s", response.Status)
 	}
+
 	return &result, nil
 }
 
