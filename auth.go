@@ -15,8 +15,9 @@ import (
 )
 
 type User struct {
-	Username       string `json:"username"`
-	Password       string `json:"password"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+
 	LastFMUsername string `json:"lastfm_username,omitempty"`
 	LastFMSession  string `json:"lastfm_session,omitempty"`
 	LastFMToken    string `json:"lastfm_token,omitempty"`

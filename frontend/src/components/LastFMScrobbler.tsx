@@ -7,7 +7,7 @@ import { createLastFMPlaybackTracker } from 'utils/LastFMPlayback';
 
 export const LastFMScrobbler = () => {
   const { data: lastFM } = useLastFM();
-  const scrobbledInstances = useRef(new Map<string, number>());
+  const scrobbledPlaybackCounts = useRef(new Map<string, number>());
 
   useEffect(() => {
     if (!lastFM?.connected) return;
@@ -16,14 +16,15 @@ export const LastFMScrobbler = () => {
     let startedAt = 0;
 
     const sync = (player: ReturnType<typeof usePlayerStore.getState>) => {
-      const { song, state, position, parsedDuration, playbackInstance } = player;
+      const { song, state, position, parsedDuration, playbackCount } = player;
+
       if (!song?.artist || !song.title) return;
 
       const duration = parsedDuration || song.length || 0;
 
       const playback = trackPlayback({
         duration,
-        instance: playbackInstance,
+        playbackCount,
         now: performance.now(),
         position,
         state,
@@ -41,11 +42,11 @@ export const LastFMScrobbler = () => {
         });
       }
 
-      if (!playback.shouldScrobble || scrobbledInstances.current.get(lastFM.username) === playbackInstance) {
+      if (!playback.shouldScrobble || scrobbledPlaybackCounts.current.get(lastFM.username) === playbackCount) {
         return;
       }
 
-      scrobbledInstances.current.set(lastFM.username, playbackInstance);
+      scrobbledPlaybackCounts.current.set(lastFM.username, playbackCount);
 
       void request('/api/lastfm/scrobble', {
         method: 'POST',
@@ -65,8 +66,8 @@ export const LastFMScrobbler = () => {
 
     // Set initial state
     sync(usePlayerStore.getState());
-    
-    // Continously sync playback state when state in store updates
+
+    // Continuously sync playback state when state in store updates
     return usePlayerStore.subscribe(sync);
   }, [lastFM?.connected, lastFM?.username]);
 

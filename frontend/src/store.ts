@@ -25,7 +25,7 @@ interface PlayerState {
   position: number;
 
   /** Increments whenever a new track playback starts, including repeats */
-  playbackInstance: number;
+  playbackCount: number;
 
   /** Repeat & shuffle states */
   repeat: boolean;
@@ -106,7 +106,7 @@ export const usePlayerStore = create<PlayerState>()(
       (set) => ({
         appNavWidth: DEFAULT_APP_NAV_WIDTH,
         parsedDuration: 0,
-        playbackInstance: 0,
+        playbackCount: 0,
         playlist: [] as Song[],
         position: 0,
         repeat: false,
@@ -175,7 +175,7 @@ export const usePlayerStore = create<PlayerState>()(
 
             return {
               parsedDuration: 0,
-              playbackInstance: state.playbackInstance + 1,
+              playbackCount: state.playbackCount + 1,
               position: 0,
               song,
               state: 'playing',
@@ -198,8 +198,6 @@ export const usePlayerStore = create<PlayerState>()(
               return {};
             }
 
-            const isResume = state.state === 'paused';
-
             AppAudio.playSong(song.path);
 
             // if we were playing something before, play & seek to previous position
@@ -208,7 +206,7 @@ export const usePlayerStore = create<PlayerState>()(
             }
 
             return {
-              playbackInstance: isResume ? state.playbackInstance : state.playbackInstance + 1,
+              playbackCount: state.state === 'paused' ? state.playbackCount : state.playbackCount + 1,
               song,
               state: 'playing',
             };
@@ -338,7 +336,7 @@ function changeSong(direction: -1 | 1, { force } = { force: false }): (state: Pl
 
       return {
         parsedDuration: 0,
-        playbackInstance: state.playbackInstance + 1,
+        playbackCount: state.playbackCount + 1,
         position: 0,
         song: nextSong,
         ...newHistory,
