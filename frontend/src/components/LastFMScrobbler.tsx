@@ -1,52 +1,34 @@
 import { useLastFM } from 'hooks/swr';
-import { useEffect } from 'react';
-import { mutate } from 'swr';
+import { useEffect, useRef } from 'react';
 import { usePlayerStore } from 'store';
+import { mutate } from 'swr';
 import { ApiError, request } from 'utils/api';
-
-const PLAYBACK_CLOCK_TOLERANCE = 1;
+import { createLastFMPlaybackTracker } from 'utils/LastFMPlayback';
 
 export const LastFMScrobbler = () => {
   const { data: lastFM } = useLastFM();
+  const scrobbledInstances = useRef(new Map<string, number>());
 
   useEffect(() => {
     if (!lastFM?.connected) return;
 
-    const ignoredInstance = usePlayerStore.getState().playbackInstance;
-    let currentInstance = ignoredInstance;
+    const trackPlayback = createLastFMPlaybackTracker();
     let startedAt = 0;
-    let playedSeconds = 0;
-    let lastUpdate = Date.now();
-    let lastPosition = 0;
-    let previousState: ReturnType<typeof usePlayerStore.getState>['state'] = 'stopped';
-    let scrobbled = false;
 
     const sync = (player: ReturnType<typeof usePlayerStore.getState>) => {
       const { song, state, position, parsedDuration, playbackInstance } = player;
       if (!song?.artist || !song.title) return;
 
-      const now = Date.now();
-      if (playbackInstance === ignoredInstance) {
-        lastUpdate = now;
-        lastPosition = position;
-        previousState = state;
-        return;
-      }
-      if (currentInstance === playbackInstance && previousState === 'playing') {
-        const progress = position - lastPosition;
-        const elapsed = (now - lastUpdate) / 1000;
-        if (progress > 0 && progress <= elapsed + PLAYBACK_CLOCK_TOLERANCE) playedSeconds += progress;
-      }
-      lastUpdate = now;
-      lastPosition = position;
-      previousState = state;
-
       const duration = parsedDuration || song.length || 0;
-      if (state === 'playing' && currentInstance !== playbackInstance) {
-        currentInstance = playbackInstance;
+      const playback = trackPlayback({
+        duration,
+        instance: playbackInstance,
+        now: performance.now(),
+        position,
+        state,
+      });
+      if (playback.started) {
         startedAt = Math.floor(Date.now() / 1000);
-        playedSeconds = 0;
-        scrobbled = false;
         void request('/api/lastfm/now-playing', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -57,14 +39,8 @@ export const LastFMScrobbler = () => {
         });
       }
 
-      if (
-        currentInstance !== playbackInstance ||
-        scrobbled ||
-        duration <= 30 ||
-        playedSeconds < Math.min(240, duration / 2)
-      )
-        return;
-      scrobbled = true;
+      if (!playback.shouldScrobble || scrobbledInstances.current.get(lastFM.username) === playbackInstance) return;
+      scrobbledInstances.current.set(lastFM.username, playbackInstance);
       void request('/api/lastfm/scrobble', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -83,7 +59,7 @@ export const LastFMScrobbler = () => {
 
     sync(usePlayerStore.getState());
     return usePlayerStore.subscribe(sync);
-  }, [lastFM?.connected]);
+  }, [lastFM?.connected, lastFM?.username]);
 
   return null;
 };

@@ -16,6 +16,7 @@ vet:
 
 test:
 	go test ./...
+	cd frontend && npm test
 
 check: vet test
 	test -z "$$(gofmt -l $$(git ls-files '*.go'))"
