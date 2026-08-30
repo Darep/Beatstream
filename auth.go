@@ -81,6 +81,8 @@ type Session struct {
 	Username string
 }
 
+const sessionCookieName = "beatstream_session"
+
 // Sessions array to store all active sessions
 var sessions []Session
 
@@ -156,8 +158,9 @@ func getSession(token string) *Session {
 
 func createSessionCookie(token string) *http.Cookie {
 	return &http.Cookie{
-		Name:     "session",
+		Name:     sessionCookieName,
 		Value:    token,
+		Path:     "/",
 		Expires:  time.Now().Add(30 * 24 * time.Hour), // Cookie expires after 30 days
 		HttpOnly: true,                                // The cookie is not accessible via JavaScript
 		// Secure: true // FIXME: enable when we have HTTPS
@@ -167,7 +170,7 @@ func createSessionCookie(token string) *http.Cookie {
 
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie("session")
+		cookie, err := r.Cookie(sessionCookieName)
 		if err != nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return

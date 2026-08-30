@@ -63,7 +63,7 @@ func TestPasswordHandlerHashesNewPassword(t *testing.T) {
 	sessions = []Session{{Token: "token", Username: "alice"}}
 
 	req := httptest.NewRequest(http.MethodPut, "/api/password", bytes.NewBufferString(`{"currentPassword":"old","newPassword":"new"}`))
-	req.AddCookie(&http.Cookie{Name: "session", Value: "token"})
+	req.AddCookie(&http.Cookie{Name: sessionCookieName, Value: "token"})
 	req = req.WithContext(context.WithValue(req.Context(), "username", "alice"))
 	response := httptest.NewRecorder()
 	passwordHandler(response, req)
@@ -73,5 +73,12 @@ func TestPasswordHandlerHashesNewPassword(t *testing.T) {
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(users[0].Password), []byte("new")); err != nil {
 		t.Fatal("new password was not hashed")
+	}
+}
+
+func TestSessionCookieIsNamespacedAndSiteWide(t *testing.T) {
+	cookie := createSessionCookie("token")
+	if cookie.Name != "beatstream_session" || cookie.Path != "/" {
+		t.Fatalf("unexpected session cookie: %#v", cookie)
 	}
 }

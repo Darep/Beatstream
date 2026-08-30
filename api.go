@@ -115,7 +115,7 @@ func passwordHandler(w http.ResponseWriter, r *http.Request) {
 			}
 
 			users = updated
-			cookie, _ := r.Cookie("session")
+			cookie, _ := r.Cookie(sessionCookieName)
 			deleteOtherSessions(username, cookie.Value)
 			respondJSON(w, map[string]string{})
 			return
@@ -174,7 +174,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 // DELETE /api/session
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("session")
+	cookie, err := r.Cookie(sessionCookieName)
 	if err != nil {
 		http.Error(w, "Session cookie not found", http.StatusUnauthorized)
 		return
@@ -185,8 +185,9 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Delete the session cookie
 	http.SetCookie(w, &http.Cookie{
-		Name:   "session",
+		Name:   sessionCookieName,
 		Value:  "",
+		Path:   "/",
 		MaxAge: -1, // Set MaxAge to -1 to delete the cookie
 	})
 

@@ -22,6 +22,20 @@ func TestDeleteOtherSessions(t *testing.T) {
 	}
 }
 
+func TestLogoutDeletesSiteWideSessionCookie(t *testing.T) {
+	sessions = []Session{{Token: "token", Username: "admin"}}
+	req := httptest.NewRequest(http.MethodDelete, "/api/session", nil)
+	req.AddCookie(&http.Cookie{Name: sessionCookieName, Value: "token"})
+	response := httptest.NewRecorder()
+
+	logoutHandler(response, req)
+
+	cookies := response.Result().Cookies()
+	if len(cookies) != 1 || cookies[0].Name != sessionCookieName || cookies[0].Path != "/" || cookies[0].MaxAge != -1 {
+		t.Fatalf("unexpected logout cookie: %#v", cookies)
+	}
+}
+
 func TestRefreshStatusHandler(t *testing.T) {
 	songsRefreshing.Store(true)
 	t.Cleanup(func() { songsRefreshing.Store(false) })
