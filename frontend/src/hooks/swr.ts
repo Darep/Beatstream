@@ -33,4 +33,7 @@ export const useRefreshStatus = () =>
   });
 
 export const useLastFM = () =>
-  useApi<{ configured: boolean; connected: boolean; pending: boolean; username: string }>('/api/lastfm');
+  useSWRImmutable<{ configured: boolean; connected: boolean; pending: boolean; username: string }>(
+    '/api/lastfm',
+    fetcher,
+  );
