@@ -179,7 +179,7 @@ func lastFMCompleteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	users = updated
-	respondJSON(w, map[string]any{"connected": true, "username": user.LastFMUsername})
+	respondJSON(w, map[string]string{})
 }
 
 func lastFMDisconnectHandler(w http.ResponseWriter, r *http.Request) {
@@ -194,7 +194,7 @@ func lastFMDisconnectHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	users = updated
-	respondJSON(w, map[string]any{"connected": false})
+	respondJSON(w, map[string]string{})
 }
 
 func lastFMTrackHandler(method string) http.HandlerFunc {
