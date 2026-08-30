@@ -24,7 +24,7 @@ interface PlayerState {
   /** Current song position in seconds */
   position: number;
 
-  /** Increments whenever a new track playback starts, including repeats */
+  /** Increments whenever a new track playback starts, including repeats. Used by LastFM to track unique plays. */
   playbackCount: number;
 
   /** Repeat & shuffle states */
