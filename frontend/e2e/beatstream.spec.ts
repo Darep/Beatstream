@@ -200,6 +200,31 @@ test('login, index, play, search, and logout', async ({ page }) => {
     await expect(page.getByText('2 songs', { exact: true })).toBeVisible();
   });
 
+  await test.step('navigate settings', async () => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.getByRole('button', { name: 'admin' }).click();
+    await page.getByRole('button', { name: 'Settings…' }).click();
+
+    const dialog = page.getByRole('dialog');
+    await expect(dialog.getByRole('heading', { name: 'Account' })).toBeVisible();
+    await expect(dialog.getByRole('code')).toHaveText('admin');
+    expect((await dialog.boundingBox())?.height).toBeLessThan(700);
+    await dialog.evaluate((element) => {
+      element.dataset.transitionRoot = 'stable';
+    });
+    await dialog.getByRole('button', { name: 'Change password' }).click();
+    await expect(dialog).toHaveAttribute('data-transition-root', 'stable');
+    await expect(dialog.getByRole('heading', { name: 'Change password' })).toBeVisible();
+    await expect(dialog.locator('input[type="password"]')).toHaveCount(3);
+    await dialog.getByRole('button', { name: 'Cancel' }).click();
+    await expect(dialog).toHaveAttribute('data-transition-root', 'stable');
+    await expect(dialog.getByRole('heading', { name: 'Account' })).toBeVisible();
+    await dialog.getByRole('button', { name: 'Connections' }).click();
+    await expect(dialog.getByRole('heading', { name: 'Connections' })).toBeVisible();
+    await expect(dialog.getByText('Last.fm', { exact: true })).toBeVisible();
+    await dialog.getByRole('button', { name: 'Close dialog' }).click();
+  });
+
   await test.step('log out cleanly', async () => {
     await page.getByRole('button', { name: 'admin' }).click();
     await page.getByRole('button', { name: 'Log out' }).click();

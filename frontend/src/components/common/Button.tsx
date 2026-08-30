@@ -4,7 +4,7 @@ import styles from './Button.module.css';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  variant: 'primary' | 'secondary' | 'plain';
+  variant: 'primary' | 'secondary' | 'plain' | 'danger';
 }
 
 export const Button = ({ children, type = 'button', variant, ...props }: ButtonProps) => {

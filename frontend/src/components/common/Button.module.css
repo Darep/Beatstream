@@ -8,3 +8,13 @@
   padding: 0;
   margin: 0;
 }
+
+.button--danger {
+  color: #ee9b95;
+
+  &:hover:not(:disabled) {
+    background: #382524;
+    border-color: #613a37;
+    color: #ffb1ab;
+  }
+}
