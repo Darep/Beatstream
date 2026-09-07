@@ -15,10 +15,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "natural-compare-lite": "1.4.0",
+    "natural-compare-lite": "1.4.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "slickgrid": "5.19.0",
+    "slickgrid": "5.20.0",
     "swr": "2.5.1",
     "zustand": "5.0.15"
   },
