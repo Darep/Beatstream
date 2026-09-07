@@ -23,12 +23,12 @@
     "zustand": "5.0.15"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.11",
+    "@biomejs/biome": "2.5.12",
     "@playwright/test": "1.62.1",
     "@types/natural-compare-lite": "1.4.2",
-    "@types/node": "26.4.0",
+    "@types/node": "26.4.1",
     "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.5",
+    "@types/react-dom": "19.2.7",
     "@vitejs/plugin-react-swc": "4.3.3",
     "classnames": "2.5.1",
     "postcss-nesting": "14.0.1",
