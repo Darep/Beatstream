@@ -50,6 +50,13 @@ The fresh container has the default user `admin` / `admin` and an **empty librar
 Requires Docker, `python3` (WAV generation), `curl`, and `frontend/node_modules` with Playwright Chromium
 (`cd frontend && npm ci && npm run test:e2e:install`).
 
+### Real music
+
+The demo WAVs are untagged. For changes to metadata reading, library refresh, or supported formats, mount the user's
+library with `MUSIC_DIR=~/Music` and compare against the base branch built with `REF=master`. See
+[real-library.md](real-library.md) for the mount, the comparison recipe, and the files with exotic encodings, scripts,
+and formats (Japanese, Finnish, FLAC, Ogg, M4A, damaged MP3s) to check.
+
 ## Doctor
 
 Run first, and whenever anything looks off:
