@@ -25,7 +25,12 @@ func respondJSON(w http.ResponseWriter, data any) {
 
 func newSongFromFile(absolutePath string) (*Song, error) {
 	// Read metadata
-	file, err := mtag.Open(absolutePath, mtag.WithReadOnly(), mtag.WithSkipPictures())
+	file, err := mtag.Open(
+		absolutePath,
+		mtag.WithReadOnly(),
+		mtag.WithSkipPictures(),
+		mtag.WithAudioPropertiesStyle(mtag.AudioPropertiesFast),
+	)
 	if err != nil {
 		logger.Log.Println("Failed to read audio file metadata:", err, absolutePath)
 		return nil, err
@@ -54,27 +59,37 @@ func newSongFromFile(absolutePath string) (*Song, error) {
 	return song, nil
 }
 
+// audioDuration avoids scanning every MPEG frame when the Xing/VBRI summary or a constant bitrate gives the duration,
+// because the scan reads the whole file, which is slow on network shares.
 func audioDuration(file *mtag.File, path string) time.Duration {
-	duration := file.AudioProperties().Duration
-	if duration != 0 {
-		return duration
+	if file.Container() == mtag.ContainerMP3 {
+		fast := file.AudioProperties()
+		if fast.Duration != 0 {
+			return fast.Duration
+		}
+		average := audioProperties(path, mtag.AudioPropertiesAverage)
+		if ratio := float64(average.Bitrate) / float64(fast.Bitrate); ratio > 0.99 && ratio < 1.01 {
+			return average.Duration
+		}
 	}
 
-	estimated, err := mtag.Open(
-		path,
-		mtag.WithReadOnly(),
-		mtag.WithSkipPictures(),
-		mtag.WithAudioPropertiesStyle(mtag.AudioPropertiesAverage),
-	)
-	if err != nil {
-		return 0
+	if duration := audioProperties(path, mtag.AudioPropertiesAccurate).Duration; duration != 0 {
+		return duration
 	}
-	defer estimated.Close()
-	duration = estimated.AudioProperties().Duration
+	duration := audioProperties(path, mtag.AudioPropertiesAverage).Duration
 	if duration < time.Second {
 		return 0
 	}
 	return duration.Round(time.Second)
+}
+
+func audioProperties(path string, style mtag.AudioPropertiesStyle) mtag.AudioProperties {
+	file, err := mtag.Open(path, mtag.WithReadOnly(), mtag.WithSkipPictures(), mtag.WithAudioPropertiesStyle(style))
+	if err != nil {
+		return mtag.AudioProperties{}
+	}
+	defer file.Close()
+	return file.AudioProperties()
 }
 
 func artist(file *mtag.File) string {
