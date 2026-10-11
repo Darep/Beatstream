@@ -141,3 +141,28 @@ func TestNewSongFromFileWithMultipleArtists(t *testing.T) {
 		})
 	}
 }
+
+func TestNewSongFromFileWithSingleNULUTF16Text(t *testing.T) {
+	data, err := os.ReadFile(filepath.Join("testdata", "metadata", "tagged.mp3"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	audio := data[10+int(data[6])<<21|int(data[7])<<14|int(data[8])<<7|int(data[9]):]
+
+	// ID3v2.4 TIT2 in UTF-16 with BOM, ended by one NUL byte instead of two, as some taggers write it.
+	body := []byte{0x01, 0xFF, 0xFE, 'O', 0, 'v', 0, 'i', 0, 0}
+	frame := append([]byte{'T', 'I', 'T', '2', 0, 0, 0, byte(len(body)), 0, 0}, body...)
+	tag := append([]byte{'I', 'D', '3', 4, 0, 0, 0, 0, 0, byte(len(frame))}, frame...)
+	path := filepath.Join(t.TempDir(), "single-nul.mp3")
+	if err := os.WriteFile(path, append(tag, audio...), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	song, err := newSongFromFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if song == nil || song.Title != "Ovi" {
+		t.Fatalf("song = %#v, want title %q", song, "Ovi")
+	}
+}

@@ -9,3 +9,5 @@ require (
 )
 
 require golang.org/x/crypto v0.55.0
+
+replace github.com/tommyo123/mtag => github.com/Darep/mtag v1.0.2-0.20261011060430-0c5dfa5e671c
