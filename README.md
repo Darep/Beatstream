@@ -36,7 +36,7 @@ Each Beatstream user can then connect and disconnect their own Last.fm account f
 
 ### Manual Install
 
-Requirements: Go 1.26 or newer. Node.js 20 or newer. TagLib (C bindings) e.g. libtagc
+Requirements: Go 1.26 or newer. Node.js 20 or newer.
 
 ```bash
 git clone https://github.com/Darep/Beatstream

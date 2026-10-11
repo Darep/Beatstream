@@ -5,9 +5,11 @@ import (
 	"net/http"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/Darep/Beatstream/logger"
-	tag "github.com/wtolson/go-taglib"
+	"github.com/tommyo123/mtag"
+	"github.com/tommyo123/mtag/id3v2"
 )
 
 // Helper for responding as JSON
@@ -23,23 +25,22 @@ func respondJSON(w http.ResponseWriter, data any) {
 
 func newSongFromFile(absolutePath string) (*Song, error) {
 	// Read metadata
-	file, err := tag.Read(absolutePath)
+	file, err := mtag.Open(
+		absolutePath,
+		mtag.WithReadOnly(),
+		mtag.WithSkipPictures(),
+		mtag.WithAudioPropertiesStyle(mtag.AudioPropertiesFast),
+	)
 	if err != nil {
 		logger.Log.Println("Failed to read audio file metadata:", err, absolutePath)
 		return nil, err
 	}
 	defer file.Close()
 
-	if file.Length() == 0 {
+	length := int(audioDuration(file, absolutePath).Seconds())
+	if length == 0 {
 		logger.Log.Println("Skipping file with length 0:", absolutePath)
 		return nil, nil
-	}
-
-	// Check track number
-	trackNum := file.Track()
-	var trackNumPtr *int
-	if trackNum != 0 {
-		trackNumPtr = &trackNum
 	}
 
 	// Create new song
@@ -48,12 +49,72 @@ func newSongFromFile(absolutePath string) (*Song, error) {
 		Path:      strings.TrimPrefix(absolutePath, MusicPath),
 		Extension: strings.TrimPrefix(strings.ToLower(filepath.Ext(absolutePath)), "."),
 		Title:     file.Title(),
-		Artist:    file.Artist(),
+		Artist:    artist(file),
 		Album:     file.Album(),
-		DiscNum:   discNumber(absolutePath),
-		TrackNum:  trackNumPtr,
-		Length:    int(file.Length().Seconds()),
+		DiscNum:   optionalPositiveInt(file.Disc()),
+		TrackNum:  optionalPositiveInt(file.Track()),
+		Length:    length,
 	}
 
 	return song, nil
+}
+
+// audioDuration avoids scanning every MPEG frame when the Xing/VBRI summary or a constant bitrate gives the duration,
+// because the scan reads the whole file, which is slow on network shares.
+func audioDuration(file *mtag.File, path string) time.Duration {
+	if file.Container() == mtag.ContainerMP3 {
+		fast := file.AudioProperties()
+		if fast.Duration != 0 {
+			return fast.Duration
+		}
+		average := audioProperties(path, mtag.AudioPropertiesAverage)
+		if ratio := float64(average.Bitrate) / float64(fast.Bitrate); ratio > 0.99 && ratio < 1.01 {
+			return average.Duration
+		}
+	}
+
+	if duration := audioProperties(path, mtag.AudioPropertiesAccurate).Duration; duration != 0 {
+		return duration
+	}
+	duration := audioProperties(path, mtag.AudioPropertiesAverage).Duration
+	if duration < time.Second {
+		return 0
+	}
+	return duration.Round(time.Second)
+}
+
+func audioProperties(path string, style mtag.AudioPropertiesStyle) mtag.AudioProperties {
+	file, err := mtag.Open(path, mtag.WithReadOnly(), mtag.WithSkipPictures(), mtag.WithAudioPropertiesStyle(style))
+	if err != nil {
+		return mtag.AudioProperties{}
+	}
+	defer file.Close()
+	return file.AudioProperties()
+}
+
+func artist(file *mtag.File) string {
+	if tag := file.ID3v2(); tag != nil {
+		if frame, ok := tag.Find(id3v2.FrameArtist).(*id3v2.TextFrame); ok {
+			if artists := joinValues(frame.Values); artists != "" {
+				return artists
+			}
+		}
+	}
+	if file.Container() == mtag.ContainerFLAC || file.Container() == mtag.ContainerOGG {
+		if artists := joinValues(file.CustomValues("ARTIST")); artists != "" {
+			return artists
+		}
+	}
+	return file.Artist()
+}
+
+// joinValues joins multi-value tags, skipping the empty values that NUL padding leaves behind.
+func joinValues(values []string) string {
+	nonEmpty := make([]string, 0, len(values))
+	for _, value := range values {
+		if strings.TrimSpace(value) != "" {
+			nonEmpty = append(nonEmpty, value)
+		}
+	}
+	return strings.Join(nonEmpty, " / ")
 }

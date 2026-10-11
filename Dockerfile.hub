@@ -15,12 +15,6 @@ ARG REVISION=unknown
 
 WORKDIR /app
 
-# requirements
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-    libtagc0-dev \
-    && rm -rf /var/lib/apt/lists/*
-
 # installs
 COPY go.mod go.sum ./
 RUN go mod download
@@ -30,7 +24,7 @@ COPY . .
 COPY --from=frontend /app/dist /app/frontend/dist
 
 # build
-RUN CGO_ENABLED=1 go build -tags production \
+RUN CGO_ENABLED=0 go build -tags production \
     -ldflags="-X main.version=${VERSION} -X main.revision=${REVISION}" \
     -o /beatstream
 
@@ -38,12 +32,6 @@ RUN CGO_ENABLED=1 go build -tags production \
 FROM debian:13.3-slim AS runtime
 
 ENV MUSIC_PATH=/music
-
-# requirements
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-    libtag-c2 \
-    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /beatstream /beatstream
 
