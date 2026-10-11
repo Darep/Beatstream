@@ -103,10 +103,10 @@ func TestNewSongFromFileWithMultipleArtists(t *testing.T) {
 		set  func(*mtag.File)
 	}{
 		{"Vorbis", "tagged.flac", func(file *mtag.File) {
-			file.SetCustomValues("ARTIST", "Fixture Artist", "Second Artist")
+			file.SetCustomValues("ARTIST", "Fixture Artist", "", "Second Artist", "")
 		}},
 		{"ID3v2", "tagged.mp3", func(file *mtag.File) {
-			file.ID3v2().SetText(id3v2.FrameArtist, "Fixture Artist", "Second Artist")
+			file.ID3v2().SetText(id3v2.FrameArtist, "Fixture Artist", "", "Second Artist", "", "")
 		}},
 	} {
 		t.Run(tt.name, func(t *testing.T) {

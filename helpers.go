@@ -94,14 +94,27 @@ func audioProperties(path string, style mtag.AudioPropertiesStyle) mtag.AudioPro
 
 func artist(file *mtag.File) string {
 	if tag := file.ID3v2(); tag != nil {
-		if frame, ok := tag.Find(id3v2.FrameArtist).(*id3v2.TextFrame); ok && len(frame.Values) > 0 {
-			return strings.Join(frame.Values, " / ")
+		if frame, ok := tag.Find(id3v2.FrameArtist).(*id3v2.TextFrame); ok {
+			if artists := joinValues(frame.Values); artists != "" {
+				return artists
+			}
 		}
 	}
 	if file.Container() == mtag.ContainerFLAC || file.Container() == mtag.ContainerOGG {
-		if artists := file.CustomValues("ARTIST"); len(artists) > 0 {
-			return strings.Join(artists, " / ")
+		if artists := joinValues(file.CustomValues("ARTIST")); artists != "" {
+			return artists
 		}
 	}
 	return file.Artist()
+}
+
+// joinValues joins multi-value tags, skipping the empty values that NUL padding leaves behind.
+func joinValues(values []string) string {
+	nonEmpty := make([]string, 0, len(values))
+	for _, value := range values {
+		if strings.TrimSpace(value) != "" {
+			nonEmpty = append(nonEmpty, value)
+		}
+	}
+	return strings.Join(nonEmpty, " / ")
 }
