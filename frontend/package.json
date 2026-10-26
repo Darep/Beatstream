@@ -15,20 +15,20 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "natural-compare-lite": "1.4.0",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "slickgrid": "5.19.0",
+    "natural-compare-lite": "1.4.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "slickgrid": "5.20.2",
     "swr": "2.5.1",
-    "zustand": "5.0.15"
+    "zustand": "5.0.16"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.11",
     "@playwright/test": "1.62.1",
     "@types/natural-compare-lite": "1.4.2",
     "@types/node": "26.4.0",
-    "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react-swc": "4.3.3",
     "classnames": "2.5.1",
     "postcss-nesting": "14.0.1",
