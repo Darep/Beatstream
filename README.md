@@ -114,3 +114,9 @@ Releases follow Semantic Versioning and are published from GitHub Releases.
 1. Update `CHANGELOG.md`: move items from `Unreleased` into a new versioned section.
 2. Go to https://github.com/Darep/Beatstream/releases/new and publish a new release.
 3. The GitHub action workflow will publish the new version to Docker Hub.
+
+### Demo
+
+Every push to `master` that passes the Integration workflow is deployed to https://demo.beatstream.fi/ by the
+Deploy demo workflow. It can also be run manually from the Actions tab. The server address and deploy key are
+secrets of the `demo` environment.
