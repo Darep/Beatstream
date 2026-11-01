@@ -1,0 +1,63 @@
+name: Deploy demo
+
+on:
+  workflow_run:
+    workflows: [Integration]
+    types: [completed]
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-demo
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Only deploy commits pushed to this repository's master after Integration passed (never fork PRs).
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: demo
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-go@v6
+        with:
+          go-version: 1.26.0
+          cache: true
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20.20.2
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build
+        run: |
+          (cd frontend && npm ci && npm run build)
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags production -buildvcs=false \
+            -ldflags="-X main.version=$(git describe --tags --always) -X main.revision=$(git rev-parse HEAD)" \
+            -o bin/beatstream .
+
+      # The deploy key can only run the server's deploy script, which reads the binary from stdin,
+      # restarts the service and rolls back if the site does not come up.
+      - name: Deploy
+        env:
+          DEMO_SSH_KEY: ${{ secrets.DEMO_SSH_KEY }}
+          DEMO_SSH_HOST: ${{ secrets.DEMO_SSH_HOST }}
+          DEMO_KNOWN_HOSTS: ${{ secrets.DEMO_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEMO_SSH_KEY" > ~/.ssh/demo_deploy && chmod 600 ~/.ssh/demo_deploy
+          printf '%s\n' "$DEMO_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/demo_deploy -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes \
+            -o LogLevel=ERROR "demo@$DEMO_SSH_HOST" < bin/beatstream
