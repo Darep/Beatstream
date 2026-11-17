@@ -147,7 +147,7 @@ func TestNewSongFromFileWithSingleNULUTF16Text(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	audio := data[10+int(data[6])<<21|int(data[7])<<14|int(data[8])<<7|int(data[9]):]
+	audio := data[10+(int(data[6])<<21|int(data[7])<<14|int(data[8])<<7|int(data[9])):]
 
 	// ID3v2.4 TIT2 in UTF-16 with BOM, ended by one NUL byte instead of two, as some taggers write it.
 	body := []byte{0x01, 0xFF, 0xFE, 'O', 0, 'v', 0, 'i', 0, 0}
