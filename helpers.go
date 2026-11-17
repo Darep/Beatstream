@@ -59,28 +59,17 @@ func newSongFromFile(absolutePath string) (*Song, error) {
 	return song, nil
 }
 
-// audioDuration avoids scanning every MPEG frame when the Xing/VBRI summary or a constant bitrate gives the duration,
-// because the scan reads the whole file, which is slow on network shares.
+// audioDuration reads the duration from the file's headers when they give one, and scans the audio only when they do
+// not, because a scan reads the whole file, which is slow on network shares.
 func audioDuration(file *mtag.File, path string) time.Duration {
-	if file.Container() == mtag.ContainerMP3 {
-		fast := file.AudioProperties()
-		if fast.Duration != 0 {
-			return fast.Duration
-		}
-		average := audioProperties(path, mtag.AudioPropertiesAverage)
-		if ratio := float64(average.Bitrate) / float64(fast.Bitrate); ratio > 0.99 && ratio < 1.01 {
-			return average.Duration
-		}
-	}
-
-	if duration := audioProperties(path, mtag.AudioPropertiesAccurate).Duration; duration != 0 {
+	// Fast properties give a duration only from an exact source: a Xing/VBRI summary or the container's headers.
+	if duration := file.AudioProperties().Duration; duration != 0 {
 		return duration
 	}
-	duration := audioProperties(path, mtag.AudioPropertiesAverage).Duration
-	if duration < time.Second {
-		return 0
+	if file.Container() == mtag.ContainerMP3 {
+		return mp3Duration(path)
 	}
-	return duration.Round(time.Second)
+	return audioProperties(path, mtag.AudioPropertiesAccurate).Duration
 }
 
 func audioProperties(path string, style mtag.AudioPropertiesStyle) mtag.AudioProperties {
