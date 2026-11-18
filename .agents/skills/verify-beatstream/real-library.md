@@ -58,7 +58,8 @@ Decode a disputed duration with `ffmpeg -v error -stats -i <file> -f null -` and
 
 Upstream mtag v1.0.2 drops the last character of the single-NUL UTF-16 frames (`Stam1n`, `Seit`, `Metallic`), so
 searching `Stam1na` loses the *Uudet Kymmenen Käskyä* album. `go.mod` replaces mtag with the `Darep/mtag` fork
-(branch `fix/utf16-single-nul-terminator`), which fixes it; check these albums whenever that `replace` changes.
+(branch `fix/metadata-reading`), which fixes it and owns multi-artist reading, WAV INFO fallback, and MPEG duration
+scanning. Check these albums whenever that `replace` changes.
 
 `Calling Elvis`, `Viva Las Vegas` (Dead Kennedys), and `Flat Beat` (Mr. Oizo) have damaged frames, so no reader gets
 their duration exactly. Don't count a difference there as a regression unless the new value moves further from the
