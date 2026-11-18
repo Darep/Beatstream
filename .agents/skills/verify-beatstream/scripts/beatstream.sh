@@ -2,6 +2,8 @@
 # Build and run Beatstream from the current checkout with Dockerfile.hub.
 #
 #   beatstream.sh up                 isolated verification instance on 127.0.0.1:<random>
+#                                    MUSIC_DIR=<dir> mounts that directory instead of the demo tracks
+#                                    REF=<git-ref> builds that ref instead of the working tree
 #   beatstream.sh preview            the AGENTS.md "run it" preview on 0.0.0.0:8080
 #   beatstream.sh doctor <run-id|preview>
 #   beatstream.sh down <run-id>      remove a verification instance, keep its artifacts
@@ -19,16 +21,17 @@ die() {
 }
 
 revision() {
-	local rev
-	rev=$(git -C "$repo" rev-parse --short HEAD)
-	if [ -n "$(git -C "$repo" status --porcelain --untracked-files=no)" ]; then rev="$rev-dirty"; fi
+	local src=${1:-$repo} rev
+	rev=$(git -C "$src" rev-parse --short HEAD)
+	if [ -n "$(git -C "$src" status --porcelain --untracked-files=no)" ]; then rev="$rev-dirty"; fi
 	echo "$rev"
 }
 
 build() {
-	docker build --quiet --file "$repo/Dockerfile.hub" --tag "$1" \
-		--build-arg VERSION=verify --build-arg REVISION="$(revision)" \
-		--label beatstream.verify=1 "$repo" >/dev/null
+	local src=${2:-$repo}
+	docker build --quiet --file "$src/Dockerfile.hub" --tag "$1" \
+		--build-arg VERSION=verify --build-arg REVISION="$(revision "$src")" \
+		--label beatstream.verify=1 "$src" >/dev/null
 }
 
 # Three 6-second mono sine-wave WAVs with distinct names and pitches.
@@ -70,11 +73,18 @@ cmd_up() {
 	local run_id="${RUN_ID:-$(date +%Y%m%d-%H%M%S)-$$}"
 	local dir="$verify_root/$run_id"
 	local name="beatstream-verify-$run_id"
+	local music="${MUSIC_DIR:-$dir/music}"
 	mkdir -p "$dir/artifacts"
-	make_demo_tracks "$dir/music"
-	build "beatstream:verify-$run_id"
+	if [ -z "${MUSIC_DIR:-}" ]; then make_demo_tracks "$music"; fi
+	[ -d "$music" ] || die "MUSIC_DIR $music is not a directory"
+	local src=$repo
+	if [ -n "${REF:-}" ]; then
+		src="$dir/src"
+		git -C "$repo" worktree add --force --detach "$src" "$REF" >/dev/null 2>&1 || die "cannot check out $REF"
+	fi
+	build "beatstream:verify-$run_id" "$src"
 	docker run --detach --name "$name" --label beatstream.verify=1 \
-		--publish 127.0.0.1::8080 --volume "$dir/music:/music:ro" \
+		--publish 127.0.0.1::8080 --volume "$(realpath "$music"):/music:ro" \
 		"beatstream:verify-$run_id" >/dev/null
 	local url
 	url=$(host_url "$name")
@@ -117,7 +127,7 @@ cmd_doctor() {
 	echo "url:       $url"
 	local built current
 	built=$(docker exec "$name" /beatstream --version)
-	current=$(revision)
+	if [ -d "$verify_root/$target/src" ]; then current=$(revision "$verify_root/$target/src"); else current=$(revision); fi
 	echo "build:     $built"
 	case "$built" in
 	*"($current)"*) echo "checkout:  $current (matches)" ;;
@@ -132,6 +142,7 @@ cmd_down() {
 	local run_id=${1:?usage: down <run-id>}
 	docker rm --force "beatstream-verify-$run_id" >/dev/null 2>&1 || true
 	docker image rm --force "beatstream:verify-$run_id" >/dev/null 2>&1 || true
+	if [ -d "$verify_root/$run_id/src" ]; then git -C "$repo" worktree remove --force "$verify_root/$run_id/src"; fi
 	rm -rf "$verify_root/$run_id/music" "$verify_root/$run_id/url"
 	echo "removed beatstream-verify-$run_id; artifacts kept in $verify_root/$run_id/artifacts"
 }
