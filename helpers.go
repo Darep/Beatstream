@@ -27,6 +27,7 @@ func newSongFromFile(absolutePath string) (*Song, error) {
 		absolutePath,
 		mtag.WithReadOnly(),
 		mtag.WithSkipPictures(),
+		mtag.WithAudioPropertiesStyle(mtag.AudioPropertiesAverage),
 	)
 	if err != nil {
 		logger.Log.Println("Failed to read audio file metadata:", err, absolutePath)
@@ -55,4 +56,3 @@ func newSongFromFile(absolutePath string) (*Song, error) {
 
 	return song, nil
 }
-

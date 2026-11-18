@@ -10,4 +10,4 @@ require (
 
 require golang.org/x/crypto v0.58.0
 
-replace github.com/tommyo123/mtag => github.com/Darep/mtag v1.0.2-0.20261118024440-ef750ad2d773
+replace github.com/tommyo123/mtag => github.com/Darep/mtag v1.0.2-0.20261118025458-a711ff5689cc

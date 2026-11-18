@@ -1,5 +1,5 @@
-github.com/Darep/mtag v1.0.2-0.20261118024440-ef750ad2d773 h1:+ctTlBhstmBo4JPYoGmHi0x+o/51qKMCgAXzm///Qf8=
-github.com/Darep/mtag v1.0.2-0.20261118024440-ef750ad2d773/go.mod h1:hpL2VUJfLmOVt4PJYoEHKgV/UVrhQXCmpWqZkqpcuno=
+github.com/Darep/mtag v1.0.2-0.20261118025458-a711ff5689cc h1:QPoSTSwDkVG2pL94V1V6+kfdmjMLVcA3vrbmGeghScE=
+github.com/Darep/mtag v1.0.2-0.20261118025458-a711ff5689cc/go.mod h1:hpL2VUJfLmOVt4PJYoEHKgV/UVrhQXCmpWqZkqpcuno=
 github.com/go-chi/chi/v5 v5.5.0 h1:xdKQ1dJmVJsmgahrXSKhUx8NyVPzpwdlyrrQFpMPJgg=
 github.com/go-chi/chi/v5 v5.5.0/go.mod h1:d1IG7GtKPSjPyBP365PH8sAGVHk3qfB/IhjFNRH1wWM=
 github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
