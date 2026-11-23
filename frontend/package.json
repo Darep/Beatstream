@@ -18,7 +18,7 @@
     "natural-compare-lite": "1.4.1",
     "react": "19.3.1",
     "react-dom": "19.3.1",
-    "slickgrid": "5.19.0",
+    "slickgrid": "6.0.0",
     "swr": "2.5.1",
     "zustand": "5.1.0"
   },
